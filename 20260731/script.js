@@ -1,0 +1,207 @@
+const librarySource = window.coordinateLibraries;
+const eventSource = window.coordinateEvents || {};
+const countryNames = { japan: "JAPAN", korea: "KOREA", uk: "UNITED KINGDOM", us: "UNITED STATES" };
+
+const elements = {
+  tabs: [...document.querySelectorAll(".country-tab")],
+  search: document.querySelector("#search-input"),
+  clearSearch: document.querySelector("#clear-search"),
+  copyAll: document.querySelector("#copy-all"),
+  library: document.querySelector("#coordinate-library"),
+  empty: document.querySelector("#empty-state"),
+  totalCount: document.querySelector("#total-count"),
+  visibleCount: document.querySelector("#visible-count"),
+  resultCount: document.querySelector("#result-count"),
+  groupCount: document.querySelector("#group-count"),
+  countryLabel: document.querySelector("#country-label"),
+  eventBanner: document.querySelector("#country-event-banner"),
+  eventLabel: document.querySelector("#country-event-label"),
+  eventTitle: document.querySelector("#country-event-title"),
+  eventPeriod: document.querySelector("#country-event-period"),
+  eventDescription: document.querySelector("#country-event-description"),
+  converterForm: document.querySelector("#converter-form"),
+  coordInput: document.querySelector("#coord-input"),
+  converterOutput: document.querySelector("#converter-output"),
+  toast: document.querySelector("#toast"),
+  toastLabel: document.querySelector("#toast-label")
+};
+
+let activeCountry = "japan";
+let visibleCoordinates = [];
+let toastTimer;
+
+const libraries = {
+  japan: librarySource.japan,
+  korea: librarySource.korea,
+  uk: librarySource.uk,
+  us: librarySource.us
+};
+
+function coordinateValue(coordinate) {
+  return typeof coordinate === "string" ? coordinate : coordinate.value;
+}
+
+function isExpired(endDate) {
+  if (!endDate) return false;
+  return Date.now() > new Date(`${endDate}T23:59:59`).getTime();
+}
+
+function allCoordinates() {
+  return Object.values(libraries).flatMap((groups) => groups.flatMap((group) => group.coordinates));
+}
+
+async function copyText(text, label) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.cssText = "position:fixed;opacity:0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  }
+  elements.toastLabel.textContent = label;
+  elements.toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 1800);
+}
+
+function makeCoordinateButton(coordinate, index, groupEndDate) {
+  const value = coordinateValue(coordinate);
+  const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}`;
+  const label = typeof coordinate === "object"
+    ? `<span class="coordinate-label"><b>${coordinate.name}</b><small>${coordinate.area}</small></span>`
+    : "";
+  const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}<i>⧉</i>`;
+  button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
+  button.addEventListener("click", () => {
+    if (expired) {
+      button.classList.add("selected");
+      setTimeout(() => button.classList.remove("selected"), 1200);
+    }
+    copyText(value, typeof coordinate === "object" ? coordinate.name : value);
+  });
+  return button;
+}
+
+function render() {
+  const query = elements.search.value.trim().toLowerCase();
+  const fragment = document.createDocumentFragment();
+  visibleCoordinates = [];
+  let visibleGroups = 0;
+
+  libraries[activeCountry].forEach((group) => {
+    const groupMatches = `${group.region} ${group.name}`.toLowerCase().includes(query);
+    const matches = group.coordinates.filter((coordinate) => {
+      const searchable = typeof coordinate === "string"
+        ? coordinate
+        : `${coordinate.name} ${coordinate.area} ${coordinate.value}`;
+      return groupMatches || searchable.toLowerCase().includes(query);
+    });
+    if (!matches.length) return;
+
+    visibleGroups += 1;
+    visibleCoordinates.push(...matches);
+    const section = document.createElement("section");
+    section.className = "region-block";
+    const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
+    section.innerHTML = `<header>${region}<h3>${group.name}</h3><b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    if (group.event) {
+      const eventInfo = document.createElement("div");
+      eventInfo.className = "event-info";
+      const detailLabel = group.event.detailLabel || "一星團體戰";
+      const detail = group.event.detail || group.event.raid || "";
+      const bulletList = group.event.bullets?.length
+        ? `<ul>${group.event.bullets.map((item) => `<li>${item}</li>`).join("")}</ul>`
+        : detail;
+      const notice = group.event.notice
+        ? `<p class="event-notice"><b>NOTICE</b>${group.event.notice}</p>`
+        : "";
+      const sourceLink = group.event.sourceUrl
+        ? `<a class="event-source" href="${group.event.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.event.sourceLabel || "查看文獻來源"} <span>↗</span></a>`
+        : "";
+      eventInfo.innerHTML = `
+        <div class="event-period"><span>EVENT PERIOD / 台灣時間</span><strong>${group.event.period}</strong></div>
+        <p>${group.event.description}</p>
+        <div class="raid-note"><b>★ ${detailLabel}</b>${bulletList}</div>
+        ${notice}
+        ${sourceLink}`;
+      section.appendChild(eventInfo);
+    }
+    const grid = document.createElement("div");
+    grid.className = "coordinate-grid";
+    const groupEndDate = group.event?.endDate || eventSource[activeCountry]?.endDate;
+    grid.replaceChildren(...matches.map((coordinate, index) => makeCoordinateButton(coordinate, index, groupEndDate)));
+    section.appendChild(grid);
+    fragment.appendChild(section);
+  });
+
+  elements.library.replaceChildren(fragment);
+  elements.resultCount.textContent = visibleCoordinates.length;
+  elements.visibleCount.textContent = String(visibleCoordinates.length).padStart(3, "0");
+  elements.groupCount.textContent = visibleGroups;
+  elements.countryLabel.textContent = countryNames[activeCountry];
+  elements.empty.hidden = visibleCoordinates.length > 0;
+  elements.copyAll.disabled = visibleCoordinates.length === 0;
+
+  const countryEvent = eventSource[activeCountry];
+  elements.eventBanner.hidden = !countryEvent;
+  if (countryEvent) {
+    elements.eventLabel.textContent = countryEvent.label;
+    elements.eventTitle.textContent = countryEvent.title;
+    elements.eventPeriod.textContent = countryEvent.period;
+    elements.eventDescription.textContent = countryEvent.description;
+  }
+}
+
+function switchCountry(country) {
+  activeCountry = country;
+  elements.tabs.forEach((tab) => {
+    const active = tab.dataset.country === country;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+  });
+  render();
+}
+
+function parseCoordinate(input) {
+  const normalized = input.replace(/[，、]/g, ",").replace(/[−–—]/g, "-").trim();
+  const mapMatch = normalized.match(/@([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)/);
+  const values = mapMatch
+    ? [Number(mapMatch[1]), Number(mapMatch[2])]
+    : [...normalized.matchAll(/[+-]?\d+(?:\.\d+)?/g)].map((match) => Number(match[0]));
+  if (values.length < 2) return null;
+  let [lat, lng] = values;
+  const upper = normalized.toUpperCase();
+  if ((normalized.includes("南") || /\bS\b/.test(upper)) && lat > 0) lat *= -1;
+  if ((normalized.includes("西") || /\bW\b/.test(upper)) && lng > 0) lng *= -1;
+  if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+}
+
+elements.tabs.forEach((tab) => tab.addEventListener("click", () => switchCountry(tab.dataset.country)));
+elements.search.addEventListener("input", render);
+elements.clearSearch.addEventListener("click", () => {
+  elements.search.value = "";
+  elements.search.focus();
+  render();
+});
+elements.copyAll.addEventListener("click", () => {
+  copyText(visibleCoordinates.map(coordinateValue).join("\n"), `${visibleCoordinates.length} COORDINATES`);
+});
+elements.converterForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const result = parseCoordinate(elements.coordInput.value);
+  elements.converterOutput.className = result ? "success" : "error";
+  elements.converterOutput.textContent = result || "ERROR: INVALID COORDINATE";
+  if (result) copyText(result, "DECODED COORDINATE");
+});
+
+elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
+render();

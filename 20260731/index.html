@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05080b">
+  <meta name="description" content="日本、韓國、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
+  <title>GEO//PULSE 座標終端</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-symbol"><i></i></span>
+      <span>GEO//PULSE<small>COORDINATE TERMINAL</small></span>
+    </a>
+    <div class="system-state"><i></i> SYSTEM ONLINE</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker"><span>01</span> GLOBAL POSITION DATABASE</p>
+        <h1>座標，<br><em>即刻鎖定。</em></h1>
+        <p class="hero-note">日本・韓國・英國・美國活動雷達座標資料庫。切換區域、搜尋目標，點擊任何座標即可複製。</p>
+      </div>
+      <div class="radar" aria-hidden="true">
+        <div class="radar-sweep"></div>
+        <div class="radar-core"></div>
+        <span class="blip b1"></span><span class="blip b2"></span><span class="blip b3"></span>
+        <p>35.6812° N<br>139.7671° E</p>
+      </div>
+      <div class="stats">
+        <div><span>座標總數</span><strong id="total-count">000</strong></div>
+        <div><span>目前顯示</span><strong id="visible-count">000</strong></div>
+        <div><span>資料狀態</span><strong class="status-text">LIVE</strong></div>
+      </div>
+    </section>
+
+    <section class="terminal" aria-labelledby="library-title">
+      <div class="terminal-head">
+        <div>
+          <p class="kicker"><span>02</span> TARGET LIBRARY</p>
+          <h2 id="library-title">選擇座標區域</h2>
+        </div>
+        <div class="country-tabs" role="tablist" aria-label="國家">
+          <button class="country-tab active" data-country="japan" role="tab" aria-selected="true"><b>JP</b> 日本座標</button>
+          <button class="country-tab" data-country="korea" role="tab" aria-selected="false"><b>KR</b> 韓國座標</button>
+          <button class="country-tab" data-country="uk" role="tab" aria-selected="false"><b>UK</b> 英國座標</button>
+          <button class="country-tab" data-country="us" role="tab" aria-selected="false"><b>US</b> 美國座標</button>
+        </div>
+      </div>
+
+      <div class="control-deck">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <span class="sr-only">搜尋區域或座標</span>
+          <input id="search-input" type="search" placeholder="搜尋區域名稱或座標…" autocomplete="off">
+          <kbd>SEARCH</kbd>
+        </label>
+        <button class="copy-all" id="copy-all" type="button">COPY ALL <span>⧉</span></button>
+      </div>
+
+      <div class="feed-meta">
+        <p><i></i> DATA STREAM: <strong id="country-label">JAPAN</strong></p>
+        <p><span id="group-count">0</span> REGIONS / <span id="result-count">0</span> COORDINATES</p>
+      </div>
+
+      <section class="country-event-banner" id="country-event-banner" hidden>
+        <div class="event-signal" aria-hidden="true"><i></i><span>EVENT</span></div>
+        <div class="country-event-title">
+          <span id="country-event-label"></span>
+          <h3 id="country-event-title"></h3>
+        </div>
+        <div class="country-event-period">
+          <span>EVENT PERIOD / 活動期間</span>
+          <strong id="country-event-period"></strong>
+        </div>
+        <p id="country-event-description"></p>
+      </section>
+
+      <div id="coordinate-library"></div>
+      <section class="empty" id="empty-state" hidden>
+        <span>NO SIGNAL</span>
+        <h2>找不到符合的座標</h2>
+        <p>請更換搜尋條件。</p>
+        <button id="clear-search" type="button">RESET SEARCH</button>
+      </section>
+    </section>
+
+    <section class="converter" aria-labelledby="converter-title">
+      <div>
+        <p class="kicker"><span>03</span> COORDINATE DECODER</p>
+        <h2 id="converter-title">座標格式轉換</h2>
+        <p>貼上一般經緯度、方向文字或 Google Maps 網址，自動轉為標準十進位格式。</p>
+      </div>
+      <form id="converter-form">
+        <textarea id="coord-input" rows="3" placeholder="北 43.26132° 東 141.96267°"></textarea>
+        <button type="submit">DECODE + COPY</button>
+        <output id="converter-output">WAITING FOR INPUT_</output>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>GEO//PULSE © 2026</p>
+    <p>WGS84 / DECIMAL DEGREES</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span>✓</span><div><strong>COPIED</strong><small id="toast-label"></small></div>
+  </div>
+
+  <script src="coordinates-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
