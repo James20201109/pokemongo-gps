@@ -7,6 +7,8 @@ const elements = {
   search: document.querySelector("#search-input"),
   clearSearch: document.querySelector("#clear-search"),
   copyAll: document.querySelector("#copy-all"),
+  clearCopied: document.querySelector("#clear-copied"),
+  copiedCount: document.querySelector("#copied-count"),
   library: document.querySelector("#coordinate-library"),
   empty: document.querySelector("#empty-state"),
   totalCount: document.querySelector("#total-count"),
@@ -28,7 +30,33 @@ const elements = {
 
 let activeCountry = "japan";
 let visibleCoordinates = [];
+let visibleCoordinateKeys = [];
 let toastTimer;
+const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
+
+function loadCopiedKeys() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(copiedStorageKey) || "[]");
+    return new Set(Array.isArray(saved) ? saved : []);
+  } catch {
+    return new Set();
+  }
+}
+
+const copiedKeys = loadCopiedKeys();
+
+function saveCopiedKeys() {
+  try {
+    localStorage.setItem(copiedStorageKey, JSON.stringify([...copiedKeys]));
+  } catch {
+    // 頁面仍可使用；瀏覽器禁止儲存時只保留本次開啟期間的狀態。
+  }
+}
+
+function updateCopiedCounter() {
+  elements.copiedCount.textContent = copiedKeys.size;
+  elements.clearCopied.disabled = copiedKeys.size === 0;
+}
 
 const libraries = {
   japan: librarySource.japan,
@@ -39,6 +67,11 @@ const libraries = {
 
 function coordinateValue(coordinate) {
   return typeof coordinate === "string" ? coordinate : coordinate.value;
+}
+
+function coordinateKey(country, groupName, coordinate) {
+  const name = typeof coordinate === "object" ? coordinate.name : "";
+  return `${country}|${groupName}|${name}|${coordinateValue(coordinate)}`;
 }
 
 function isExpired(endDate) {
@@ -68,24 +101,30 @@ async function copyText(text, label) {
   toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 1800);
 }
 
-function makeCoordinateButton(coordinate, index, groupEndDate) {
+function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
+  const visited = copiedKeys.has(key);
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}`;
   const label = typeof coordinate === "object"
     ? `<span class="coordinate-label"><b>${coordinate.name}</b><small>${coordinate.area}</small></span>`
     : "";
   const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
-  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}<i>⧉</i>`;
+  const copiedStatus = `<em class="copied-label">✓ 已複製</em>`;
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}${copiedStatus}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
     if (expired) {
       button.classList.add("selected");
       setTimeout(() => button.classList.remove("selected"), 1200);
     }
-    copyText(value, typeof coordinate === "object" ? coordinate.name : value);
+    await copyText(value, typeof coordinate === "object" ? coordinate.name : value);
+    copiedKeys.add(key);
+    saveCopiedKeys();
+    button.classList.add("visited");
+    updateCopiedCounter();
   });
   return button;
 }
@@ -94,6 +133,7 @@ function render() {
   const query = elements.search.value.trim().toLowerCase();
   const fragment = document.createDocumentFragment();
   visibleCoordinates = [];
+  visibleCoordinateKeys = [];
   let visibleGroups = 0;
 
   libraries[activeCountry].forEach((group) => {
@@ -108,6 +148,8 @@ function render() {
 
     visibleGroups += 1;
     visibleCoordinates.push(...matches);
+    const matchKeys = matches.map((coordinate) => coordinateKey(activeCountry, group.name, coordinate));
+    visibleCoordinateKeys.push(...matchKeys);
     const section = document.createElement("section");
     section.className = "region-block";
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
@@ -137,7 +179,9 @@ function render() {
     const grid = document.createElement("div");
     grid.className = "coordinate-grid";
     const groupEndDate = group.event?.endDate || eventSource[activeCountry]?.endDate;
-    grid.replaceChildren(...matches.map((coordinate, index) => makeCoordinateButton(coordinate, index, groupEndDate)));
+    grid.replaceChildren(...matches.map((coordinate, index) =>
+      makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index])
+    ));
     section.appendChild(grid);
     fragment.appendChild(section);
   });
@@ -149,6 +193,7 @@ function render() {
   elements.countryLabel.textContent = countryNames[activeCountry];
   elements.empty.hidden = visibleCoordinates.length > 0;
   elements.copyAll.disabled = visibleCoordinates.length === 0;
+  updateCopiedCounter();
 
   const countryEvent = eventSource[activeCountry];
   elements.eventBanner.hidden = !countryEvent;
@@ -192,8 +237,20 @@ elements.clearSearch.addEventListener("click", () => {
   elements.search.focus();
   render();
 });
-elements.copyAll.addEventListener("click", () => {
-  copyText(visibleCoordinates.map(coordinateValue).join("\n"), `${visibleCoordinates.length} COORDINATES`);
+elements.copyAll.addEventListener("click", async () => {
+  await copyText(visibleCoordinates.map(coordinateValue).join("\n"), `${visibleCoordinates.length} COORDINATES`);
+  visibleCoordinateKeys.forEach((key) => copiedKeys.add(key));
+  saveCopiedKeys();
+  render();
+});
+elements.clearCopied.addEventListener("click", () => {
+  copiedKeys.clear();
+  try {
+    localStorage.removeItem(copiedStorageKey);
+  } catch {
+    // 忽略瀏覽器封鎖儲存空間的情況。
+  }
+  render();
 });
 elements.converterForm.addEventListener("submit", (event) => {
   event.preventDefault();
