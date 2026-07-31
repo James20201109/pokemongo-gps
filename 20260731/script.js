@@ -1,6 +1,13 @@
 const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
-const countryNames = { japan: "JAPAN", korea: "KOREA", uk: "UNITED KINGDOM", us: "UNITED STATES" };
+const countryNames = {
+  japan: "JAPAN",
+  korea: "KOREA",
+  uk: "UNITED KINGDOM",
+  us: "UNITED STATES",
+  hot2026: "GLOBAL HOTSPOTS 2026",
+  hot2025: "GLOBAL HOTSPOTS 2025"
+};
 
 const elements = {
   tabs: [...document.querySelectorAll(".country-tab")],
@@ -62,7 +69,9 @@ const libraries = {
   japan: librarySource.japan,
   korea: librarySource.korea,
   uk: librarySource.uk,
-  us: librarySource.us
+  us: librarySource.us,
+  hot2026: librarySource.hot2026,
+  hot2025: librarySource.hot2025
 };
 
 function coordinateValue(coordinate) {
@@ -153,7 +162,10 @@ function render() {
     const section = document.createElement("section");
     section.className = "region-block";
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
-    section.innerHTML = `<header>${region}<h3>${group.name}</h3><b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    const groupSource = group.sourceUrl
+      ? `<a class="group-source" href="${group.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.sourceLabel || "資料來源"} ↗</a>`
+      : "";
+    section.innerHTML = `<header>${region}<h3>${group.name}</h3>${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
     if (group.event) {
       const eventInfo = document.createElement("div");
       eventInfo.className = "event-info";
@@ -168,8 +180,11 @@ function render() {
       const sourceLink = group.event.sourceUrl
         ? `<a class="event-source" href="${group.event.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.event.sourceLabel || "查看文獻來源"} <span>↗</span></a>`
         : "";
+      const periodInfo = group.event.period
+        ? `<div class="event-period"><span>EVENT PERIOD / 台灣時間</span><strong>${group.event.period}</strong></div>`
+        : "";
       eventInfo.innerHTML = `
-        <div class="event-period"><span>EVENT PERIOD / 台灣時間</span><strong>${group.event.period}</strong></div>
+        ${periodInfo}
         <p>${group.event.description}</p>
         <div class="raid-note"><b>★ ${detailLabel}</b>${bulletList}</div>
         ${notice}
