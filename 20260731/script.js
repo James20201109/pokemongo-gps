@@ -1,12 +1,14 @@
 const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
 const countryNames = {
+  lego: "LEGO GLOBAL EVENT",
   japan: "JAPAN",
   korea: "KOREA",
   uk: "UNITED KINGDOM",
   us: "UNITED STATES",
   hot2026: "GLOBAL HOTSPOTS 2026",
-  hot2025: "GLOBAL HOTSPOTS 2025"
+  hot2025: "GLOBAL HOTSPOTS 2025",
+  raid: "GLOBAL RAID CLOCK"
 };
 
 const elements = {
@@ -35,11 +37,12 @@ const elements = {
   toastLabel: document.querySelector("#toast-label")
 };
 
-let activeCountry = "japan";
+let activeCountry = "lego";
 let visibleCoordinates = [];
 let visibleCoordinateKeys = [];
 let toastTimer;
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
+const activeTabStorageKey = "geo-pulse-active-tab-v1";
 
 function loadCopiedKeys() {
   try {
@@ -66,13 +69,26 @@ function updateCopiedCounter() {
 }
 
 const libraries = {
+  lego: librarySource.lego,
   japan: librarySource.japan,
   korea: librarySource.korea,
   uk: librarySource.uk,
   us: librarySource.us,
   hot2026: librarySource.hot2026,
-  hot2025: librarySource.hot2025
+  hot2025: librarySource.hot2025,
+  raid: librarySource.raid
 };
+
+function loadActiveCountry() {
+  try {
+    const saved = localStorage.getItem(activeTabStorageKey);
+    return saved && Object.hasOwn(libraries, saved) ? saved : "lego";
+  } catch {
+    return "lego";
+  }
+}
+
+activeCountry = loadActiveCountry();
 
 function coordinateValue(coordinate) {
   return typeof coordinate === "string" ? coordinate : coordinate.value;
@@ -86,6 +102,47 @@ function coordinateKey(country, groupName, coordinate) {
 function isExpired(endDate) {
   if (!endDate) return false;
   return Date.now() > new Date(`${endDate}T23:59:59`).getTime();
+}
+
+function timeToMinutes(time) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function taipeiMinutes(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Taipei",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return Number(values.hour) * 60 + Number(values.minute);
+}
+
+function isRaidActive(start, end, date = new Date()) {
+  if (!start || !end) return false;
+  const current = taipeiMinutes(date);
+  const startMinutes = timeToMinutes(start);
+  const endMinutes = timeToMinutes(end);
+  return endMinutes <= startMinutes
+    ? current >= startMinutes || current < endMinutes
+    : current >= startMinutes && current < endMinutes;
+}
+
+function localTime(timeZone, date = new Date()) {
+  try {
+    return new Intl.DateTimeFormat("zh-TW", {
+      timeZone,
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).format(date);
+  } catch {
+    return "--:--";
+  }
 }
 
 function allCoordinates() {
@@ -114,15 +171,23 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
   const visited = copiedKeys.has(key);
+  const raid = typeof coordinate === "object" && coordinate.timezone;
+  const raidActive = raid && isRaidActive(coordinate.start, coordinate.end);
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidActive ? " raid-active" : ""}`;
+  if (raid) {
+    button.dataset.raidStart = coordinate.start;
+    button.dataset.raidEnd = coordinate.end;
+    button.dataset.timezone = coordinate.timezone;
+  }
   const label = typeof coordinate === "object"
-    ? `<span class="coordinate-label"><b>${coordinate.name}</b><small>${coordinate.area}</small></span>`
+    ? `<span class="coordinate-label"><b>${coordinate.name}</b><small>${coordinate.area}</small>${raid ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
     : "";
   const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
   const copiedStatus = `<em class="copied-label">✓ 已複製</em>`;
-  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}${copiedStatus}<i>⧉</i>`;
+  const raidStatus = raid ? `<em class="raid-live-label">LIVE NOW</em>` : "";
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}${copiedStatus}${raidStatus}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
   button.addEventListener("click", async () => {
     if (expired) {
@@ -218,10 +283,24 @@ function render() {
     elements.eventPeriod.textContent = countryEvent.period;
     elements.eventDescription.textContent = countryEvent.description;
   }
+  updateRaidClocks();
+}
+
+function updateRaidClocks() {
+  document.querySelectorAll(".raid-card").forEach((card) => {
+    card.classList.toggle("raid-active", isRaidActive(card.dataset.raidStart, card.dataset.raidEnd));
+    const clock = card.querySelector(".local-clock");
+    if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
+  });
 }
 
 function switchCountry(country) {
   activeCountry = country;
+  try {
+    localStorage.setItem(activeTabStorageKey, country);
+  } catch {
+    // 無法使用儲存空間時，仍保留本次瀏覽期間的頁籤狀態。
+  }
   elements.tabs.forEach((tab) => {
     const active = tab.dataset.country === country;
     tab.classList.toggle("active", active);
@@ -276,4 +355,5 @@ elements.converterForm.addEventListener("submit", (event) => {
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
-render();
+switchCountry(activeCountry);
+setInterval(updateRaidClocks, 30000);

@@ -1,5 +1,32 @@
 // GPS 座標資料庫：依國家、區域及地區分組。
 window.coordinateLibraries = {
+  "lego": [
+    {
+      "region": "Pokémon GO × LEGO 聯名活動",
+      "name": "LEGO Store 特殊背景卡皮卡丘",
+      "event": {
+        "period": "2026 年 8 月 3 日 ～ 2026 年 9 月 30 日",
+        "endDate": "2026-09-30",
+        "description": "Pokémon GO × LEGO 聯名活動回歸，指定 LEGO Store 可獲得特殊背景卡皮卡丘。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "一星團體戰。",
+          "GO 集章活動。",
+          "限時調查。",
+          "限定貼圖。"
+        ],
+        "notice": "活動座標以各地當地時間下午 5:00 開始；座標卡片已標示對應台灣時間。"
+      },
+      "coordinates": [
+        { "name": "LEGO Store · 紐約", "area": "美國紐約 · 當地 17:00 · 台灣隔日 05:00", "value": "40.758800, -73.977993" },
+        { "name": "LEGO Store · 倫敦", "area": "英國倫敦 · 當地 17:00 · 台灣隔日 00:00", "value": "51.510285, -0.131135" },
+        { "name": "LEGO Store · 柏林", "area": "德國柏林 · 當地 17:00 · 台灣當日 23:00", "value": "52.503632, 13.338763" },
+        { "name": "LEGO Store · 巴黎", "area": "法國巴黎 · 當地 17:00 · 台灣當日 23:00", "value": "48.861580, 2.347634" },
+        { "name": "LEGO Store · 華沙", "area": "波蘭華沙 · 當地 17:00 · 台灣當日 23:00", "value": "52.179484, 21.003730" },
+        { "name": "LEGO Store · 雪梨", "area": "澳洲雪梨 · 當地 17:00 · 台灣當日 15:00", "value": "-33.869096, 151.208320" }
+      ]
+    }
+  ],
   "japan": [
     {
       "region": "北海道・東北",
@@ -961,6 +988,42 @@ window.coordinateLibraries = {
         { "name": "大笨鐘／薩沃伊酒店", "area": "英國 · 倫敦", "value": "51.510100, -0.120600" },
         { "name": "環形碼頭", "area": "澳大利亞 · 雪梨", "value": "-33.861756, 151.210884" },
         { "name": "阿納海姆迪士尼樂園", "area": "美國 · 加利福尼亞", "value": "33.812511, -117.918976" }
+      ]
+    }
+  ],
+  "raid": [
+    {
+      "region": "全球團戰時區追蹤",
+      "name": "團戰座標 · 台灣時間表",
+      "coordinates": [
+        { "name": "倫敦", "area": "吉里巴斯 · 聖誕島｜台灣 08:00–11:00", "timezone": "Pacific/Kiritimati", "start": "08:00", "end": "11:00", "value": "1.986900, -157.477100" },
+        { "name": "市政府廣場", "area": "薩摩亞 · 阿皮亞｜台灣 09:00–12:00", "timezone": "Pacific/Apia", "start": "09:00", "end": "12:00", "value": "-13.830500, -171.766700" },
+        { "name": "植物園", "area": "紐西蘭 · 威靈頓｜台灣 10:00–13:00", "timezone": "Pacific/Auckland", "start": "10:00", "end": "13:00", "value": "-41.284400, 174.767600" },
+        { "name": "滑板公園", "area": "法屬新喀里多尼亞｜台灣 11:00–14:00", "timezone": "Pacific/Noumea", "start": "11:00", "end": "14:00", "value": "-22.213400, 166.466400" },
+        { "name": "皇家植物園", "area": "澳洲 · 雪梨｜台灣 12:00–15:00", "timezone": "Australia/Sydney", "start": "12:00", "end": "15:00", "value": "-33.864700, 151.216700" },
+        { "name": "慶典中心", "area": "澳洲 · 阿德萊德｜台灣 12:30–15:30", "timezone": "Australia/Adelaide", "start": "12:30", "end": "15:30", "value": "-34.919100, 138.598800" },
+        { "name": "上野恩賜公園", "area": "日本 · 東京｜台灣 13:00–16:00", "timezone": "Asia/Tokyo", "start": "13:00", "end": "16:00", "value": "35.714000, 139.771700" },
+        { "name": "大安森林公園", "area": "台灣 · 台北｜台灣 14:00–17:00", "timezone": "Asia/Taipei", "start": "14:00", "end": "17:00", "value": "25.030700, 121.535200" },
+        { "name": "陶丹公園", "area": "越南 · 胡志明市｜台灣 15:00–18:00", "timezone": "Asia/Ho_Chi_Minh", "start": "15:00", "end": "18:00", "value": "10.774100, 106.692700" },
+        { "name": "達卡兒童公園", "area": "孟加拉 · 達卡｜台灣 16:00–19:00", "timezone": "Asia/Dhaka", "start": "16:00", "end": "19:00", "value": "23.734800, 90.397600" },
+        { "name": "洛迪花園", "area": "印度 · 新德里｜台灣 16:30–19:30", "timezone": "Asia/Kolkata", "start": "16:30", "end": "19:30", "value": "28.592900, 77.220600" },
+        { "name": "馬律市中心", "area": "馬爾地夫｜台灣 17:00–20:00", "timezone": "Indian/Maldives", "start": "17:00", "end": "20:00", "value": "4.172500, 73.508900" },
+        { "name": "迪拜碼頭", "area": "阿拉伯聯合大公國｜台灣 18:00–21:00", "timezone": "Asia/Dubai", "start": "18:00", "end": "21:00", "value": "25.076600, 55.132800" },
+        { "name": "卡扎里公園", "area": "希臘 · 拉里薩｜台灣 19:00–22:00", "timezone": "Europe/Athens", "start": "19:00", "end": "22:00", "value": "39.641800, 22.413300" },
+        { "name": "化學公園", "area": "西班牙 · 札拉戈沙｜台灣 20:00–23:00", "timezone": "Europe/Madrid", "start": "20:00", "end": "23:00", "value": "41.661900, -0.893500" },
+        { "name": "國會廣場", "area": "英國 · 倫敦｜台灣 21:00–翌日 00:00", "timezone": "Europe/London", "start": "21:00", "end": "00:00", "value": "51.500700, -0.125800" },
+        { "name": "音樂廳公園", "area": "冰島 · 雷克雅維克｜台灣 22:00–翌日 01:00", "timezone": "Atlantic/Reykjavik", "start": "22:00", "end": "01:00", "value": "64.141200, -21.944000" },
+        { "name": "民族博物館", "area": "維德角 · 普拉亞｜台灣 23:00–翌日 02:00", "timezone": "Atlantic/Cape_Verde", "start": "23:00", "end": "02:00", "value": "14.921300, -23.507000" },
+        { "name": "聖米格爾宮殿", "area": "巴西｜台灣 00:00–03:00", "timezone": "America/Noronha", "start": "00:00", "end": "03:00", "value": "-3.840600, -32.410800" },
+        { "name": "伊比拉布埃拉公園", "area": "巴西 · 聖保羅｜台灣 01:00–04:00", "timezone": "America/Sao_Paulo", "start": "01:00", "end": "04:00", "value": "-23.588000, -46.655100" },
+        { "name": "中央公園", "area": "美國 · 紐約｜台灣 02:00–05:00", "timezone": "America/New_York", "start": "02:00", "end": "05:00", "value": "40.779600, -73.964400" },
+        { "name": "錢凱廣場", "area": "秘魯 · 利馬｜台灣 03:00–06:00", "timezone": "America/Lima", "start": "03:00", "end": "06:00", "value": "-11.562900, -77.270100" },
+        { "name": "城市公園", "area": "墨西哥 · 墨西哥城｜台灣 04:00–07:00", "timezone": "America/Mexico_City", "start": "04:00", "end": "07:00", "value": "19.419200, -99.180800" },
+        { "name": "漁人碼頭", "area": "美國 · 舊金山｜台灣 05:00–08:00", "timezone": "America/Los_Angeles", "start": "05:00", "end": "08:00", "value": "37.809300, -122.415700" },
+        { "name": "阿拉斯加海洋中心", "area": "美國 · 史華德｜台灣 06:00–09:00", "timezone": "America/Anchorage", "start": "06:00", "end": "09:00", "value": "60.099900, -149.440800" },
+        { "name": "甘比爾群島", "area": "法屬玻里尼西亞｜台灣 07:00–10:00", "timezone": "Pacific/Gambier", "start": "07:00", "end": "10:00", "value": "-23.123200, -134.968500" },
+        { "name": "檀香山動物園", "area": "美國 · 夏威夷｜台灣 08:00–11:00", "timezone": "Pacific/Honolulu", "start": "08:00", "end": "11:00", "value": "21.271500, -157.822600" },
+        { "name": "巴哥巴哥博物館", "area": "美屬薩摩亞｜台灣 09:00–12:00", "timezone": "Pacific/Pago_Pago", "start": "09:00", "end": "12:00", "value": "-14.277700, -170.687700" }
       ]
     }
   ]

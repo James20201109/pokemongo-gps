@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;600;800;900&display=swap");
 
-:root { --bg:#05080b; --panel:#0a1014; --line:#1a2b31; --cyan:#35f4e6; --lime:#c7ff4a; --text:#eef8f7; --muted:#75908f; }
+:root { --bg:#05080b; --panel:#0a1014; --line:#1a2b31; --cyan:#35f4e6; --lime:#c7ff4a; --yellow:#ffd83d; --text:#eef8f7; --muted:#75908f; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--bg); color:var(--text); font-family:"Noto Sans TC",sans-serif; }
@@ -49,6 +49,9 @@ h2 { margin:0;font-size:34px;letter-spacing:-.04em; }
 .country-tab b { margin-right:9px;font:700 10px "JetBrains Mono",monospace;color:#3f6468; }
 .country-tab.active { border-color:var(--cyan);background:rgba(53,244,230,.08);color:var(--text);box-shadow:inset 0 -2px var(--cyan); }
 .country-tab.active b { color:var(--cyan); }
+.country-tab.raid-tab { border-color:rgba(255,216,61,.3);color:#b7a65c; }
+.country-tab.raid-tab b { color:var(--yellow); }
+.country-tab.raid-tab:hover,.country-tab.raid-tab.active { border-color:var(--yellow);background:rgba(255,216,61,.09);color:#fff3b2;box-shadow:inset 0 -2px var(--yellow),0 0 18px rgba(255,216,61,.07); }
 .control-deck { display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:12px;border:1px solid var(--line);background:#080d11; }
 .search-box { min-height:50px;display:flex;align-items:center;gap:13px;padding:0 16px;border:1px solid #17282e;background:#05090c; }
 .search-box>span { color:var(--cyan);font-size:22px; }
@@ -119,6 +122,15 @@ kbd { color:#40585b;font:8px "JetBrains Mono",monospace; }
 .coordinate-label { min-width:0;display:grid;gap:4px; }
 .coordinate-label b { overflow:hidden;color:var(--text);font-size:12px;white-space:nowrap;text-overflow:ellipsis; }
 .coordinate-label small { overflow:hidden;color:#607c7f;font-size:10px;white-space:nowrap;text-overflow:ellipsis; }
+.coordinate-item.raid-card { min-height:90px;border-color:rgba(255,216,61,.18); }
+.raid-card .coordinate-label { gap:5px; }
+.raid-card .coordinate-label small { overflow:visible;white-space:normal;text-overflow:clip;line-height:1.35; }
+.raid-card .local-clock { color:#d9bd42;font:700 9px "JetBrains Mono",monospace;letter-spacing:.03em; }
+.raid-live-label { display:none;position:absolute;right:8px;top:6px;color:#1a1500;background:var(--yellow);padding:3px 5px;font:800 7px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.07em;box-shadow:0 0 14px rgba(255,216,61,.25); }
+.coordinate-item.raid-active { border-color:var(--yellow);background:linear-gradient(110deg,rgba(255,216,61,.16),rgba(255,178,31,.035));box-shadow:0 7px 28px rgba(255,216,61,.12),inset 3px 0 var(--yellow); }
+.coordinate-item.raid-active strong { color:#fff1a1; }
+.coordinate-item.raid-active .raid-live-label { display:block; }
+.coordinate-item.raid-active:hover,.coordinate-item.raid-active:focus-visible { border-color:#fff08b;background:rgba(255,216,61,.19);box-shadow:0 9px 32px rgba(255,216,61,.16),inset 3px 0 var(--yellow); }
 .empty { padding:80px;text-align:center;border:1px dashed #244147; }
 .empty>span { color:#37585c;font:9px "JetBrains Mono",monospace;letter-spacing:.3em; }
 .empty h2 { margin:14px 0; }
