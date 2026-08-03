@@ -15,7 +15,10 @@ window.coordinateLibraries = {
           "限時調查。",
           "限定貼圖。"
         ],
-        "notice": "活動座標以各地當地時間下午 5:00 開始；座標卡片已標示對應台灣時間。"
+        "notice": "活動座標以各地當地時間下午 5:00 開始；座標卡片已標示對應台灣時間。",
+        "image": "assets/lego-pikachu.jpg",
+        "imageAlt": "Pokémon GO × LEGO 聯名活動皮卡丘特殊背景",
+        "imageCaption": "Pokémon GO × LEGO 聯名活動特殊背景示意圖"
       },
       "coordinates": [
         { "name": "LEGO Store · 紐約", "area": "美國紐約 · 當地 17:00 · 台灣隔日 05:00", "value": "40.758800, -73.977993" },
@@ -724,7 +727,10 @@ window.coordinateLibraries = {
         "period": "2026 年 7 月 28 日 15:00 ～ 2027 年 8 月 31 日 19:00（台灣時間）",
         "endDate": "2027-08-31",
         "description": "為慶祝寶可夢 30 週年企劃「Red Pokémon Jet」啟航，日本指定機場舉辦限定合作活動。",
-        "raid": "小火龍將於一星團體戰登場，並有機會獲得 Red Pokémon Jet 特殊背景。每位訓練家每天可在每座道館參加 1 次團體戰。"
+        "raid": "小火龍將於一星團體戰登場，並有機會獲得 Red Pokémon Jet 特殊背景。每位訓練家每天可在每座道館參加 1 次團體戰。",
+        "image": "assets/red-pokemon-jet.jpg",
+        "imageAlt": "Red Pokémon Jet 特殊背景小火龍",
+        "imageCaption": "Red Pokémon Jet 特殊背景示意圖"
       },
       "coordinates": [
         { "name": "新千歲機場", "area": "New Chitose Airport", "value": "42.787530, 141.676850" },
@@ -744,7 +750,10 @@ window.coordinateLibraries = {
         "endDate": "2026-09-15",
         "description": "台山公園及周邊天文設施活動座標。",
         "detailLabel": "活動任務",
-        "detail": "捕捉 10 隻超能力屬性寶可夢。火箭 H-2 的原始資料未提供座標，待取得座標後再補入。"
+        "detail": "捕捉 10 隻超能力屬性寶可夢。火箭 H-2 的原始資料未提供座標，待取得座標後再補入。",
+        "image": "assets/astronomy-event-clefairy.jpg",
+        "imageAlt": "天文活動星空特殊背景皮皮",
+        "imageCaption": "天文活動星空特殊背景示意圖"
       },
       "coordinates": [
         { "name": "天文活動中心座標", "area": "台山公園周邊", "value": "37.970270, 140.782750" },

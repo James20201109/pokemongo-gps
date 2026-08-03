@@ -34,7 +34,11 @@ const elements = {
   coordInput: document.querySelector("#coord-input"),
   converterOutput: document.querySelector("#converter-output"),
   toast: document.querySelector("#toast"),
-  toastLabel: document.querySelector("#toast-label")
+  toastLabel: document.querySelector("#toast-label"),
+  imageModal: document.querySelector("#image-modal"),
+  imageModalContent: document.querySelector("#image-modal-content"),
+  imageModalCaption: document.querySelector("#image-modal-caption"),
+  imageModalClose: document.querySelector("#image-modal-close")
 };
 
 let activeCountry = "lego";
@@ -167,6 +171,22 @@ async function copyText(text, label) {
   toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 1800);
 }
 
+function openImageModal(image, alt, caption) {
+  elements.imageModalContent.src = image;
+  elements.imageModalContent.alt = alt;
+  elements.imageModalCaption.textContent = caption;
+  if (typeof elements.imageModal.showModal === "function") {
+    elements.imageModal.showModal();
+  } else {
+    elements.imageModal.setAttribute("open", "");
+  }
+}
+
+function closeImageModal() {
+  elements.imageModal.close?.();
+  elements.imageModal.removeAttribute("open");
+}
+
 function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
@@ -248,12 +268,22 @@ function render() {
       const periodInfo = group.event.period
         ? `<div class="event-period"><span>EVENT PERIOD / 台灣時間</span><strong>${group.event.period}</strong></div>`
         : "";
+      const eventImage = group.event.image
+        ? `<button class="event-image-trigger" type="button" aria-label="放大查看 ${group.event.imageAlt}">
+            <img src="${group.event.image}" alt="${group.event.imageAlt}" loading="lazy">
+            <span>點擊放大 <b>↗</b></span>
+          </button>`
+        : "";
       eventInfo.innerHTML = `
         ${periodInfo}
         <p>${group.event.description}</p>
         <div class="raid-note"><b>★ ${detailLabel}</b>${bulletList}</div>
         ${notice}
-        ${sourceLink}`;
+        ${sourceLink}
+        ${eventImage}`;
+      eventInfo.querySelector(".event-image-trigger")?.addEventListener("click", () => {
+        openImageModal(group.event.image, group.event.imageAlt, group.event.imageCaption);
+      });
       section.appendChild(eventInfo);
     }
     const grid = document.createElement("div");
@@ -352,6 +382,10 @@ elements.converterForm.addEventListener("submit", (event) => {
   elements.converterOutput.className = result ? "success" : "error";
   elements.converterOutput.textContent = result || "ERROR: INVALID COORDINATE";
   if (result) copyText(result, "DECODED COORDINATE");
+});
+elements.imageModalClose.addEventListener("click", closeImageModal);
+elements.imageModal.addEventListener("click", (event) => {
+  if (event.target === elements.imageModal) closeImageModal();
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
