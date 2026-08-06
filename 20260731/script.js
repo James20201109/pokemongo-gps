@@ -1,5 +1,5 @@
 window.location.href = "../";
-return;
+
 const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
 const countryNames = {
