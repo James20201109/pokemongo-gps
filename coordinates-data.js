@@ -743,6 +743,36 @@ window.coordinateLibraries = {
       ]
     },
     {
+      "region": "Pokémon GO × ANA 航空合作活動",
+      "name": "綠色機身 第二階段 · 日本當地活動",
+      "event": {
+        "period": "2026 年 9 月 18 日 14:00 ～ 2027 年 8 月 31 日 20:00（日本當地時間）",
+        "endDate": "2027-08-31",
+        "description": "Pokémon GO × ANA 綠色機身第二階段日本當地合作活動。",
+        "detailLabel": "活動主角",
+        "detail": "妙蛙種子將以綠色機身特殊背卡登場。",
+        "image": "assets/ana-green-jet-bulbasaur.png",
+        "imageAlt": "Pokémon GO × ANA 綠色機身妙蛙種子特殊背卡",
+        "imageCaption": "ANA 綠色機身第二階段 · 妙蛙種子特殊背卡"
+      },
+      "coordinates": [
+        { "name": "高知空港", "area": "Kochi Airport", "value": "33.547440, 133.673920" },
+        { "name": "松山空港", "area": "Matsuyama Airport", "value": "33.829350, 132.704340" },
+        { "name": "高松空港", "area": "Takamatsu Airport", "value": "34.218920, 134.018680" },
+        { "name": "德島空港", "area": "Tokushima Airport", "value": "34.134730, 134.617960" },
+        { "name": "福岡空港", "area": "Fukuoka Airport", "value": "33.584430, 130.444110" },
+        { "name": "佐賀空港", "area": "Saga Airport", "value": "33.153620, 130.303630" },
+        { "name": "宮崎空港", "area": "Miyazaki Airport", "value": "31.872590, 131.442130" },
+        { "name": "熊本空港", "area": "Kumamoto Airport", "value": "32.834350, 130.858250" },
+        { "name": "鹿兒島空港", "area": "Kagoshima Airport", "value": "31.801660, 130.715330" },
+        { "name": "長崎空港", "area": "Nagasaki Airport", "value": "32.914370, 129.922400" },
+        { "name": "大分空港", "area": "Oita Airport", "value": "33.477080, 131.732370" },
+        { "name": "石垣空港", "area": "Ishigaki Airport", "value": "24.390790, 124.246080" },
+        { "name": "宮古空港", "area": "Miyako Airport", "value": "24.778760, 125.298430" },
+        { "name": "那霸空港", "area": "Naha Airport", "value": "26.206490, 127.650620" }
+      ]
+    },
+    {
       "region": "日本限定活動",
       "name": "天文活動",
       "event": {
@@ -927,6 +957,63 @@ window.coordinateLibraries = {
   ],
   "us": [
     {
+      "region": "Pokémon World Championships 2026",
+      "name": "舊金山大橋背卡 · 集章趣",
+      "event": {
+        "period": "2026 年 8 月 28 日 ～ 2026 年 8 月 30 日",
+        "endDate": "2026-08-30",
+        "description": "#WorldChampionships2026｜美國舊金山 Moscone Center 周邊限定集章活動。",
+        "detailLabel": "必背寶可夢",
+        "detail": "巨鉗蟹／白海獅／鋼鋁龍／椰蛋樹／超夢／烈空座。",
+        "notice": "本活動已結束，座標卡片滑鼠移入或點選時會顯示紅色過期提示。",
+        "images": [
+          {
+            "src": "assets/world-championships-2026-bridge-1.png",
+            "alt": "Pokémon World Championships 2026 舊金山大橋特殊背卡參考圖一",
+            "caption": "舊金山大橋特殊背卡參考圖一"
+          },
+          {
+            "src": "assets/world-championships-2026-bridge-2.png",
+            "alt": "Pokémon World Championships 2026 舊金山大橋特殊背卡參考圖二",
+            "caption": "舊金山大橋特殊背卡參考圖二"
+          },
+          {
+            "src": "assets/sf-bridge-rayquaza.png",
+            "alt": "烈空坐舊金山大橋特殊背卡",
+            "caption": "烈空坐 · 舊金山大橋特殊背卡"
+          },
+          {
+            "src": "assets/sf-bridge-kingler.png",
+            "alt": "巨鉗蟹舊金山大橋特殊背卡",
+            "caption": "巨鉗蟹 · 舊金山大橋特殊背卡"
+          },
+          {
+            "src": "assets/sf-bridge-duraludon.png",
+            "alt": "鋁鋼龍舊金山大橋特殊背卡",
+            "caption": "鋁鋼龍 · 舊金山大橋特殊背卡"
+          },
+          {
+            "src": "assets/sf-bridge-dewgong.png",
+            "alt": "白海獅舊金山大橋特殊背卡",
+            "caption": "白海獅 · 舊金山大橋特殊背卡"
+          },
+          {
+            "src": "assets/sf-bridge-exeggutor.png",
+            "alt": "椰蛋樹舊金山大橋特殊背卡",
+            "caption": "椰蛋樹 · 舊金山大橋特殊背卡"
+          }
+        ]
+      },
+      "coordinates": [
+        { "name": "Moscone Center 集章點 01", "area": "美國 · 舊金山", "value": "37.785600, -122.401200" },
+        { "name": "Moscone Center 集章點 02", "area": "美國 · 舊金山", "value": "37.783300, -122.402300" },
+        { "name": "Moscone Center 集章點 03", "area": "美國 · 舊金山", "value": "37.788700, -122.397300" },
+        { "name": "Moscone Center 集章點 04", "area": "美國 · 舊金山", "value": "37.795300, -122.393800" },
+        { "name": "Moscone Center 集章點 05", "area": "美國 · 舊金山", "value": "37.787700, -122.407900" },
+        { "name": "Moscone Center 集章點 06", "area": "美國 · 舊金山", "value": "37.790800, -122.405600" }
+      ]
+    },
+    {
       "region": "Pokémon GO × MLB 活動",
       "name": "克里夫蘭守護者隊 · Cleveland Guardians",
       "event": {
@@ -955,7 +1042,10 @@ window.coordinateLibraries = {
         "endDate": "2027-04-11",
         "description": "美國芝加哥化石博物館皮卡丘活動座標。",
         "detailLabel": "活動地點",
-        "detail": "芝加哥博物館園區限定活動。"
+        "detail": "芝加哥博物館園區限定活動。",
+        "image": "assets/chicago-fossil-museum-pikachu.png",
+        "imageAlt": "化石博物館皮卡丘特殊背景卡參考圖片",
+        "imageCaption": "芝加哥化石博物館皮卡丘特殊背景卡"
       },
       "coordinates": [
         { "name": "化石博物館皮卡丘", "area": "Chicago · Museum Campus", "value": "41.866244, -87.616969" }
@@ -1004,6 +1094,18 @@ window.coordinateLibraries = {
     {
       "region": "全球團戰時區追蹤",
       "name": "團戰座標 · 台灣時間表",
+      "event": {
+        "period": "依各座標所在地的當地時間自動更新",
+        "description": "地點名稱後方的括號為當日可用時段倒數。系統從當地 09:00 開始，以 21:30 為終點計算；例如當地 17:00 距離 21:30 還有 4.5 小時，因此顯示（4.5）。每經過 30 分鐘，數值減少 0.5。",
+        "detailLabel": "燈號與倒數說明",
+        "bullets": [
+          "黃色 RAID TIME：當地時間 14:00～16:59，屬於團戰重點時段，黃色優先於綠色。",
+          "綠色 ACTIVE HOURS：當地時間 09:00～13:59，以及 17:00～20:59。",
+          "一般暗色：當地時間 21:00～翌日 08:59，不顯示黃色或綠色高亮。",
+          "倒數數值：09:00～21:29 依距離 21:30 的剩餘時間顯示；21:30～翌日 08:59 固定顯示（0）。"
+        ],
+        "notice": "卡片時間、燈號與倒數皆以各地時區計算，頁面開啟期間會自動更新。"
+      },
       "coordinates": [
         { "name": "倫敦", "area": "吉里巴斯 · 聖誕島｜台灣 08:00–11:00", "timezone": "Pacific/Kiritimati", "start": "08:00", "end": "11:00", "value": "1.986900, -157.477100" },
         { "name": "市政府廣場", "area": "薩摩亞 · 阿皮亞｜台灣 09:00–12:00", "timezone": "Pacific/Apia", "start": "09:00", "end": "12:00", "value": "-13.830500, -171.766700" },

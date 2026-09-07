@@ -44,7 +44,12 @@ const elements = {
   imageModal: document.querySelector("#image-modal"),
   imageModalContent: document.querySelector("#image-modal-content"),
   imageModalCaption: document.querySelector("#image-modal-caption"),
-  imageModalClose: document.querySelector("#image-modal-close")
+  imageModalClose: document.querySelector("#image-modal-close"),
+  trashFilterOpen: document.querySelector("#trash-filter-open"),
+  trashFilterModal: document.querySelector("#trash-filter-modal"),
+  trashFilterClose: document.querySelector("#trash-filter-close"),
+  trashFilterContent: document.querySelector("#trash-filter-content"),
+  trashFilterCopy: document.querySelector("#trash-filter-copy")
 };
 
 let activeCountry = "lego";
@@ -58,6 +63,37 @@ let pendingRemovalButton = null;
 let pendingRemovalTimer = null;
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
+const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
+const collapsibleJapanGroups = new Set([
+  "北海道", "青森", "岩手", "宮城", "秋田", "山形", "福島",
+  "茨城", "栃木", "埼玉", "千葉", "東京", "神奈川",
+  "新潟", "富山", "石川", "福井", "岐阜", "靜岡", "愛知", "三重",
+  "滋賀", "京都", "大阪", "兵庫", "奈良", "和歌山", "鳥取", "島根",
+  "岡山", "山口", "德島", "香川", "愛媛", "高知", "福岡", "佐賀",
+  "長崎", "宮崎", "鹿兒島", "沖繩", "棒球相關活動"
+]);
+const stampedJapanGroups = new Set(
+  [...collapsibleJapanGroups].filter((name) => name !== "棒球相關活動").concat("日本蓋章")
+);
+
+function loadExpandedGroups() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(expandedGroupsStorageKey) || "[]");
+    return new Set(Array.isArray(saved) ? saved : []);
+  } catch {
+    return new Set();
+  }
+}
+
+const expandedGroups = loadExpandedGroups();
+
+function saveExpandedGroups() {
+  try {
+    localStorage.setItem(expandedGroupsStorageKey, JSON.stringify([...expandedGroups]));
+  } catch {
+    // 瀏覽器禁止儲存時，仍保留本次頁面開啟期間的展開狀態。
+  }
+}
 
 function loadCopiedKeys() {
   try {
@@ -159,6 +195,38 @@ function localTime(timeZone, date = new Date()) {
   } catch {
     return "--:--";
   }
+}
+
+function localMinutes(timeZone, date = new Date()) {
+  try {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(date);
+    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+    return Number(values.hour) * 60 + Number(values.minute);
+  } catch {
+    return -1;
+  }
+}
+
+function raidTimeStatus(timeZone, date = new Date()) {
+  const current = localMinutes(timeZone, date);
+  if (current >= 14 * 60 && current < 17 * 60) return "peak";
+  if (current >= 9 * 60 && current < 21 * 60) return "open";
+  return "closed";
+}
+
+function raidCountdown(timeZone, date = new Date()) {
+  const current = localMinutes(timeZone, date);
+  const startMinutes = 9 * 60;
+  const endMinutes = 21 * 60 + 30;
+  if (current < startMinutes || current >= endMinutes) return "0";
+  const remainingHalfHours = Math.ceil((endMinutes - current) / 30);
+  const remainingHours = remainingHalfHours * 0.5;
+  return Number.isInteger(remainingHours) ? String(remainingHours) : remainingHours.toFixed(1);
 }
 
 function allCoordinates() {
@@ -280,26 +348,39 @@ function closeImageModal() {
   elements.imageModal.removeAttribute("open");
 }
 
+function openTrashFilterModal() {
+  if (typeof elements.trashFilterModal.showModal === "function") {
+    elements.trashFilterModal.showModal();
+  } else {
+    elements.trashFilterModal.setAttribute("open", "");
+  }
+}
+
+function closeTrashFilterModal() {
+  elements.trashFilterModal.close?.();
+  elements.trashFilterModal.removeAttribute("open");
+}
+
 function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
   const visited = copiedKeys.has(key);
   const raid = typeof coordinate === "object" && coordinate.timezone;
-  const raidActive = raid && isRaidActive(coordinate.start, coordinate.end);
+  const raidTimeState = raid ? raidTimeStatus(coordinate.timezone) : "closed";
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidActive ? " raid-active" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}`;
   if (raid) {
     button.dataset.raidStart = coordinate.start;
     button.dataset.raidEnd = coordinate.end;
     button.dataset.timezone = coordinate.timezone;
   }
   const label = typeof coordinate === "object"
-    ? `<span class="coordinate-label"><b>${coordinate.name}</b><small>${coordinate.area}</small>${raid ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
+    ? `<span class="coordinate-label"><b>${coordinate.name}${raid ? ` <span class="raid-countdown">(${raidCountdown(coordinate.timezone)})</span>` : ""}</b><small>${coordinate.area}</small>${raid ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
     : "";
   const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
   const copiedStatus = `<em class="copied-label">✓ 已複製</em>`;
-  const raidStatus = raid ? `<em class="raid-live-label">LIVE NOW</em>` : "";
+  const raidStatus = raid ? `<em class="raid-live-label">${raidTimeState === "peak" ? "RAID TIME" : "ACTIVE HOURS"}</em>` : "";
   button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}${copiedStatus}${raidStatus}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
   button.addEventListener("click", async () => {
@@ -358,11 +439,28 @@ function render() {
     visibleCoordinateKeys.push(...matchKeys);
     const section = document.createElement("section");
     section.className = "region-block";
+    const collapsible = activeCountry === "japan" && collapsibleJapanGroups.has(group.name);
+    const groupStateKey = `${activeCountry}|${group.name}`;
+    const expanded = !collapsible || expandedGroups.has(groupStateKey);
+    section.classList.toggle("is-collapsed", collapsible && !expanded);
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
     const groupSource = group.sourceUrl
       ? `<a class="group-source" href="${group.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.sourceLabel || "資料來源"} ↗</a>`
       : "";
-    section.innerHTML = `<header>${region}<h3>${group.name}</h3>${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    const collapseControl = collapsible
+      ? `<button class="group-collapse" type="button" aria-expanded="${expanded}" aria-label="${expanded ? "收合" : "展開"}${group.name}座標"><span aria-hidden="true">${expanded ? "−" : "＋"}</span></button>`
+      : "";
+    const groupStamp = stampedJapanGroups.has(group.name) ? `<span class="group-stamp" aria-hidden="true">蓋</span>` : "";
+    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    section.querySelector(".group-collapse")?.addEventListener("click", () => {
+      if (expandedGroups.has(groupStateKey)) {
+        expandedGroups.delete(groupStateKey);
+      } else {
+        expandedGroups.add(groupStateKey);
+      }
+      saveExpandedGroups();
+      render();
+    });
     if (group.event) {
       const eventInfo = document.createElement("div");
       eventInfo.className = "event-info";
@@ -380,11 +478,17 @@ function render() {
       const periodInfo = group.event.period
         ? `<div class="event-period"><span>EVENT PERIOD / 台灣時間</span><strong>${group.event.period}</strong></div>`
         : "";
-      const eventImage = group.event.image
-        ? `<button class="event-image-trigger" type="button" aria-label="放大查看 ${group.event.imageAlt}">
-            <img src="${group.event.image}" alt="${group.event.imageAlt}" loading="lazy">
-            <span>點擊放大 <b>↗</b></span>
-          </button>`
+      const eventImages = group.event.images || (group.event.image ? [{
+        src: group.event.image,
+        alt: group.event.imageAlt,
+        caption: group.event.imageCaption
+      }] : []);
+      const eventImage = eventImages.length
+        ? `<div class="event-image-gallery">${eventImages.map((image, index) => `
+            <button class="event-image-trigger" type="button" data-image-index="${index}" aria-label="放大查看 ${image.alt}">
+              <img src="${image.src}" alt="${image.alt}" loading="lazy">
+              <span>點擊放大 <b>↗</b></span>
+            </button>`).join("")}</div>`
         : "";
       eventInfo.innerHTML = `
         ${periodInfo}
@@ -393,9 +497,10 @@ function render() {
         ${notice}
         ${sourceLink}
         ${eventImage}`;
-      eventInfo.querySelector(".event-image-trigger")?.addEventListener("click", () => {
-        openImageModal(group.event.image, group.event.imageAlt, group.event.imageCaption);
-      });
+      eventInfo.querySelectorAll(".event-image-trigger").forEach((trigger) => trigger.addEventListener("click", () => {
+        const image = eventImages[Number(trigger.dataset.imageIndex)];
+        openImageModal(image.src, image.alt, image.caption);
+      }));
       section.appendChild(eventInfo);
     }
     const grid = document.createElement("div");
@@ -404,6 +509,7 @@ function render() {
     grid.replaceChildren(...matches.map((coordinate, index) =>
       makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index])
     ));
+    grid.hidden = collapsible && !expanded;
     section.appendChild(grid);
     fragment.appendChild(section);
   });
@@ -436,7 +542,13 @@ function render() {
 
 function updateRaidClocks() {
   document.querySelectorAll(".raid-card").forEach((card) => {
-    card.classList.toggle("raid-active", isRaidActive(card.dataset.raidStart, card.dataset.raidEnd));
+    const timeState = raidTimeStatus(card.dataset.timezone);
+    card.classList.toggle("raid-active", timeState === "peak");
+    card.classList.toggle("raid-open", timeState === "open");
+    const liveLabel = card.querySelector(".raid-live-label");
+    if (liveLabel) liveLabel.textContent = timeState === "peak" ? "RAID TIME" : "ACTIVE HOURS";
+    const countdown = card.querySelector(".raid-countdown");
+    if (countdown) countdown.textContent = `(${raidCountdown(card.dataset.timezone)})`;
     const clock = card.querySelector(".local-clock");
     if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
   });
@@ -504,6 +616,14 @@ elements.converterForm.addEventListener("submit", (event) => {
 elements.imageModalClose.addEventListener("click", closeImageModal);
 elements.imageModal.addEventListener("click", (event) => {
   if (event.target === elements.imageModal) closeImageModal();
+});
+elements.trashFilterOpen.addEventListener("click", openTrashFilterModal);
+elements.trashFilterClose.addEventListener("click", closeTrashFilterModal);
+elements.trashFilterModal.addEventListener("click", (event) => {
+  if (event.target === elements.trashFilterModal) closeTrashFilterModal();
+});
+elements.trashFilterCopy.addEventListener("click", async () => {
+  await copyText(elements.trashFilterContent.value, "寶可夢清理篩選文字");
 });
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
