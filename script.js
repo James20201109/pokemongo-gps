@@ -73,7 +73,7 @@ const collapsibleJapanGroups = new Set([
   "長崎", "宮崎", "鹿兒島", "沖繩", "棒球相關活動"
 ]);
 const stampedJapanGroups = new Set(
-  [...collapsibleJapanGroups].filter((name) => name !== "棒球相關活動").concat("日本蓋章")
+  [...collapsibleJapanGroups].filter((name) => name !== "棒球相關活動").concat("日本蓋章", "長崎蓋章")
 );
 
 function loadExpandedGroups() {
