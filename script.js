@@ -2,6 +2,7 @@ const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
 const countryNames = {
   lego: "LEGO GLOBAL EVENT",
+  pokexciting: "POKÉXCITING ASIA TOUR",
   copied: "COPIED COORDINATES",
   japan: "JAPAN",
   korea: "KOREA",
@@ -34,6 +35,7 @@ const elements = {
   eventTitle: document.querySelector("#country-event-title"),
   eventPeriod: document.querySelector("#country-event-period"),
   eventDescription: document.querySelector("#country-event-description"),
+  eventSourceLink: document.querySelector("#country-event-source"),
   converterForm: document.querySelector("#converter-form"),
   coordInput: document.querySelector("#coord-input"),
   converterOutput: document.querySelector("#converter-output"),
@@ -49,7 +51,11 @@ const elements = {
   trashFilterModal: document.querySelector("#trash-filter-modal"),
   trashFilterClose: document.querySelector("#trash-filter-close"),
   trashFilterContent: document.querySelector("#trash-filter-content"),
-  trashFilterCopy: document.querySelector("#trash-filter-copy")
+  trashFilterCopy: document.querySelector("#trash-filter-copy"),
+  newsOpen: document.querySelector("#news-open"),
+  newsModal: document.querySelector("#news-modal"),
+  newsClose: document.querySelector("#news-close"),
+  newsSections: document.querySelector("#news-sections")
 };
 
 let activeCountry = "lego";
@@ -122,6 +128,7 @@ function updateCopiedCounter() {
 
 const libraries = {
   lego: librarySource.lego,
+  pokexciting: librarySource.pokexciting,
   japan: librarySource.japan,
   korea: librarySource.korea,
   uk: librarySource.uk,
@@ -361,6 +368,119 @@ function closeTrashFilterModal() {
   elements.trashFilterModal.removeAttribute("open");
 }
 
+function eventStartDate(event) {
+  if (event.startDate) return event.startDate;
+  const match = event.period?.match(/(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  if (!match) return "";
+  return `${match[1]}-${match[2].padStart(2, "0")}-${match[3].padStart(2, "0")}`;
+}
+
+function eventTimeValue(date, endOfDay = false) {
+  if (!date) return NaN;
+  return new Date(`${date}T${endOfDay ? "23:59:59" : "00:00:00"}+08:00`).getTime();
+}
+
+function eventNewsStatus(event, now = Date.now()) {
+  const start = eventTimeValue(eventStartDate(event));
+  const end = eventTimeValue(event.endDate, true);
+  if (Number.isFinite(end) && now > end) return "expired";
+  if (Number.isFinite(start) && now < start) return "upcoming";
+  return "active";
+}
+
+function newsItems() {
+  const items = [];
+  Object.entries(libraries).forEach(([country, groups]) => {
+    groups.forEach((group) => {
+      if (!group.event?.endDate) return;
+      items.push({
+        country,
+        groupName: group.name,
+        region: group.region,
+        title: group.name,
+        period: group.event.period || group.event.endDate,
+        event: group.event
+      });
+    });
+  });
+  Object.entries(eventSource).forEach(([country, event]) => {
+    if (!event?.endDate) return;
+    items.push({ country, groupName: "", region: countryNames[country], title: event.title, period: event.period, event });
+  });
+  return items;
+}
+
+function navigateToNewsItem(item) {
+  closeNewsModal();
+  elements.search.value = "";
+  const groupKey = item.groupName ? `${item.country}|${item.groupName}` : "";
+  if (item.country === "japan" && collapsibleJapanGroups.has(item.groupName)) {
+    expandedGroups.add(groupKey);
+    saveExpandedGroups();
+  }
+  switchCountry(item.country);
+  requestAnimationFrame(() => {
+    const target = groupKey
+      ? [...document.querySelectorAll(".region-block")].find((section) => section.dataset.groupKey === groupKey)
+      : elements.eventBanner;
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    target.classList.add("news-target");
+    setTimeout(() => target.classList.remove("news-target"), 1900);
+  });
+}
+
+function renderNews() {
+  const categories = [
+    { key: "active", title: "活動期間", label: "LIVE" },
+    { key: "upcoming", title: "活動將近", label: "UPCOMING" },
+    { key: "expired", title: "已過期", label: "EXPIRED" }
+  ];
+  const items = newsItems().map((item) => ({ ...item, status: eventNewsStatus(item.event) }));
+  const fragment = document.createDocumentFragment();
+  categories.forEach((category) => {
+    const categoryItems = items.filter((item) => item.status === category.key).sort((a, b) => {
+      const aDate = category.key === "upcoming" ? eventTimeValue(eventStartDate(a.event)) : eventTimeValue(a.event.endDate, true);
+      const bDate = category.key === "upcoming" ? eventTimeValue(eventStartDate(b.event)) : eventTimeValue(b.event.endDate, true);
+      return category.key === "expired" ? bDate - aDate : aDate - bDate;
+    });
+    const section = document.createElement("section");
+    section.className = "news-group";
+    section.innerHTML = `<header><h3>${category.title}</h3><span>${String(categoryItems.length).padStart(2, "0")}</span></header>`;
+    const list = document.createElement("div");
+    list.className = "news-list";
+    if (!categoryItems.length) {
+      list.innerHTML = `<p class="news-empty">目前沒有活動</p>`;
+    } else {
+      categoryItems.forEach((item) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `news-item ${category.key}`;
+        button.innerHTML = `<strong>${item.title}</strong><small>${item.region} · ${item.period}</small><em>${category.label} ↗</em>`;
+        button.addEventListener("click", () => navigateToNewsItem(item));
+        list.appendChild(button);
+      });
+    }
+    section.appendChild(list);
+    fragment.appendChild(section);
+  });
+  elements.newsSections.replaceChildren(fragment);
+}
+
+function openNewsModal() {
+  renderNews();
+  if (typeof elements.newsModal.showModal === "function") {
+    elements.newsModal.showModal();
+  } else {
+    elements.newsModal.setAttribute("open", "");
+  }
+}
+
+function closeNewsModal() {
+  elements.newsModal.close?.();
+  elements.newsModal.removeAttribute("open");
+}
+
 function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
@@ -421,13 +541,13 @@ function render() {
   const activeGroups = activeCountry === "copied" ? copiedGroups() : libraries[activeCountry];
   activeGroups.forEach((group) => {
     const groupMatches = `${group.region} ${group.name}`.toLowerCase().includes(query);
-    const matches = group.coordinates.filter((coordinate) => {
+    const matches = (group.coordinates || []).filter((coordinate) => {
       const searchable = typeof coordinate === "string"
         ? coordinate
         : `${coordinate.name} ${coordinate.area} ${coordinate.value}`;
       return groupMatches || searchable.toLowerCase().includes(query);
     });
-    if (!matches.length) return;
+    if (!matches.length && (!group.event || (query && !groupMatches))) return;
 
     visibleGroups += 1;
     visibleCoordinates.push(...matches);
@@ -441,6 +561,7 @@ function render() {
     section.className = "region-block";
     const collapsible = activeCountry === "japan" && collapsibleJapanGroups.has(group.name);
     const groupStateKey = `${activeCountry}|${group.name}`;
+    section.dataset.groupKey = groupStateKey;
     const expanded = !collapsible || expandedGroups.has(groupStateKey);
     section.classList.toggle("is-collapsed", collapsible && !expanded);
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
@@ -476,7 +597,7 @@ function render() {
         ? `<a class="event-source" href="${group.event.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.event.sourceLabel || "查看文獻來源"} <span>↗</span></a>`
         : "";
       const periodInfo = group.event.period
-        ? `<div class="event-period"><span>EVENT PERIOD / 台灣時間</span><strong>${group.event.period}</strong></div>`
+        ? `<div class="event-period"><span>${group.event.periodLabel || "EVENT PERIOD / 台灣時間"}</span><strong>${group.event.period}</strong></div>`
         : "";
       const eventImages = group.event.images || (group.event.image ? [{
         src: group.event.image,
@@ -503,14 +624,16 @@ function render() {
       }));
       section.appendChild(eventInfo);
     }
-    const grid = document.createElement("div");
-    grid.className = "coordinate-grid";
-    const groupEndDate = group.event?.endDate || group.endDate || eventSource[activeCountry]?.endDate;
-    grid.replaceChildren(...matches.map((coordinate, index) =>
-      makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index])
-    ));
-    grid.hidden = collapsible && !expanded;
-    section.appendChild(grid);
+    if (matches.length) {
+      const grid = document.createElement("div");
+      grid.className = "coordinate-grid";
+      const groupEndDate = group.event?.endDate || group.endDate || eventSource[activeCountry]?.endDate;
+      grid.replaceChildren(...matches.map((coordinate, index) =>
+        makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index])
+      ));
+      grid.hidden = collapsible && !expanded;
+      section.appendChild(grid);
+    }
     fragment.appendChild(section);
   });
 
@@ -519,7 +642,7 @@ function render() {
   elements.visibleCount.textContent = String(visibleCoordinates.length).padStart(3, "0");
   elements.groupCount.textContent = visibleGroups;
   elements.countryLabel.textContent = countryNames[activeCountry];
-  elements.empty.hidden = visibleCoordinates.length > 0;
+  elements.empty.hidden = visibleGroups > 0;
   elements.emptyTitle.textContent = activeCountry === "copied" && copiedKeys.size === 0
     ? "尚未複製任何座標"
     : "找不到符合的座標";
@@ -536,6 +659,11 @@ function render() {
     elements.eventTitle.textContent = countryEvent.title;
     elements.eventPeriod.textContent = countryEvent.period;
     elements.eventDescription.textContent = countryEvent.description;
+    elements.eventSourceLink.hidden = !countryEvent.sourceUrl;
+    if (countryEvent.sourceUrl) {
+      elements.eventSourceLink.href = countryEvent.sourceUrl;
+      elements.eventSourceLink.firstChild.textContent = `${countryEvent.sourceLabel || "官網來源"} `;
+    }
   }
   updateRaidClocks();
 }
@@ -624,6 +752,11 @@ elements.trashFilterModal.addEventListener("click", (event) => {
 });
 elements.trashFilterCopy.addEventListener("click", async () => {
   await copyText(elements.trashFilterContent.value, "寶可夢清理篩選文字");
+});
+elements.newsOpen.addEventListener("click", openNewsModal);
+elements.newsClose.addEventListener("click", closeNewsModal);
+elements.newsModal.addEventListener("click", (event) => {
+  if (event.target === elements.newsModal) closeNewsModal();
 });
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();

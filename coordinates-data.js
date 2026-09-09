@@ -1,5 +1,95 @@
 // GPS 座標資料庫：依國家、區域及地區分組。
 window.coordinateLibraries = {
+  "pokexciting": [
+    {
+      "region": "PokéXciting! 亞洲巡迴活動",
+      "name": "馬來西亞 · 吉隆坡",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 9 月 12 日～9 月 13 日 · 10:00～22:00",
+        "endDate": "2026-09-13",
+        "description": "免費活動，會場位於吉隆坡城中城公園（KLCC Park）。PokéXciting 皮卡丘於活動開始後仍會在野外持續出現 1 個月。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "Stamp Rally（集章活動）：可取得綠松石色皮卡丘特殊背景版本。",
+          "超極巨化 Max Battle：超極巨化妙蛙花、噴火龍、水箭龜。",
+          "野外出現：小火龍、妙蛙種子、傑尼龜、派對帽伊布、臭泥、蝴蝶結胖丁及皮卡丘。",
+          "誘餌模組：派對帽耿鬼、暴鯉龍、電龍、班基拉斯、沙奈朵、七夕青鳥及烈咬陸鯊。",
+          "薰香：未知圖騰 Y、M。",
+          "活動加成：交換所需星塵減少 50%，額外增加 2 次特殊交換。"
+        ],
+        "notice": "特殊背景目前已確認可透過集章活動取得；是否也能透過田野調查取得仍待活動開始後確認。活動補充資訊轉載自臉書社團。",
+        "sourceUrl": "https://my.portal-pokemon.com/30th/topics/pokexciting_news0/",
+        "sourceLabel": "馬來西亞活動官網",
+        "image": "assets/pokexciting-kuala-lumpur.png",
+        "imageAlt": "PokéXciting 吉隆坡綠松石色皮卡丘特殊背景卡",
+        "imageCaption": "PokéXciting! in 吉隆坡 · 綠松石色皮卡丘背景版本"
+      },
+      "coordinates": [
+        { "name": "吉隆坡城中城公園", "area": "KLCC Park · 馬來西亞", "value": "3.155600, 101.714700" }
+      ]
+    },
+    {
+      "region": "PokéXciting! 亞洲巡迴活動",
+      "name": "台灣 · 台北市",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 活動日期",
+        "period": "2026 年 10 月 10 日～10 月 11 日",
+        "endDate": "2026-10-11",
+        "description": "活動會場位於台北市信義區特定地點，不含山區；詳細座標尚待公布。",
+        "detailLabel": "座標狀態",
+        "detail": "COMING SOON · 待官方或現場資訊公布後補充。",
+        "sourceUrl": "https://tw.portal-pokemon.com/30th/topics/pokexciting_news0/",
+        "sourceLabel": "台北活動官網"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "PokéXciting! 亞洲巡迴活動",
+      "name": "新加坡",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 活動日期",
+        "period": "2026 年 11 月 7 日～11 月 8 日",
+        "endDate": "2026-11-08",
+        "description": "活動會場位於新加坡市區；詳細座標尚待公布。",
+        "detailLabel": "座標狀態",
+        "detail": "COMING SOON · 待官方或現場資訊公布後補充。",
+        "sourceUrl": "https://sg.portal-pokemon.com/30th/topics/pokexciting_news0/",
+        "sourceLabel": "新加坡活動官網"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "PokéXciting! 亞洲巡迴活動",
+      "name": "菲律賓 · 馬尼拉",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 活動日期",
+        "period": "2027 年 1 月 23 日～1 月 24 日",
+        "endDate": "2027-01-24",
+        "description": "活動會場位於 SM Mall of Asia 購物中心周邊；詳細座標尚待公布。",
+        "detailLabel": "座標狀態",
+        "detail": "COMING SOON · 待官方或現場資訊公布後補充。",
+        "sourceUrl": "https://ph.portal-pokemon.com/30th/topics/pokexciting_news0/",
+        "sourceLabel": "馬尼拉活動官網"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "PokéXciting! 亞洲巡迴活動",
+      "name": "泰國 · 曼谷",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 活動日期",
+        "period": "2027 年 2 月 13 日～2 月 14 日",
+        "endDate": "2027-02-14",
+        "description": "活動會場尚待公布，座標將於取得官方或現場資訊後補充。",
+        "detailLabel": "座標狀態",
+        "detail": "COMING SOON · 活動會場與座標尚待公布。",
+        "sourceUrl": "https://th.portal-pokemon.com/30th/topics/pokexciting_news0/",
+        "sourceLabel": "曼谷活動官網"
+      },
+      "coordinates": []
+    }
+  ],
   "lego": [
     {
       "region": "Pokémon GO × LEGO 聯名活動",
@@ -981,7 +1071,7 @@ window.coordinateLibraries = {
         { "name": "Calke Abbey", "area": "Derbyshire", "value": "52.799700, -1.455800" },
         { "name": "Clumber Park", "area": "Nottinghamshire", "value": "53.270900, -1.051800" },
         { "name": "Hanbury Hall", "area": "Worcestershire", "value": "52.271800, -2.083200" },
-        { "name": "Hardwick", "area": "Derbyshire", "value": "53.183000, -1.319600" },
+        { "name": "Hardwick", "area": "Derbyshire", "value": "53.168804, -1.308726" },
         { "name": "Wimpole Estate", "area": "Cambridgeshire", "value": "52.141000, -0.049800" }
       ]
     }
@@ -1176,8 +1266,10 @@ window.coordinateEvents = {
   "uk": {
     "label": "UNITED KINGDOM / LIMITED EVENT",
     "title": "尼維爾 1 號哈布蘭入侵地區",
-    "period": "2026 年 7 月 18 日 ～ 2026 年 9 月 6 日",
-    "endDate": "2026-09-06",
-    "description": "英國 4 個活動區域共 27 種寶可夢突襲背景；每個區域分別對應毽子草、蟲寶包、榛果球與橡實果。"
+    "period": "2026 年 7 月 18 日 ～ 2026 年 12 月 31 日",
+    "endDate": "2026-12-31",
+    "description": "英國 4 個活動區域共 27 種寶可夢突襲背景；每個區域分別對應毽子草、蟲寶包、榛果球與橡實果。",
+    "sourceUrl": "https://pokemongo.com/news/nationaltrust-2026",
+    "sourceLabel": "官網來源"
   }
 };

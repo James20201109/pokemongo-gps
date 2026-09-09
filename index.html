@@ -46,6 +46,7 @@
         </div>
         <div class="country-tabs" role="tablist" aria-label="國家">
           <button class="country-tab copied-tab" data-country="copied" role="tab" aria-selected="false"><b>✓</b> 複製座標 <span class="tab-count" id="copied-tab-count">0</span></button>
+          <button class="country-tab pokexciting-tab" data-country="pokexciting" role="tab" aria-selected="false"><b>PX</b> PokéXciting 座標</button>
           <button class="country-tab active" data-country="lego" role="tab" aria-selected="true"><b>LG</b> 樂高座標</button>
           <button class="country-tab" data-country="japan" role="tab" aria-selected="false"><b>JP</b> 日本座標</button>
           <button class="country-tab korea-tab" data-country="korea" role="tab" aria-selected="false"><b>KR</b> 韓國座標</button>
@@ -86,6 +87,7 @@
           <strong id="country-event-period"></strong>
         </div>
         <p id="country-event-description"></p>
+        <a class="country-event-source" id="country-event-source" href="#" target="_blank" rel="noopener noreferrer" hidden>官網來源 <span>↗</span></a>
       </section>
 
       <div id="coordinate-library"></div>
@@ -131,6 +133,10 @@
     <span aria-hidden="true">🗑</span>
   </button>
 
+  <button class="floating-news" id="news-open" type="button" aria-label="開啟近期活動導航" title="近期活動">
+    NEWS
+  </button>
+
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span>✓</span>
     <div><strong id="toast-title">COPIED</strong><small id="toast-label"></small></div>
@@ -153,6 +159,16 @@
       <p class="filter-modal-note">複製下方文字後，可直接貼入遊戲搜尋欄。內容可於網站檔案中持續調整。</p>
       <textarea id="trash-filter-content" rows="6" readonly>!4*&!亮晶晶&!毛崖蟹&!背卡&!傳說的寶可夢&!究極異獸&!異色&!xxl&!xxs&!特殊&!極巨化&!超極巨化&!獨劍&!古月&!黑眼&!米立&!刺梭&!CP10&!搗蛋&!魔尼尼&!露力麗&!頑皮熊貓&!皮寶寶&!皮丘&!拳拳&!古空&!愛管&!晶光&!波克比&!小果然&!未知&!幻&!暗影&!淨化&!年2016-2020&!合體&!小福蛋&!含羞苞&!盆才怪&!小卡比獸&!鴨嘴寶寶&!電擊怪&!迷唇娃&!無畏小子&!駒刀小兵&!夜盜火蜥&!毒電嬰</textarea>
       <button class="filter-copy-button" id="trash-filter-copy" type="button">COPY FILTER <span>⧉</span></button>
+    </div>
+  </dialog>
+
+  <dialog class="filter-modal news-modal" id="news-modal" aria-labelledby="news-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="news-close" type="button" aria-label="關閉近期活動">×</button>
+      <p class="kicker"><span>05</span> EVENT NAVIGATOR</p>
+      <h2 id="news-title">近期活動</h2>
+      <p class="filter-modal-note">點擊活動即可切換至對應座標頁籤與活動位置。</p>
+      <div class="news-sections" id="news-sections"></div>
     </div>
   </dialog>
 
