@@ -486,10 +486,14 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
   const visited = copiedKeys.has(key);
   const raid = typeof coordinate === "object" && coordinate.timezone;
+  const nationalTrustImage = activeCountry === "uk" && typeof coordinate === "object" && /^\d{2}\./.test(coordinate.name)
+    ? `assets/pokemon_go_national_trust_2026/${coordinate.name}.jpg`
+    : "";
+  const coordinateImage = typeof coordinate === "object" ? coordinate.image || nationalTrustImage : "";
   const raidTimeState = raid ? raidTimeStatus(coordinate.timezone) : "closed";
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}`;
   if (raid) {
     button.dataset.raidStart = coordinate.start;
     button.dataset.raidEnd = coordinate.end;
@@ -501,9 +505,16 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
   const copiedStatus = `<em class="copied-label">✓ 已複製</em>`;
   const raidStatus = raid ? `<em class="raid-live-label">${raidTimeState === "peak" ? "RAID TIME" : "ACTIVE HOURS"}</em>` : "";
-  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${status}${copiedStatus}${raidStatus}<i>⧉</i>`;
+  const coordinatePreview = coordinateImage
+    ? `<img class="coordinate-thumb" src="${coordinateImage}" alt="${coordinate.name} 背景圖片" loading="lazy" title="點擊放大圖片">`
+    : "";
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
-  button.addEventListener("click", async () => {
+  button.addEventListener("click", async (event) => {
+    if (coordinateImage && event.target.closest(".coordinate-thumb")) {
+      openImageModal(coordinateImage, `${coordinate.name} 背景圖片`, `${coordinate.name} · ${coordinate.area}`);
+      return;
+    }
     const alreadyVisited = copiedKeys.has(key);
     const removingRecord = alreadyVisited && pendingRemovalKey === key;
     if (expired) {

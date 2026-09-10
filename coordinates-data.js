@@ -1028,51 +1028,51 @@ window.coordinateLibraries = {
       "region": "英格蘭北部",
       "name": "North · Pineco（榛果球）",
       "coordinates": [
-        { "name": "Dunham Massey", "area": "Greater Manchester", "value": "53.382800, -2.400100" },
-        { "name": "Fountains Abbey", "area": "North Yorkshire", "value": "54.109500, -1.581800" },
-        { "name": "Gibside", "area": "Tyne & Wear", "value": "54.922300, -1.723600" },
-        { "name": "Lyme", "area": "Cheshire", "value": "53.338200, -2.054400" },
-        { "name": "Mount Stewart", "area": "County Down", "value": "54.551600, -5.601800" }
+        { "name": "01.Dunham Massey", "area": "Greater Manchester", "value": "53.382800, -2.400100" },
+        { "name": "02.Fountains Abbey", "area": "North Yorkshire", "value": "54.109500, -1.581800" },
+        { "name": "03.Gibside", "area": "Tyne & Wear", "value": "54.922300, -1.723600" },
+        { "name": "04.Lyme", "area": "Cheshire", "value": "53.338200, -2.054400" },
+        { "name": "05.Mount Stewart", "area": "County Down", "value": "54.551600, -5.601800" }
       ]
     },
     {
       "region": "英格蘭西南部與威爾斯",
       "name": "South West and Wales · Seedot（橡實果）",
       "coordinates": [
-        { "name": "Chirk Castle and Garden", "area": "Wrexham", "value": "52.937700, -3.091700" },
-        { "name": "Killerton", "area": "Devon", "value": "50.791300, -3.457500" },
-        { "name": "Kingston Lacy", "area": "Dorset", "value": "50.811000, -2.031600" },
-        { "name": "Lacock", "area": "Wiltshire", "value": "51.415600, -2.117000" },
-        { "name": "Stourhead", "area": "Wiltshire", "value": "51.105100, -2.317900" },
-        { "name": "Tredegar House", "area": "Newport", "value": "51.561700, -3.027900" },
-        { "name": "Trelissick", "area": "Cornwall", "value": "50.217100, -5.033700" },
-        { "name": "Tyntesfield", "area": "North Somerset", "value": "51.440500, -2.711600" }
+        { "name": "06.Chirk Castle and Garden", "area": "Wrexham", "value": "52.937700, -3.091700" },
+        { "name": "07.Killerton", "area": "Devon", "value": "50.791300, -3.457500" },
+        { "name": "08.Kingston Lacy", "area": "Dorset", "value": "50.811000, -2.031600" },
+        { "name": "09.Lacock", "area": "Wiltshire", "value": "51.415600, -2.117000" },
+        { "name": "10.Stourhead", "area": "Wiltshire", "value": "51.105100, -2.317900" },
+        { "name": "11.Tredegar House", "area": "Newport", "value": "51.561700, -3.027900" },
+        { "name": "12.Trelissick", "area": "Cornwall", "value": "50.217100, -5.033700" },
+        { "name": "13.Tyntesfield", "area": "North Somerset", "value": "51.440500, -2.711600" }
       ]
     },
     {
       "region": "英格蘭南部海岸",
       "name": "Southern England Coast · Hoppip（毽子草）",
       "coordinates": [
-        { "name": "Cliveden", "area": "Buckinghamshire", "value": "51.556900, -0.681700" },
-        { "name": "Mottisfont", "area": "Hampshire", "value": "51.041100, -1.535200" },
-        { "name": "Nymans", "area": "West Sussex", "value": "51.049200, -0.195200" },
-        { "name": "Polesden Lacey", "area": "Surrey", "value": "51.258800, -0.374100" },
-        { "name": "Scotney Castle", "area": "Kent", "value": "51.092800, 0.408200" },
-        { "name": "Stowe Gardens", "area": "Buckinghamshire", "value": "52.022100, -1.008000" }
+        { "name": "14.Cliveden", "area": "Buckinghamshire", "value": "51.556900, -0.681700" },
+        { "name": "15.Mottisfont", "area": "Hampshire", "value": "51.041100, -1.535200" },
+        { "name": "16.Nymans", "area": "West Sussex", "value": "51.049200, -0.195200" },
+        { "name": "17.Polesden Lacey", "area": "Surrey", "value": "51.258800, -0.374100" },
+        { "name": "18.Scotney Castle", "area": "Kent", "value": "51.092800, 0.408200" },
+        { "name": "19.Stowe Gardens", "area": "Buckinghamshire", "value": "52.022100, -1.008000" }
       ]
     },
     {
       "region": "英格蘭中部與倫敦",
       "name": "Midlands and London · Sewaddle（蟲寶包）",
       "coordinates": [
-        { "name": "Anglesey Abbey", "area": "Cambridgeshire", "value": "52.236500, 0.244000" },
-        { "name": "Attingham Park", "area": "Shropshire", "value": "52.684900, -2.667100" },
-        { "name": "Belton Estate", "area": "Lincolnshire", "value": "52.943100, -0.617600" },
-        { "name": "Calke Abbey", "area": "Derbyshire", "value": "52.799700, -1.455800" },
-        { "name": "Clumber Park", "area": "Nottinghamshire", "value": "53.270900, -1.051800" },
-        { "name": "Hanbury Hall", "area": "Worcestershire", "value": "52.271800, -2.083200" },
-        { "name": "Hardwick", "area": "Derbyshire", "value": "53.168804, -1.308726" },
-        { "name": "Wimpole Estate", "area": "Cambridgeshire", "value": "52.141000, -0.049800" }
+        { "name": "20.Anglesey Abbey", "area": "Cambridgeshire", "value": "52.236500, 0.244000" },
+        { "name": "21.Attingham Park", "area": "Shropshire", "value": "52.684900, -2.667100" },
+        { "name": "22.Belton Estate", "area": "Lincolnshire", "value": "52.943100, -0.617600" },
+        { "name": "23.Calke Abbey", "area": "Derbyshire", "value": "52.799700, -1.455800" },
+        { "name": "24.Clumber Park", "area": "Nottinghamshire", "value": "53.270900, -1.051800" },
+        { "name": "25.Hanbury Hall", "area": "Worcestershire", "value": "52.271800, -2.083200" },
+        { "name": "26.Hardwick", "area": "Derbyshire", "value": "53.168804, -1.308726" },
+        { "name": "27.Wimpole Estate", "area": "Cambridgeshire", "value": "52.141000, -0.049800" }
       ]
     }
   ],
