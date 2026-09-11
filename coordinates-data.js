@@ -1069,7 +1069,7 @@ window.coordinateLibraries = {
         { "name": "21.Attingham Park", "area": "Shropshire", "value": "52.684900, -2.667100" },
         { "name": "22.Belton Estate", "area": "Lincolnshire", "value": "52.943100, -0.617600" },
         { "name": "23.Calke Abbey", "area": "Derbyshire", "value": "52.799700, -1.455800" },
-        { "name": "24.Clumber Park", "area": "Nottinghamshire", "value": "53.270900, -1.051800" },
+        { "name": "24.Clumber Park", "area": "Nottinghamshire", "value": "53.263942, -1.063399" },
         { "name": "25.Hanbury Hall", "area": "Worcestershire", "value": "52.271800, -2.083200" },
         { "name": "26.Hardwick", "area": "Derbyshire", "value": "53.168804, -1.308726" },
         { "name": "27.Wimpole Estate", "area": "Cambridgeshire", "value": "52.141000, -0.049800" }
