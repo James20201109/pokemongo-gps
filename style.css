@@ -108,6 +108,9 @@ kbd { color:#40585b;font:8px "JetBrains Mono",monospace; }
 .event-period { grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:12px;border-bottom:1px solid rgba(199,255,74,.18); }
 .event-period span { color:var(--lime);font:700 8px "JetBrains Mono",monospace;letter-spacing:.14em; }
 .event-period strong { color:#dfffa0;font-size:12px; }
+.event-stamp-period { grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 12px;border:1px solid rgba(53,244,230,.22);background:rgba(53,244,230,.035); }
+.event-stamp-period span { color:var(--cyan);font:700 8px "JetBrains Mono",monospace;letter-spacing:.13em; }
+.event-stamp-period strong { color:#bafbf6;font-size:12px; }
 .event-info p { margin:0;color:#78918f;font-size:11px;line-height:1.7; }
 .event-info .raid-note { padding-left:14px;border-left:2px solid var(--lime); }
 .event-info .raid-note b { display:block;margin-bottom:3px;color:var(--lime);font-size:10px; }
@@ -115,6 +118,8 @@ kbd { color:#40585b;font:8px "JetBrains Mono",monospace; }
 .event-notice { grid-column:1/-1;padding:11px 13px;border:1px solid rgba(53,244,230,.16);background:rgba(53,244,230,.035); }
 .event-notice b { margin-right:10px;color:var(--cyan);font:700 8px "JetBrains Mono",monospace;letter-spacing:.12em; }
 .event-source { grid-column:1/-1;justify-self:start;display:inline-flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid rgba(53,244,230,.35);color:var(--cyan);text-decoration:none;font:700 9px "JetBrains Mono",monospace;letter-spacing:.08em;transition:.2s; }
+.event-source-list { grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:9px; }
+.event-source-list .event-source { grid-column:auto;justify-self:auto; }
 .event-source:hover,.event-source:focus-visible { outline:0;border-color:var(--lime);color:var(--lime);background:rgba(199,255,74,.05);transform:translateY(-1px); }
 .event-image-gallery { grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px; }
 .event-image-trigger { width:min(210px,100%);padding:0;border:1px solid #29444a;background:#071013;color:var(--cyan);text-align:left;cursor:zoom-in;overflow:hidden;transition:.2s; }

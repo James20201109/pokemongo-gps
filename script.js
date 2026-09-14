@@ -604,11 +604,18 @@ function render() {
       const notice = group.event.notice
         ? `<p class="event-notice"><b>NOTICE</b>${group.event.notice}</p>`
         : "";
-      const sourceLink = group.event.sourceUrl
-        ? `<a class="event-source" href="${group.event.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.event.sourceLabel || "查看文獻來源"} <span>↗</span></a>`
-        : "";
+      const eventSources = group.event.sources || (group.event.sourceUrl
+        ? [{ url: group.event.sourceUrl, label: group.event.sourceLabel || "查看文獻來源" }]
+        : []);
+      const sourceLinks = eventSources.map((source) =>
+        `<a class="event-source" href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label} <span>↗</span></a>`
+      ).join("");
+      const sourceLink = sourceLinks ? `<div class="event-source-list">${sourceLinks}</div>` : "";
       const periodInfo = group.event.period
         ? `<div class="event-period"><span>${group.event.periodLabel || "EVENT PERIOD / 台灣時間"}</span><strong>${group.event.period}</strong></div>`
+        : "";
+      const stampPeriodInfo = group.event.stampPeriod
+        ? `<div class="event-stamp-period"><span>STAMP RALLY / 蓋章活動期間</span><strong>${group.event.stampPeriod}</strong></div>`
         : "";
       const eventImages = group.event.images || (group.event.image ? [{
         src: group.event.image,
@@ -624,6 +631,7 @@ function render() {
         : "";
       eventInfo.innerHTML = `
         ${periodInfo}
+        ${stampPeriodInfo}
         <p>${group.event.description}</p>
         <div class="raid-note"><b>★ ${detailLabel}</b>${bulletList}</div>
         ${notice}

@@ -7,7 +7,9 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 台灣時間",
         "period": "2026 年 9 月 12 日～9 月 13 日 · 10:00～22:00",
-        "endDate": "2026-09-13",
+        "startDate": "2026-09-12",
+        "endDate": "2029-09-11",
+        "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
         "description": "免費活動，會場位於吉隆坡城中城公園（KLCC Park）。PokéXciting 皮卡丘於活動開始後仍會在野外持續出現 1 個月。",
         "detailLabel": "活動內容",
         "bullets": [
@@ -18,15 +20,22 @@ window.coordinateLibraries = {
           "薰香：未知圖騰 Y、M。",
           "活動加成：交換所需星塵減少 50%，額外增加 2 次特殊交換。"
         ],
-        "notice": "特殊背景目前已確認可透過集章活動取得；是否也能透過田野調查取得仍待活動開始後確認。活動補充資訊轉載自臉書社團。",
-        "sourceUrl": "https://my.portal-pokemon.com/30th/topics/pokexciting_news0/",
-        "sourceLabel": "馬來西亞活動官網",
-        "image": "assets/pokexciting-kuala-lumpur.png",
+        "notice": "第一個蓋章點為必蓋座標，可取得特殊背景皮卡丘。活動補充資訊轉載自臉書社團。",
+        "sources": [
+          { "url": "https://my.portal-pokemon.com/30th/topics/pokexciting_news0/", "label": "馬來西亞活動官網" },
+          { "url": "https://pokemongo.com/zh-Hant/news/event-apac-stamp-rally-2026", "label": "蓋章活動文獻" }
+        ],
+        "image": "assets/pokexciting/my.jpg",
         "imageAlt": "PokéXciting 吉隆坡綠松石色皮卡丘特殊背景卡",
         "imageCaption": "PokéXciting! in 吉隆坡 · 綠松石色皮卡丘背景版本"
       },
       "coordinates": [
-        { "name": "吉隆坡城中城公園", "area": "KLCC Park · 馬來西亞", "value": "3.155600, 101.714700" }
+        { "name": "必蓋 · 背卡皮卡丘", "area": "KLCC Park · 馬來西亞", "value": "3.1567643, 101.71269" },
+        { "name": "吉隆坡蓋章點 02", "area": "KLCC Park · 馬來西亞", "value": "3.1553228, 101.71263" },
+        { "name": "吉隆坡蓋章點 03", "area": "KLCC Park · 馬來西亞", "value": "3.154421, 101.71312" },
+        { "name": "吉隆坡蓋章點 04", "area": "KLCC Park · 馬來西亞", "value": "3.1549568, 101.714195" },
+        { "name": "吉隆坡蓋章點 05", "area": "KLCC Park · 馬來西亞", "value": "3.1563628, 101.71499" },
+        { "name": "吉隆坡蓋章點 06", "area": "KLCC Park · 馬來西亞", "value": "3.155417, 101.716769" }
       ]
     },
     {
@@ -35,14 +44,23 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2026 年 10 月 10 日～10 月 11 日",
-        "endDate": "2026-10-11",
-        "description": "活動會場位於台北市信義區特定地點，不含山區；詳細座標尚待公布。",
-        "detailLabel": "座標狀態",
-        "detail": "COMING SOON · 待官方或現場資訊公布後補充。",
-        "sourceUrl": "https://tw.portal-pokemon.com/30th/topics/pokexciting_news0/",
-        "sourceLabel": "台北活動官網"
+        "startDate": "2026-09-12",
+        "endDate": "2029-09-11",
+        "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
+        "description": "活動會場位於台北市信義區特定地點，不含山區。",
+        "detailLabel": "蓋章座標",
+        "detail": "台北 101 特殊背景，位置方向為右下 ↘️。",
+        "sources": [
+          { "url": "https://tw.portal-pokemon.com/30th/topics/pokexciting_news0/", "label": "台北活動官網" },
+          { "url": "https://pokemongo.com/zh-Hant/news/event-apac-stamp-rally-2026", "label": "蓋章活動文獻" }
+        ],
+        "image": "assets/pokexciting/tw.jpg",
+        "imageAlt": "PokéXciting 台北 101 特殊背景",
+        "imageCaption": "PokéXciting! in 台北 · 台北 101 背景"
       },
-      "coordinates": []
+      "coordinates": [
+        { "name": "台北 101 背景（右下 ↘️）", "area": "台灣 · 台北市信義區", "value": "25.037260, 121.566990" }
+      ]
     },
     {
       "region": "PokéXciting! 亞洲巡迴活動",
@@ -50,14 +68,23 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2026 年 11 月 7 日～11 月 8 日",
-        "endDate": "2026-11-08",
-        "description": "活動會場位於新加坡市區；詳細座標尚待公布。",
-        "detailLabel": "座標狀態",
-        "detail": "COMING SOON · 待官方或現場資訊公布後補充。",
-        "sourceUrl": "https://sg.portal-pokemon.com/30th/topics/pokexciting_news0/",
-        "sourceLabel": "新加坡活動官網"
+        "startDate": "2026-09-12",
+        "endDate": "2029-09-11",
+        "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
+        "description": "PokéXciting! 新加坡市區蓋章活動。",
+        "detailLabel": "蓋章座標",
+        "detail": "第 3 航廈出境大廳，位置方向為右上 ↗️。",
+        "sources": [
+          { "url": "https://sg.portal-pokemon.com/30th/topics/pokexciting_news0/", "label": "新加坡活動官網" },
+          { "url": "https://pokemongo.com/zh-Hant/news/event-apac-stamp-rally-2026", "label": "蓋章活動文獻" }
+        ],
+        "image": "assets/pokexciting/sg.jpg",
+        "imageAlt": "PokéXciting 新加坡第 3 航廈背景",
+        "imageCaption": "PokéXciting! in 新加坡 · 第 3 航廈出境大廳"
       },
-      "coordinates": []
+      "coordinates": [
+        { "name": "第 3 航廈出境大廳（右上 ↗️）", "area": "新加坡", "value": "1.358600, 103.989940" }
+      ]
     },
     {
       "region": "PokéXciting! 亞洲巡迴活動",
@@ -65,14 +92,23 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2027 年 1 月 23 日～1 月 24 日",
-        "endDate": "2027-01-24",
-        "description": "活動會場位於 SM Mall of Asia 購物中心周邊；詳細座標尚待公布。",
-        "detailLabel": "座標狀態",
-        "detail": "COMING SOON · 待官方或現場資訊公布後補充。",
-        "sourceUrl": "https://ph.portal-pokemon.com/30th/topics/pokexciting_news0/",
-        "sourceLabel": "馬尼拉活動官網"
+        "startDate": "2026-09-12",
+        "endDate": "2029-09-11",
+        "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
+        "description": "活動會場位於 SM Mall of Asia 購物中心周邊。",
+        "detailLabel": "蓋章座標",
+        "detail": "SM Mall of Asia：MOA Sky。",
+        "sources": [
+          { "url": "https://ph.portal-pokemon.com/30th/topics/pokexciting_news0/", "label": "馬尼拉活動官網" },
+          { "url": "https://pokemongo.com/zh-Hant/news/event-apac-stamp-rally-2026", "label": "蓋章活動文獻" }
+        ],
+        "image": "assets/pokexciting/ph.jpg",
+        "imageAlt": "PokéXciting 馬尼拉 MOA Sky 背景",
+        "imageCaption": "PokéXciting! in 馬尼拉 · MOA Sky"
       },
-      "coordinates": []
+      "coordinates": [
+        { "name": "SM Mall of Asia：MOA Sky", "area": "菲律賓 · 馬尼拉", "value": "14.534890, 120.979970" }
+      ]
     },
     {
       "region": "PokéXciting! 亞洲巡迴活動",
@@ -85,7 +121,10 @@ window.coordinateLibraries = {
         "detailLabel": "座標狀態",
         "detail": "COMING SOON · 活動會場與座標尚待公布。",
         "sourceUrl": "https://th.portal-pokemon.com/30th/topics/pokexciting_news0/",
-        "sourceLabel": "曼谷活動官網"
+        "sourceLabel": "曼谷活動官網",
+        "image": "assets/pokexciting/th.jpg",
+        "imageAlt": "PokéXciting 曼谷活動圖片",
+        "imageCaption": "PokéXciting! in 曼谷"
       },
       "coordinates": []
     }
