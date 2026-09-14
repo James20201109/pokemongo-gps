@@ -129,6 +129,39 @@ window.coordinateLibraries = {
       "coordinates": []
     }
   ],
+  "indonesia": [
+    {
+      "region": "印尼限定活動",
+      "name": "荒野圖騰（Patterns of the Wild）",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 印尼當地時間",
+        "period": "2026 年 10 月 2 日（星期五）10:00～20:00",
+        "startDate": "2026-10-02",
+        "endDate": "2026-10-02",
+        "description": "印尼全境限定活動，首次有機會遇見身穿蠟染襯衫且帶有特殊背景的皮卡丘；運氣好的話，也可能遇見異色寶可夢。",
+        "detailLabel": "主打寶可夢與活動內容",
+        "bullets": [
+          "主角：身穿蠟染襯衫的皮卡丘，有機會帶有特殊背景。",
+          "取得方式：野外遭遇、限時調查及 GO Snapshot 驚喜遭遇。",
+          "限時調查：2026 年 9 月 28 日 06:00～10 月 7 日 23:59，獎勵包含特殊背景蠟染襯衫皮卡丘遭遇。",
+          "活動加成：薰香持續時間延長至 2 小時。",
+          "啟用薰香時，遇見蠟染襯衫皮卡丘與其他活動主題寶可夢的機率提高。",
+          "活動期間替夥伴或已捕獲寶可夢拍攝快照，有機會觸發蠟染襯衫皮卡丘驚喜遭遇。"
+        ],
+        "notice": "以下座標為 AI 推薦的印尼熱門補給站與玩家聚集地，並非官方指定活動會場。",
+        "image": "assets/Indonesia/samlpe.jpg",
+        "imageAlt": "荒野圖騰活動身穿蠟染襯衫的皮卡丘",
+        "imageCaption": "Patterns of the Wild · 身穿蠟染襯衫的皮卡丘"
+      },
+      "coordinates": [
+        { "name": "國家紀念塔（Monas）", "area": "雅加達 · 市中心核心地標與密集補給站", "value": "-6.175392, 106.827153" },
+        { "name": "GBK 體育場園區", "area": "雅加達 · Gelora Bung Karno", "value": "-6.218335, 106.802216" },
+        { "name": "PIK 海濱商圈", "area": "雅加達 · Pantai Indah Kapuk", "value": "-6.109520, 106.740232" },
+        { "name": "奔庫爾公園（Taman Bungkul）", "area": "泗水 · 社群活動熱門地點", "value": "-7.291340, 112.739770" },
+        { "name": "庫塔海灘（Kuta Beach）", "area": "峇里島 · 沿海熱門景點", "value": "-8.718500, 115.169100" }
+      ]
+    }
+  ],
   "lego": [
     {
       "region": "Pokémon GO × LEGO 聯名活動",

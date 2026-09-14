@@ -2,6 +2,7 @@ const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
 const countryNames = {
   lego: "LEGO GLOBAL EVENT",
+  indonesia: "INDONESIA LIMITED EVENT",
   pokexciting: "POKÉXCITING ASIA TOUR",
   copied: "COPIED COORDINATES",
   japan: "JAPAN",
@@ -128,6 +129,7 @@ function updateCopiedCounter() {
 
 const libraries = {
   lego: librarySource.lego,
+  indonesia: librarySource.indonesia,
   pokexciting: librarySource.pokexciting,
   japan: librarySource.japan,
   korea: librarySource.korea,

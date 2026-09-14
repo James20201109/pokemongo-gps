@@ -58,6 +58,9 @@ h2 { margin:0;font-size:34px;letter-spacing:-.04em; }
 .country-tab.pokexciting-tab { border-color:rgba(72,203,255,.34);color:#76b9d2; }
 .country-tab.pokexciting-tab b { color:#55d7ff; }
 .country-tab.pokexciting-tab:hover,.country-tab.pokexciting-tab.active { border-color:#55d7ff;background:linear-gradient(120deg,rgba(85,215,255,.11),rgba(199,255,74,.05));color:#e5faff;box-shadow:inset 0 -2px #55d7ff,0 0 18px rgba(85,215,255,.09); }
+.country-tab.indonesia-tab { border-color:rgba(255,165,52,.34);color:#c39159; }
+.country-tab.indonesia-tab b { color:#ffad45; }
+.country-tab.indonesia-tab:hover,.country-tab.indonesia-tab.active { border-color:#ffad45;background:linear-gradient(120deg,rgba(255,173,69,.12),rgba(255,216,61,.04));color:#fff0d7;box-shadow:inset 0 -2px #ffad45,0 0 18px rgba(255,173,69,.09); }
 .country-tab.copied-tab { border-color:rgba(199,255,74,.3);color:#91a65e; }
 .country-tab.copied-tab b { color:var(--lime); }
 .country-tab.copied-tab:hover,.country-tab.copied-tab.active { border-color:var(--lime);background:rgba(199,255,74,.09);color:#ecffba;box-shadow:inset 0 -2px var(--lime),0 0 18px rgba(199,255,74,.07); }
