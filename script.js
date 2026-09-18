@@ -705,6 +705,7 @@ function updateRaidClocks() {
 
 function switchCountry(country) {
   activeCountry = country;
+  const koreaActive = libraries.korea.some((group) => group.event && eventNewsStatus(group.event) === "active");
   try {
     localStorage.setItem(activeTabStorageKey, country);
   } catch {
@@ -712,6 +713,7 @@ function switchCountry(country) {
   }
   elements.tabs.forEach((tab) => {
     const active = tab.dataset.country === country;
+    if (tab.dataset.country === "korea") tab.classList.toggle("has-live-event", koreaActive);
     tab.classList.toggle("active", active);
     tab.setAttribute("aria-selected", String(active));
   });
