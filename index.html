@@ -140,6 +140,10 @@
     NEWS
   </button>
 
+  <button class="floating-alert" id="alert-settings-open" type="button" aria-label="開啟活動提醒設定" title="活動提醒">
+    <span aria-hidden="true">◷</span><small id="alert-enabled-count">0</small>
+  </button>
+
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span>✓</span>
     <div><strong id="toast-title">COPIED</strong><small id="toast-label"></small></div>
@@ -172,6 +176,17 @@
       <h2 id="news-title">近期活動</h2>
       <p class="filter-modal-note">點擊活動即可切換至對應座標頁籤與活動位置。</p>
       <div class="news-sections" id="news-sections"></div>
+    </div>
+  </dialog>
+
+  <dialog class="filter-modal alert-modal" id="alert-settings-modal" aria-labelledby="alert-settings-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="alert-settings-close" type="button" aria-label="關閉提醒設定">×</button>
+      <p class="kicker"><span>06</span> EVENT ALERT</p>
+      <h2 id="alert-settings-title">Moonlight O'Clock 提醒</h2>
+      <p class="filter-modal-note">勾選想追蹤的地區。活動開始前 10 分鐘會顯示 Alert；同一地區、日期與場次關閉後不會再次提醒。</p>
+      <div class="alert-options" id="alert-options"></div>
+      <button class="filter-copy-button alert-save-button" id="alert-settings-save" type="button">SAVE ALERTS</button>
     </div>
   </dialog>
 

@@ -58,7 +58,13 @@ const elements = {
   newsOpen: document.querySelector("#news-open"),
   newsModal: document.querySelector("#news-modal"),
   newsClose: document.querySelector("#news-close"),
-  newsSections: document.querySelector("#news-sections")
+  newsSections: document.querySelector("#news-sections"),
+  alertSettingsOpen: document.querySelector("#alert-settings-open"),
+  alertSettingsModal: document.querySelector("#alert-settings-modal"),
+  alertSettingsClose: document.querySelector("#alert-settings-close"),
+  alertSettingsSave: document.querySelector("#alert-settings-save"),
+  alertOptions: document.querySelector("#alert-options"),
+  alertEnabledCount: document.querySelector("#alert-enabled-count")
 };
 
 let activeCountry = "lego";
@@ -69,6 +75,8 @@ let pendingUndoKey = null;
 let pendingUndoLabel = "";
 let pendingRemovalKey = null;
 let pendingRemovalButton = null;
+const alertPreferenceStorageKey = "geoPulseMoonlightAlerts";
+const alertHistoryStorageKey = "geoPulseMoonlightAlertHistory";
 let pendingRemovalTimer = null;
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
@@ -249,6 +257,103 @@ function moonlightStatus(timeZone, date = new Date()) {
   if (starts.some((start) => current >= start && current < start + 5)) return "live";
   if (starts.some((start) => current >= start - 10 && current < start)) return "soon";
   return "idle";
+}
+
+function loadStringSet(storageKey) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    return new Set(Array.isArray(saved) ? saved : []);
+  } catch {
+    return new Set();
+  }
+}
+
+let moonlightAlertPreferences = loadStringSet(alertPreferenceStorageKey);
+let moonlightAlertHistory = loadStringSet(alertHistoryStorageKey);
+
+function saveStringSet(storageKey, values) {
+  try {
+    localStorage.setItem(storageKey, JSON.stringify([...values]));
+  } catch {
+    // 無法使用儲存空間時，提醒設定仍保留至本次頁面關閉。
+  }
+}
+
+function localDateKey(timeZone, date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function moonlightAlertOccurrence(coordinate, date = new Date()) {
+  const current = localMinutes(coordinate.timezone, date);
+  const starts = [12 * 60, 13 * 60, 19 * 60, 20 * 60];
+  const start = starts.find((value) => current >= value - 10 && current < value + 5);
+  if (start === undefined) return null;
+  const time = `${String(Math.floor(start / 60)).padStart(2, "0")}:${String(start % 60).padStart(2, "0")}`;
+  return {
+    key: `${coordinate.name}|${localDateKey(coordinate.timezone, date)}|${time}`,
+    name: coordinate.name,
+    time,
+    state: current < start ? "即將開始" : "活動進行中"
+  };
+}
+
+function moonlightCoordinates() {
+  return (libraries.asiaLimited || []).flatMap((group) => group.coordinates || []);
+}
+
+function updateAlertEnabledCount() {
+  elements.alertEnabledCount.textContent = String(moonlightAlertPreferences.size);
+  elements.alertSettingsOpen.classList.toggle("enabled", moonlightAlertPreferences.size > 0);
+}
+
+function renderAlertOptions() {
+  elements.alertOptions.replaceChildren(...moonlightCoordinates().map((coordinate) => {
+    const label = document.createElement("label");
+    label.className = "alert-option";
+    label.style.setProperty("--option-accent", coordinate.accent || "#35f4e6");
+    label.innerHTML = `<input type="checkbox" value="${coordinate.name}" ${moonlightAlertPreferences.has(coordinate.name) ? "checked" : ""}><span><b>${coordinate.name}</b><small>${coordinate.area}</small></span><em>12／13／19／20</em>`;
+    return label;
+  }));
+}
+
+function openAlertSettings() {
+  renderAlertOptions();
+  if (typeof elements.alertSettingsModal.showModal === "function") elements.alertSettingsModal.showModal();
+  else elements.alertSettingsModal.setAttribute("open", "");
+}
+
+function closeAlertSettings() {
+  elements.alertSettingsModal.close?.();
+  elements.alertSettingsModal.removeAttribute("open");
+}
+
+function saveAlertSettings() {
+  moonlightAlertPreferences = new Set(
+    [...elements.alertOptions.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value)
+  );
+  saveStringSet(alertPreferenceStorageKey, moonlightAlertPreferences);
+  updateAlertEnabledCount();
+  closeAlertSettings();
+  checkMoonlightAlerts();
+}
+
+function checkMoonlightAlerts(date = new Date()) {
+  const alerts = moonlightCoordinates()
+    .filter((coordinate) => moonlightAlertPreferences.has(coordinate.name))
+    .map((coordinate) => moonlightAlertOccurrence(coordinate, date))
+    .filter((occurrence) => occurrence && !moonlightAlertHistory.has(occurrence.key));
+  if (!alerts.length) return;
+  alerts.forEach((occurrence) => moonlightAlertHistory.add(occurrence.key));
+  if (moonlightAlertHistory.size > 240) moonlightAlertHistory = new Set([...moonlightAlertHistory].slice(-180));
+  saveStringSet(alertHistoryStorageKey, moonlightAlertHistory);
+  window.alert(`Moonlight O'Clock 活動提醒\n\n${alerts.map((item) => `${item.name}｜${item.time}｜${item.state}`).join("\n")}`);
 }
 
 function allCoordinates() {
@@ -810,10 +915,21 @@ elements.newsClose.addEventListener("click", closeNewsModal);
 elements.newsModal.addEventListener("click", (event) => {
   if (event.target === elements.newsModal) closeNewsModal();
 });
+elements.alertSettingsOpen.addEventListener("click", openAlertSettings);
+elements.alertSettingsClose.addEventListener("click", closeAlertSettings);
+elements.alertSettingsSave.addEventListener("click", saveAlertSettings);
+elements.alertSettingsModal.addEventListener("click", (event) => {
+  if (event.target === elements.alertSettingsModal) closeAlertSettings();
+});
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
+updateAlertEnabledCount();
 switchCountry(activeCountry);
-setInterval(updateRaidClocks, 30000);
+checkMoonlightAlerts();
+setInterval(() => {
+  updateRaidClocks();
+  checkMoonlightAlerts();
+}, 30000);
