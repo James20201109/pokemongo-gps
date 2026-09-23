@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#05080b">
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
-  <link rel="stylesheet" href="style.css?v=20260923">
+  <link rel="stylesheet" href="style.css?v=20260923-2">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -186,11 +186,23 @@
       <h2 id="alert-settings-title">Moonlight O'Clock 提醒</h2>
       <p class="filter-modal-note">勾選想追蹤的地區。活動開始前 10 分鐘會顯示 Alert；同一地區、日期與場次關閉後不會再次提醒。</p>
       <div class="alert-options" id="alert-options"></div>
+      <section class="custom-alert-time" aria-labelledby="custom-alert-title">
+        <div>
+          <h3 id="custom-alert-title">自定義測試時間</h3>
+          <p>依目前裝置時間觸發，用來確認 Alert 是否正常。同一天同一時間只提醒一次。</p>
+        </div>
+        <label class="custom-alert-toggle"><input id="custom-alert-enabled" type="checkbox"> 啟用</label>
+        <div class="custom-time-fields">
+          <label><span>小時</span><select id="custom-alert-hour" aria-label="測試提醒小時"></select></label>
+          <b>:</b>
+          <label><span>分鐘</span><select id="custom-alert-minute" aria-label="測試提醒分鐘"></select></label>
+        </div>
+      </section>
       <button class="filter-copy-button alert-save-button" id="alert-settings-save" type="button">SAVE ALERTS</button>
     </div>
   </dialog>
 
-  <script src="coordinates-data.js?v=20260923"></script>
-  <script src="script.js?v=20260923"></script>
+  <script src="coordinates-data.js?v=20260923-2"></script>
+  <script src="script.js?v=20260923-2"></script>
 </body>
 </html>

@@ -64,7 +64,10 @@ const elements = {
   alertSettingsClose: document.querySelector("#alert-settings-close"),
   alertSettingsSave: document.querySelector("#alert-settings-save"),
   alertOptions: document.querySelector("#alert-options"),
-  alertEnabledCount: document.querySelector("#alert-enabled-count")
+  alertEnabledCount: document.querySelector("#alert-enabled-count"),
+  customAlertEnabled: document.querySelector("#custom-alert-enabled"),
+  customAlertHour: document.querySelector("#custom-alert-hour"),
+  customAlertMinute: document.querySelector("#custom-alert-minute")
 };
 
 let activeCountry = "lego";
@@ -77,6 +80,7 @@ let pendingRemovalKey = null;
 let pendingRemovalButton = null;
 const alertPreferenceStorageKey = "geoPulseMoonlightAlerts";
 const alertHistoryStorageKey = "geoPulseMoonlightAlertHistory";
+const customAlertStorageKey = "geoPulseCustomAlertTime";
 let pendingRemovalTimer = null;
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
@@ -271,6 +275,23 @@ function loadStringSet(storageKey) {
 let moonlightAlertPreferences = loadStringSet(alertPreferenceStorageKey);
 let moonlightAlertHistory = loadStringSet(alertHistoryStorageKey);
 
+function loadCustomAlertTime() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(customAlertStorageKey) || "null");
+    if (saved && /^\d{2}$/.test(saved.hour) && /^\d{2}$/.test(saved.minute)) return saved;
+  } catch {
+    // 使用預設測試時間。
+  }
+  const nextMinute = new Date(Date.now() + 60000);
+  return {
+    enabled: false,
+    hour: String(nextMinute.getHours()).padStart(2, "0"),
+    minute: String(nextMinute.getMinutes()).padStart(2, "0")
+  };
+}
+
+let customAlertTime = loadCustomAlertTime();
+
 function saveStringSet(storageKey, values) {
   try {
     localStorage.setItem(storageKey, JSON.stringify([...values]));
@@ -309,8 +330,29 @@ function moonlightCoordinates() {
 }
 
 function updateAlertEnabledCount() {
-  elements.alertEnabledCount.textContent = String(moonlightAlertPreferences.size);
-  elements.alertSettingsOpen.classList.toggle("enabled", moonlightAlertPreferences.size > 0);
+  const enabledCount = moonlightAlertPreferences.size + (customAlertTime.enabled ? 1 : 0);
+  elements.alertEnabledCount.textContent = String(enabledCount);
+  elements.alertSettingsOpen.classList.toggle("enabled", enabledCount > 0);
+}
+
+function populateCustomAlertTimeFields() {
+  if (!elements.customAlertHour.options.length) {
+    elements.customAlertHour.replaceChildren(...Array.from({ length: 24 }, (_, hour) => {
+      const option = document.createElement("option");
+      option.value = String(hour).padStart(2, "0");
+      option.textContent = option.value;
+      return option;
+    }));
+    elements.customAlertMinute.replaceChildren(...Array.from({ length: 60 }, (_, minute) => {
+      const option = document.createElement("option");
+      option.value = String(minute).padStart(2, "0");
+      option.textContent = option.value;
+      return option;
+    }));
+  }
+  elements.customAlertEnabled.checked = Boolean(customAlertTime.enabled);
+  elements.customAlertHour.value = customAlertTime.hour;
+  elements.customAlertMinute.value = customAlertTime.minute;
 }
 
 function renderAlertOptions() {
@@ -325,6 +367,7 @@ function renderAlertOptions() {
 
 function openAlertSettings() {
   renderAlertOptions();
+  populateCustomAlertTimeFields();
   if (typeof elements.alertSettingsModal.showModal === "function") elements.alertSettingsModal.showModal();
   else elements.alertSettingsModal.setAttribute("open", "");
 }
@@ -339,6 +382,16 @@ function saveAlertSettings() {
     [...elements.alertOptions.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value)
   );
   saveStringSet(alertPreferenceStorageKey, moonlightAlertPreferences);
+  customAlertTime = {
+    enabled: elements.customAlertEnabled.checked,
+    hour: elements.customAlertHour.value,
+    minute: elements.customAlertMinute.value
+  };
+  try {
+    localStorage.setItem(customAlertStorageKey, JSON.stringify(customAlertTime));
+  } catch {
+    // 無法使用儲存空間時，測試時間仍保留至本次頁面關閉。
+  }
   updateAlertEnabledCount();
   closeAlertSettings();
   checkMoonlightAlerts();
@@ -349,6 +402,20 @@ function checkMoonlightAlerts(date = new Date()) {
     .filter((coordinate) => moonlightAlertPreferences.has(coordinate.name))
     .map((coordinate) => moonlightAlertOccurrence(coordinate, date))
     .filter((occurrence) => occurrence && !moonlightAlertHistory.has(occurrence.key));
+  if (customAlertTime.enabled) {
+    const currentHour = String(date.getHours()).padStart(2, "0");
+    const currentMinute = String(date.getMinutes()).padStart(2, "0");
+    const localDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    const customKey = `custom|${localDate}|${customAlertTime.hour}:${customAlertTime.minute}`;
+    if (currentHour === customAlertTime.hour && currentMinute === customAlertTime.minute && !moonlightAlertHistory.has(customKey)) {
+      alerts.push({
+        key: customKey,
+        name: "自定義測試提醒",
+        time: `${customAlertTime.hour}:${customAlertTime.minute}`,
+        state: "Alert 功能測試"
+      });
+    }
+  }
   if (!alerts.length) return;
   alerts.forEach((occurrence) => moonlightAlertHistory.add(occurrence.key));
   if (moonlightAlertHistory.size > 240) moonlightAlertHistory = new Set([...moonlightAlertHistory].slice(-180));
