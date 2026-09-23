@@ -64,6 +64,9 @@ h2 { margin:0;font-size:34px;letter-spacing:-.04em; }
 .country-tab.europe-tab { border-color:rgba(124,142,255,.38);color:#9aa9e8; }
 .country-tab.europe-tab b { color:#8fa4ff; }
 .country-tab.europe-tab:hover,.country-tab.europe-tab.active { border-color:#8fa4ff;background:linear-gradient(120deg,rgba(102,126,255,.14),rgba(53,244,230,.04));color:#eef1ff;box-shadow:inset 0 -2px #8fa4ff,0 0 18px rgba(102,126,255,.12); }
+.country-tab.asia-limited-tab { border-color:rgba(255,194,92,.36);color:#c9a768; }
+.country-tab.asia-limited-tab b { color:#ffd05f; }
+.country-tab.asia-limited-tab:hover,.country-tab.asia-limited-tab.active { border-color:#ffd05f;background:linear-gradient(120deg,rgba(255,208,95,.13),rgba(149,107,255,.06));color:#fff4cf;box-shadow:inset 0 -2px #ffd05f,0 0 18px rgba(255,208,95,.11); }
 .country-tab.indonesia-tab { border-color:rgba(255,165,52,.34);color:#c39159; }
 .country-tab.indonesia-tab b { color:#ffad45; }
 .country-tab.indonesia-tab:hover,.country-tab.indonesia-tab.active { border-color:#ffad45;background:linear-gradient(120deg,rgba(255,173,69,.12),rgba(255,216,61,.04));color:#fff0d7;box-shadow:inset 0 -2px #ffad45,0 0 18px rgba(255,173,69,.09); }
@@ -176,6 +179,13 @@ kbd { color:#40585b;font:8px "JetBrains Mono",monospace; }
 .raid-card .raid-countdown { color:var(--yellow);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.02em; }
 .raid-card .coordinate-label small { overflow:visible;white-space:normal;text-overflow:clip;line-height:1.35; }
 .raid-card .local-clock { color:#d9bd42;font:700 9px "JetBrains Mono",monospace;letter-spacing:.03em; }
+.coordinate-item.moonlight-card { min-height:90px;border-color:color-mix(in srgb,var(--region-accent) 58%,transparent);box-shadow:inset 3px 0 var(--region-accent); }
+.moonlight-card .coordinate-label { gap:5px; }
+.moonlight-card .coordinate-label small { overflow:visible;white-space:normal;text-overflow:clip;line-height:1.35; }
+.moonlight-card .local-clock { color:var(--region-accent);font:700 9px "JetBrains Mono",monospace;letter-spacing:.03em; }
+.moonlight-status { position:absolute;right:8px;top:6px;padding:3px 5px;color:var(--region-accent);border:1px solid color-mix(in srgb,var(--region-accent) 55%,transparent);font:800 7px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.07em; }
+.coordinate-item.moonlight-soon,.coordinate-item.moonlight-live { border-color:#ff4d62;background:linear-gradient(110deg,rgba(255,43,72,.16),rgba(255,43,72,.025));box-shadow:0 7px 24px rgba(255,43,72,.12),inset 3px 0 #ff4d62; }
+.moonlight-soon .moonlight-status,.moonlight-live .moonlight-status { color:#fff;background:#d91f39;border-color:#ff6577;box-shadow:0 0 16px rgba(255,43,72,.32); }
 .raid-live-label { display:none;position:absolute;right:8px;top:6px;color:#1a1500;background:var(--yellow);padding:3px 5px;font:800 7px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.07em;box-shadow:0 0 14px rgba(255,216,61,.25); }
 .coordinate-item.raid-open { border-color:#76e36f;background:linear-gradient(110deg,rgba(82,214,103,.13),rgba(53,244,230,.025));box-shadow:0 7px 24px rgba(82,214,103,.09),inset 3px 0 #76e36f; }
 .coordinate-item.raid-open strong { color:#c9ffc5; }

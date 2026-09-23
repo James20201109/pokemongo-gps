@@ -4,6 +4,7 @@ const countryNames = {
   lego: "LEGO GLOBAL EVENT",
   indonesia: "INDONESIA LIMITED EVENT",
   pokexciting: "POKÉXCITING ASIA TOUR",
+  asiaLimited: "ASIA LIMITED EVENT",
   europe: "EUROPE MUSEUM EVENT",
   copied: "COPIED COORDINATES",
   japan: "JAPAN",
@@ -132,6 +133,7 @@ const libraries = {
   lego: librarySource.lego,
   indonesia: librarySource.indonesia,
   pokexciting: librarySource.pokexciting,
+  asiaLimited: librarySource.asiaLimited,
   europe: librarySource.europe,
   japan: librarySource.japan,
   korea: librarySource.korea,
@@ -238,6 +240,15 @@ function raidCountdown(timeZone, date = new Date()) {
   const remainingHalfHours = Math.ceil((endMinutes - current) / 30);
   const remainingHours = remainingHalfHours * 0.5;
   return Number.isInteger(remainingHours) ? String(remainingHours) : remainingHours.toFixed(1);
+}
+
+function moonlightStatus(timeZone, date = new Date()) {
+  const current = localMinutes(timeZone, date);
+  if (current < 0) return "idle";
+  const starts = [12 * 60, 13 * 60, 19 * 60, 20 * 60];
+  if (starts.some((start) => current >= start && current < start + 5)) return "live";
+  if (starts.some((start) => current >= start - 10 && current < start)) return "soon";
+  return "idle";
 }
 
 function allCoordinates() {
@@ -489,30 +500,37 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
   const visited = copiedKeys.has(key);
-  const raid = typeof coordinate === "object" && coordinate.timezone;
+  const raid = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType !== "moonlight";
+  const moonlight = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "moonlight";
   const nationalTrustImage = activeCountry === "uk" && typeof coordinate === "object" && /^\d{2}\./.test(coordinate.name)
     ? `assets/pokemon_go_national_trust_2026/${coordinate.name}.jpg`
     : "";
   const coordinateImage = typeof coordinate === "object" ? coordinate.image || nationalTrustImage : "";
   const raidTimeState = raid ? raidTimeStatus(coordinate.timezone) : "closed";
+  const moonlightTimeState = moonlight ? moonlightStatus(coordinate.timezone) : "idle";
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}`;
   if (raid) {
     button.dataset.raidStart = coordinate.start;
     button.dataset.raidEnd = coordinate.end;
     button.dataset.timezone = coordinate.timezone;
   }
+  if (moonlight) {
+    button.dataset.timezone = coordinate.timezone;
+    button.style.setProperty("--region-accent", coordinate.accent || "#8fa4ff");
+  }
   const label = typeof coordinate === "object"
-    ? `<span class="coordinate-label"><b>${coordinate.name}${raid ? ` <span class="raid-countdown">(${raidCountdown(coordinate.timezone)})</span>` : ""}</b><small>${coordinate.area}</small>${raid ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
+    ? `<span class="coordinate-label"><b>${coordinate.name}${raid ? ` <span class="raid-countdown">(${raidCountdown(coordinate.timezone)})</span>` : ""}</b><small>${coordinate.area}</small>${raid || moonlight ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
     : "";
   const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
   const copiedStatus = `<em class="copied-label">✓ 已複製</em>`;
   const raidStatus = raid ? `<em class="raid-live-label">${raidTimeState === "peak" ? "RAID TIME" : "ACTIVE HOURS"}</em>` : "";
+  const moonlightStatusLabel = moonlight ? `<em class="moonlight-status">${moonlightTimeState === "live" ? "EVENT LIVE" : moonlightTimeState === "soon" ? "STARTING SOON" : "LOCAL TIME"}</em>` : "";
   const coordinatePreview = coordinateImage
     ? `<img class="coordinate-thumb" src="${coordinateImage}" alt="${coordinate.name} 背景圖片" loading="lazy" title="點擊放大圖片">`
     : "";
-  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}<i>⧉</i>`;
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}${moonlightStatusLabel}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
   button.addEventListener("click", async (event) => {
     if (coordinateImage && event.target.closest(".coordinate-thumb")) {
@@ -700,6 +718,15 @@ function updateRaidClocks() {
     if (liveLabel) liveLabel.textContent = timeState === "peak" ? "RAID TIME" : "ACTIVE HOURS";
     const countdown = card.querySelector(".raid-countdown");
     if (countdown) countdown.textContent = `(${raidCountdown(card.dataset.timezone)})`;
+    const clock = card.querySelector(".local-clock");
+    if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
+  });
+  document.querySelectorAll(".moonlight-card").forEach((card) => {
+    const timeState = moonlightStatus(card.dataset.timezone);
+    card.classList.toggle("moonlight-soon", timeState === "soon");
+    card.classList.toggle("moonlight-live", timeState === "live");
+    const status = card.querySelector(".moonlight-status");
+    if (status) status.textContent = timeState === "live" ? "EVENT LIVE" : timeState === "soon" ? "STARTING SOON" : "LOCAL TIME";
     const clock = card.querySelector(".local-clock");
     if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
   });

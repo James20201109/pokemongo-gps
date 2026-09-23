@@ -1,5 +1,34 @@
 // GPS 座標資料庫：依國家、區域及地區分組。
 window.coordinateLibraries = {
+  "asiaLimited": [
+    {
+      "region": "亞洲限定活動",
+      "name": "Moonlight O'Clock",
+      "event": {
+        "periodLabel": "DAILY EVENT TIME / 當地時間",
+        "period": "每日 12:00／13:00／19:00／20:00 · 每次 5 分鐘",
+        "description": "亞洲六個指定地區的 Moonlight O'Clock 活動；座標卡會顯示各地當下時間，並於每場開始前 10 分鐘切換為紅色提醒。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "活動出現：特別背卡皮皮、胖丁、熊寶寶、向尾喵、食夢夢及掘掘兔。",
+          "兩段限時調查可遇見熊寶寶、向尾喵、月石、掘掘兔及特別背卡皮皮。",
+          "每日依各地當地時間於 12:00、13:00、19:00、20:00 開始，每場持續 5 分鐘。",
+          "紅色框：活動開始前 10 分鐘顯示 STARTING SOON；活動進行中顯示 EVENT LIVE。"
+        ],
+        "image": "assets/moonlight-oclock-clefairy.png",
+        "imageAlt": "Moonlight O'Clock 特別背景皮皮",
+        "imageCaption": "Moonlight O'Clock · 特別背景皮皮"
+      },
+      "coordinates": [
+        { "name": "日本", "area": "東京都豐島區 · 池袋車站附近｜UTC+9", "timezone": "Asia/Tokyo", "clockType": "moonlight", "accent": "#ff6b86", "value": "35.730200, 139.715600" },
+        { "name": "韓國", "area": "首爾特別市松坡區 · 蠶室附近｜UTC+9", "timezone": "Asia/Seoul", "clockType": "moonlight", "accent": "#ff8c4d", "value": "37.513300, 127.102500" },
+        { "name": "台灣", "area": "台北市中正區 · 台北車站附近｜UTC+8", "timezone": "Asia/Taipei", "clockType": "moonlight", "accent": "#35f4e6", "value": "25.041400, 121.514800" },
+        { "name": "新加坡", "area": "新加坡市中心 · 濱海灣附近｜UTC+8", "timezone": "Asia/Singapore", "clockType": "moonlight", "accent": "#a98cff", "value": "1.283800, 103.858500" },
+        { "name": "馬來西亞", "area": "吉隆坡 · 十五碑附近｜UTC+8", "timezone": "Asia/Kuala_Lumpur", "clockType": "moonlight", "accent": "#ffd05f", "value": "3.131000, 101.671700" },
+        { "name": "印尼", "area": "雅加達 · 國家紀念塔附近｜UTC+7", "timezone": "Asia/Jakarta", "clockType": "moonlight", "accent": "#72e27b", "value": "-6.175300, 106.827100" }
+      ]
+    }
+  ],
   "europe": [
     {
       "region": "歐洲博物館限定活動",
