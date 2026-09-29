@@ -58,19 +58,10 @@ const elements = {
   newsOpen: document.querySelector("#news-open"),
   newsModal: document.querySelector("#news-modal"),
   newsClose: document.querySelector("#news-close"),
-  newsSections: document.querySelector("#news-sections"),
-  alertSettingsOpen: document.querySelector("#alert-settings-open"),
-  alertSettingsModal: document.querySelector("#alert-settings-modal"),
-  alertSettingsClose: document.querySelector("#alert-settings-close"),
-  alertSettingsSave: document.querySelector("#alert-settings-save"),
-  alertOptions: document.querySelector("#alert-options"),
-  alertEnabledCount: document.querySelector("#alert-enabled-count"),
-  customAlertEnabled: document.querySelector("#custom-alert-enabled"),
-  customAlertHour: document.querySelector("#custom-alert-hour"),
-  customAlertMinute: document.querySelector("#custom-alert-minute")
+  newsSections: document.querySelector("#news-sections")
 };
 
-let activeCountry = "lego";
+let activeCountry = "copied";
 let visibleCoordinates = [];
 let visibleCoordinateKeys = [];
 let toastTimer;
@@ -78,9 +69,6 @@ let pendingUndoKey = null;
 let pendingUndoLabel = "";
 let pendingRemovalKey = null;
 let pendingRemovalButton = null;
-const alertPreferenceStorageKey = "geoPulseMoonlightAlerts";
-const alertHistoryStorageKey = "geoPulseMoonlightAlertHistory";
-const customAlertStorageKey = "geoPulseCustomAlertTime";
 let pendingRemovalTimer = null;
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
@@ -159,9 +147,9 @@ const libraries = {
 function loadActiveCountry() {
   try {
     const saved = localStorage.getItem(activeTabStorageKey);
-    return saved && (saved === "copied" || Object.hasOwn(libraries, saved)) ? saved : "lego";
+    return saved && (saved === "copied" || Object.hasOwn(libraries, saved)) ? saved : "copied";
   } catch {
-    return "lego";
+    return "copied";
   }
 }
 
@@ -261,166 +249,6 @@ function moonlightStatus(timeZone, date = new Date()) {
   if (starts.some((start) => current >= start && current < start + 5)) return "live";
   if (starts.some((start) => current >= start - 10 && current < start)) return "soon";
   return "idle";
-}
-
-function loadStringSet(storageKey) {
-  try {
-    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    return new Set(Array.isArray(saved) ? saved : []);
-  } catch {
-    return new Set();
-  }
-}
-
-let moonlightAlertPreferences = loadStringSet(alertPreferenceStorageKey);
-let moonlightAlertHistory = loadStringSet(alertHistoryStorageKey);
-
-function loadCustomAlertTime() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(customAlertStorageKey) || "null");
-    if (saved && /^\d{2}$/.test(saved.hour) && /^\d{2}$/.test(saved.minute)) return saved;
-  } catch {
-    // 使用預設測試時間。
-  }
-  const nextMinute = new Date(Date.now() + 60000);
-  return {
-    enabled: false,
-    hour: String(nextMinute.getHours()).padStart(2, "0"),
-    minute: String(nextMinute.getMinutes()).padStart(2, "0")
-  };
-}
-
-let customAlertTime = loadCustomAlertTime();
-
-function saveStringSet(storageKey, values) {
-  try {
-    localStorage.setItem(storageKey, JSON.stringify([...values]));
-  } catch {
-    // 無法使用儲存空間時，提醒設定仍保留至本次頁面關閉。
-  }
-}
-
-function localDateKey(timeZone, date = new Date()) {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  }).formatToParts(date);
-  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-  return `${values.year}-${values.month}-${values.day}`;
-}
-
-function moonlightAlertOccurrence(coordinate, date = new Date()) {
-  const current = localMinutes(coordinate.timezone, date);
-  const starts = [12 * 60, 13 * 60, 19 * 60, 20 * 60];
-  const start = starts.find((value) => current >= value - 10 && current < value + 5);
-  if (start === undefined) return null;
-  const time = `${String(Math.floor(start / 60)).padStart(2, "0")}:${String(start % 60).padStart(2, "0")}`;
-  return {
-    key: `${coordinate.name}|${localDateKey(coordinate.timezone, date)}|${time}`,
-    name: coordinate.name,
-    time,
-    state: current < start ? "即將開始" : "活動進行中"
-  };
-}
-
-function moonlightCoordinates() {
-  return (libraries.asiaLimited || []).flatMap((group) => group.coordinates || []);
-}
-
-function updateAlertEnabledCount() {
-  const enabledCount = moonlightAlertPreferences.size + (customAlertTime.enabled ? 1 : 0);
-  elements.alertEnabledCount.textContent = String(enabledCount);
-  elements.alertSettingsOpen.classList.toggle("enabled", enabledCount > 0);
-}
-
-function populateCustomAlertTimeFields() {
-  if (!elements.customAlertHour.options.length) {
-    elements.customAlertHour.replaceChildren(...Array.from({ length: 24 }, (_, hour) => {
-      const option = document.createElement("option");
-      option.value = String(hour).padStart(2, "0");
-      option.textContent = option.value;
-      return option;
-    }));
-    elements.customAlertMinute.replaceChildren(...Array.from({ length: 60 }, (_, minute) => {
-      const option = document.createElement("option");
-      option.value = String(minute).padStart(2, "0");
-      option.textContent = option.value;
-      return option;
-    }));
-  }
-  elements.customAlertEnabled.checked = Boolean(customAlertTime.enabled);
-  elements.customAlertHour.value = customAlertTime.hour;
-  elements.customAlertMinute.value = customAlertTime.minute;
-}
-
-function renderAlertOptions() {
-  elements.alertOptions.replaceChildren(...moonlightCoordinates().map((coordinate) => {
-    const label = document.createElement("label");
-    label.className = "alert-option";
-    label.style.setProperty("--option-accent", coordinate.accent || "#35f4e6");
-    label.innerHTML = `<input type="checkbox" value="${coordinate.name}" ${moonlightAlertPreferences.has(coordinate.name) ? "checked" : ""}><span><b>${coordinate.name}</b><small>${coordinate.area}</small></span><em>12／13／19／20</em>`;
-    return label;
-  }));
-}
-
-function openAlertSettings() {
-  renderAlertOptions();
-  populateCustomAlertTimeFields();
-  if (typeof elements.alertSettingsModal.showModal === "function") elements.alertSettingsModal.showModal();
-  else elements.alertSettingsModal.setAttribute("open", "");
-}
-
-function closeAlertSettings() {
-  elements.alertSettingsModal.close?.();
-  elements.alertSettingsModal.removeAttribute("open");
-}
-
-function saveAlertSettings() {
-  moonlightAlertPreferences = new Set(
-    [...elements.alertOptions.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value)
-  );
-  saveStringSet(alertPreferenceStorageKey, moonlightAlertPreferences);
-  customAlertTime = {
-    enabled: elements.customAlertEnabled.checked,
-    hour: elements.customAlertHour.value,
-    minute: elements.customAlertMinute.value
-  };
-  try {
-    localStorage.setItem(customAlertStorageKey, JSON.stringify(customAlertTime));
-  } catch {
-    // 無法使用儲存空間時，測試時間仍保留至本次頁面關閉。
-  }
-  updateAlertEnabledCount();
-  closeAlertSettings();
-  checkMoonlightAlerts();
-}
-
-function checkMoonlightAlerts(date = new Date()) {
-  const alerts = moonlightCoordinates()
-    .filter((coordinate) => moonlightAlertPreferences.has(coordinate.name))
-    .map((coordinate) => moonlightAlertOccurrence(coordinate, date))
-    .filter((occurrence) => occurrence && !moonlightAlertHistory.has(occurrence.key));
-  if (customAlertTime.enabled) {
-    const currentHour = String(date.getHours()).padStart(2, "0");
-    const currentMinute = String(date.getMinutes()).padStart(2, "0");
-    const localDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-    const customKey = `custom|${localDate}|${customAlertTime.hour}:${customAlertTime.minute}`;
-    if (currentHour === customAlertTime.hour && currentMinute === customAlertTime.minute && !moonlightAlertHistory.has(customKey)) {
-      alerts.push({
-        key: customKey,
-        name: "自定義測試提醒",
-        time: `${customAlertTime.hour}:${customAlertTime.minute}`,
-        state: "Alert 功能測試"
-      });
-    }
-  }
-  if (!alerts.length) return;
-  alerts.forEach((occurrence) => moonlightAlertHistory.add(occurrence.key));
-  if (moonlightAlertHistory.size > 240) moonlightAlertHistory = new Set([...moonlightAlertHistory].slice(-180));
-  saveStringSet(alertHistoryStorageKey, moonlightAlertHistory);
-  window.alert(`Moonlight O'Clock 活動提醒\n\n${alerts.map((item) => `${item.name}｜${item.time}｜${item.state}`).join("\n")}`);
 }
 
 function allCoordinates() {
@@ -679,7 +507,7 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
     : "";
   const coordinateImage = typeof coordinate === "object" ? coordinate.image || nationalTrustImage : "";
   const raidTimeState = raid ? raidTimeStatus(coordinate.timezone) : "closed";
-  const moonlightTimeState = moonlight ? moonlightStatus(coordinate.timezone) : "idle";
+  const moonlightTimeState = moonlight && !expired ? moonlightStatus(coordinate.timezone) : "idle";
   const button = document.createElement("button");
   button.type = "button";
   button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}`;
@@ -894,6 +722,10 @@ function updateRaidClocks() {
     if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
   });
   document.querySelectorAll(".moonlight-card").forEach((card) => {
+    if (card.classList.contains("expired")) {
+      card.classList.remove("moonlight-soon", "moonlight-live");
+      return;
+    }
     const timeState = moonlightStatus(card.dataset.timezone);
     card.classList.toggle("moonlight-soon", timeState === "soon");
     card.classList.toggle("moonlight-live", timeState === "live");
@@ -982,21 +814,10 @@ elements.newsClose.addEventListener("click", closeNewsModal);
 elements.newsModal.addEventListener("click", (event) => {
   if (event.target === elements.newsModal) closeNewsModal();
 });
-elements.alertSettingsOpen.addEventListener("click", openAlertSettings);
-elements.alertSettingsClose.addEventListener("click", closeAlertSettings);
-elements.alertSettingsSave.addEventListener("click", saveAlertSettings);
-elements.alertSettingsModal.addEventListener("click", (event) => {
-  if (event.target === elements.alertSettingsModal) closeAlertSettings();
-});
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
-updateAlertEnabledCount();
 switchCountry(activeCountry);
-checkMoonlightAlerts();
-setInterval(() => {
-  updateRaidClocks();
-  checkMoonlightAlerts();
-}, 30000);
+setInterval(updateRaidClocks, 30000);

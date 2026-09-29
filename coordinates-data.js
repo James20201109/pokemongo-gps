@@ -6,7 +6,8 @@ window.coordinateLibraries = {
       "name": "Moonlight O'Clock",
       "event": {
         "periodLabel": "DAILY EVENT TIME / 當地時間",
-        "period": "每日 12:00／13:00／19:00／20:00 · 每次 5 分鐘",
+        "period": "活動至 2026 年 9 月 28 日止 · 每日 12:00／13:00／19:00／20:00 · 每次 5 分鐘",
+        "endDate": "2026-09-28",
         "description": "亞洲六個指定地區的 Moonlight O'Clock 活動；座標卡會顯示各地當下時間，並於每場開始前 10 分鐘切換為紅色提醒。",
         "detailLabel": "活動內容",
         "bullets": [
@@ -211,12 +212,27 @@ window.coordinateLibraries = {
           "啟用薰香時，遇見蠟染襯衫皮卡丘與其他活動主題寶可夢的機率提高。",
           "活動期間替夥伴或已捕獲寶可夢拍攝快照，有機會觸發蠟染襯衫皮卡丘驚喜遭遇。"
         ],
-        "notice": "以下座標為 AI 推薦的印尼熱門補給站與玩家聚集地，並非官方指定活動會場。",
-        "image": "assets/Indonesia/samlpe.jpg",
-        "imageAlt": "荒野圖騰活動身穿蠟染襯衫的皮卡丘",
-        "imageCaption": "Patterns of the Wild · 身穿蠟染襯衫的皮卡丘"
+        "notice": "第一筆為活動地點；其餘座標為 AI 推薦的印尼熱門補給站與玩家聚集地。",
+        "images": [
+          {
+            "src": "assets/Indonesia/patterns-of-wild-normal.jpg",
+            "alt": "荒野圖騰活動身穿蠟染襯衫的普色皮卡丘",
+            "caption": "Patterns of the Wild · 蠟染襯衫皮卡丘（普色版本）"
+          },
+          {
+            "src": "assets/Indonesia/patterns-of-wild-shiny.png",
+            "alt": "荒野圖騰活動身穿蠟染襯衫的異色皮卡丘",
+            "caption": "Patterns of the Wild · 蠟染襯衫皮卡丘（異色版本）"
+          },
+          {
+            "src": "assets/Indonesia/patterns-of-wild-timed-research.png",
+            "alt": "Patterns of the Wild 三階段限時調查任務",
+            "caption": "Patterns of the Wild · 限時調查任務支線（1／3～3／3）"
+          }
+        ]
       },
       "coordinates": [
+        { "name": "活動地點", "area": "印尼 · Patterns of the Wild", "value": "-6.139850, 106.815511" },
         { "name": "國家紀念塔（Monas）", "area": "雅加達 · 市中心核心地標與密集補給站", "value": "-6.175392, 106.827153" },
         { "name": "GBK 體育場園區", "area": "雅加達 · Gelora Bung Karno", "value": "-6.218335, 106.802216" },
         { "name": "PIK 海濱商圈", "area": "雅加達 · Pantai Indah Kapuk", "value": "-6.109520, 106.740232" },
@@ -1185,25 +1201,6 @@ window.coordinateLibraries = {
         { "name": "補給站任務 08", "area": "首爾", "value": "37.567700, 126.986700" },
         { "name": "補給站任務 09", "area": "首爾", "value": "37.566500, 126.978200" },
         { "name": "補給站任務 10", "area": "仁川", "value": "37.447800, 126.452100" }
-      ]
-    },
-    {
-      "region": "首爾",
-      "name": "首爾",
-      "event": {
-        "period": "2026 年 5 月 1 日 ～ 2026 年 5 月 31 日",
-        "endDate": "2026-05-31",
-        "description": "韓國首爾限定活動座標。",
-        "detailLabel": "活動狀態",
-        "detail": "此活動的 6 筆座標共用相同活動期間。"
-      },
-      "coordinates": [
-        "37.540900, 127.055000",
-        "37.542000, 127.052900",
-        "37.544100, 127.054400",
-        "37.545000, 127.052400",
-        "37.544500, 127.037300",
-        "37.545200, 127.037300"
       ]
     }
   ],
