@@ -729,7 +729,22 @@ function render() {
   visibleCoordinateKeys = [];
   let visibleGroups = 0;
 
-  const activeGroups = activeCountry === "copied" ? copiedGroups() : libraries[activeCountry];
+  const activeGroups = activeCountry === "copied" ? copiedGroups() : [...libraries[activeCountry]];
+  if (activeCountry === "events") {
+    activeGroups.sort((a, b) => {
+      const aEvent = a.event || {};
+      const bEvent = b.event || {};
+      const aExpired = eventNewsStatus(aEvent) === "expired";
+      const bExpired = eventNewsStatus(bEvent) === "expired";
+      if (aExpired !== bExpired) return aExpired ? 1 : -1;
+      const aTime = eventTimeValue(eventStartDate(aEvent));
+      const bTime = eventTimeValue(eventStartDate(bEvent));
+      return aExpired ? bTime - aTime : aTime - bTime;
+    });
+  }
+  const completedEventContent = document.createElement("div");
+  completedEventContent.className = "completed-event-content";
+  let completedEventCount = 0;
   activeGroups.forEach((group) => {
     const groupMatches = `${group.region} ${group.name}`.toLowerCase().includes(query);
     const matches = (group.coordinates || []).filter((coordinate) => {
@@ -844,8 +859,28 @@ function render() {
       grid.hidden = collapsible && !expanded;
       section.appendChild(grid);
     }
-    fragment.appendChild(section);
+    const completedEvent = activeCountry === "events" && eventNewsStatus(group.event) === "expired";
+    if (completedEvent) {
+      section.classList.add("completed-event");
+      completedEventContent.appendChild(section);
+      completedEventCount += 1;
+    } else {
+      fragment.appendChild(section);
+    }
   });
+
+  if (activeCountry === "events") {
+    const completedEvents = document.createElement("details");
+    completedEvents.className = "completed-events";
+    completedEvents.innerHTML = `<summary><span>EVENT ARCHIVE</span><strong>活動結束</strong><b>${String(completedEventCount).padStart(2, "0")}</b></summary>`;
+    if (completedEventCount) {
+      completedEvents.appendChild(completedEventContent);
+    } else {
+      completedEventContent.innerHTML = `<p class="completed-events-empty">目前沒有已結束的活動</p>`;
+      completedEvents.appendChild(completedEventContent);
+    }
+    fragment.appendChild(completedEvents);
+  }
 
   elements.library.replaceChildren(fragment);
   elements.resultCount.textContent = visibleCoordinates.length;

@@ -44,6 +44,127 @@ window.coordinateLibraries = {
   ],
   "events": [
     {
+      "region": "全球活動情報 · 季節活動",
+      "name": "豐收節：收集啃果蟲",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 9 月 29 日 10:00～10 月 5 日 20:00",
+        "startDate": "2026-09-29",
+        "endDate": "2026-10-05",
+        "startDateTime": "2026-09-29T10:00:00+08:00",
+        "endDateTime": "2026-10-05T20:00:00+08:00",
+        "description": "異色啃果蟲在 Pokémon GO 首次登場；活動期間也會提高遇見異色迷你芙的機率。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "地圖上的蘋果可獲得酸酸蘋果、甜甜蘋果或蜜汁蘋果，並可能遇見戴著花飾的木棉球與啃果蟲。",
+          "野外將出現貪心栗鼠、愛吃豚、迷你芙與啃果蟲等活動主題寶可夢。",
+          "分歧式限時調查可從酸酸蘋果、甜甜蘋果及蜜汁蘋果三種路線中選擇一種。",
+          "GO Pass 里程碑可提升取得進化蘋果的機率、延長藥草誘餌模組效果，並增加擊敗 GO 火箭隊獲得的星星沙子。",
+          "GO Pass 獎勵領取期限為台灣時間 2026 年 10 月 7 日 20:00。"
+        ],
+        "notice": "限時調查必須在台灣時間 2026 年 10 月 5 日 20:00 前完成並領取獎勵。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/harvest-festival-2026",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/harvest-festival-applin-evolutions.png",
+            "alt": "啃果蟲與其進化型參考圖",
+            "caption": "豐收節：收集啃果蟲 · 啃果蟲及其進化型",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 極巨對戰",
+      "name": "超極巨化閃焰王牌極巨對戰日",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 3 日 14:00～17:00",
+        "startDate": "2026-10-03",
+        "endDate": "2026-10-03",
+        "startDateTime": "2026-10-03T14:00:00+08:00",
+        "endDateTime": "2026-10-03T17:00:00+08:00",
+        "description": "超極巨化閃焰王牌將在六星極巨對戰登場，並首次開放異色版本。",
+        "detailLabel": "活動獎勵加碼內容",
+        "bullets": [
+          "每日蒐集極巨粒子的上限增加至 1,600，所有能量點皆會出現超極巨化對戰。",
+          "能量點刷新頻率提高、地圖出現額外能量點，從能量點取得的極巨粒子增加為 8 倍。",
+          "每日最多可進行 3 次特殊交換。",
+          "10 月 3 日 08:00～10 月 4 日 11:00，遠距團體戰參加上限由 10 次提高至 20 次。",
+          "10 月 3 日 00:00～17:00，探索取得的極巨粒子加倍，所需探索距離縮短為 1/4。",
+          "付費限時調查獎勵包含 1 個極巨菇菇、25,000 XP 與 6,400 個極巨粒子。"
+        ],
+        "notice": "活動入場券及限時調查均於台灣時間 2026 年 10 月 3 日 17:00 截止。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/gigantamax-cinderace-max-battle-day-2026",
+        "sourceLabel": "活動官網"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 社群日",
+      "name": "2026 年 10 月社群日：索羅亞",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 當地時間",
+        "period": "2026 年 10 月 10 日 14:00～17:00",
+        "startDate": "2026-10-10",
+        "endDate": "2026-10-10",
+        "startDateTime": "2026-10-10T14:00:00+08:00",
+        "endDateTime": "2026-10-10T21:00:00+08:00",
+        "description": "索羅亞將在野外大量出現，並有機會遇見異色或帶有特殊背景的索羅亞。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "活動期間或結束後 4 小時內進化索羅亞，可獲得學會一般招式「突襲」的索羅亞克。",
+          "捕捉寶可夢可獲得 3 倍 XP、2 倍糖果；31 級以上訓練家獲得糖果 XL 的機率加倍。",
+          "薰香持續 3 小時，誘餌模組持續 1 小時，拍攝 GO Snapshot 可獲得驚喜。",
+          "當日可額外進行 1 次特殊交換，交換所需星星沙子減半。",
+          "14:00～21:00，使用一般誘餌模組的寶可補給站有極高機率吸引索羅亞。",
+          "付費特殊調查包含 3 次帶有特殊背景的索羅亞遭遇、特級對戰入場券及神奇糖果 XL。"
+        ],
+        "notice": "主要社群日大量出現時段為 14:00～17:00；部分交換及誘餌加碼延續至當地時間 21:00。",
+        "sourceUrl": "https://pokemongo.com/news/communityday-october-2026-zorua?hl=enPVP",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/community-day-zorua-2026.png",
+            "alt": "2026 年 10 月社群日索羅亞",
+            "caption": "2026 年 10 月社群日 · 索羅亞"
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 限時調查",
+      "name": "秋季遠足：與夥伴同行",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 13 日 10:00～10 月 19 日 20:00",
+        "startDate": "2026-10-13",
+        "endDate": "2026-10-19",
+        "startDateTime": "2026-10-13T10:00:00+08:00",
+        "endDateTime": "2026-10-19T20:00:00+08:00",
+        "description": "免費的活動限定限時調查即將登場，完成調查可獲得 XP，並遇見戴著馬拉松遮陽帽的皮卡丘。",
+        "detailLabel": "免費限時調查獎勵",
+        "bullets": [
+          "16,800 XP。",
+          "與戴著馬拉松遮陽帽的皮卡丘相遇的機會。"
+        ],
+        "notice": "限時調查必須在台灣時間 2026 年 10 月 19 日 20:00 前完成相關課題並領取獎勵。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/fall-marathon-buddy-trek-2026",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/fall-marathon-visor-pikachu.png",
+            "alt": "戴著馬拉松遮陽帽的皮卡丘",
+            "caption": "秋季遠足：與夥伴同行 · 戴著馬拉松遮陽帽的皮卡丘"
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
       "region": "全球活動情報 · 孵化活動",
       "name": "黑眼鱷孵化日",
       "event": {

@@ -63,6 +63,18 @@ h2 { margin:0;font-size:34px;letter-spacing:-.04em; }
 .expired-country-tabs { max-width:none;padding:0 10px 10px; }
 .expired-country-tabs .country-tab { opacity:.68;border-color:rgba(255,82,101,.25); }
 .expired-country-tabs .country-tab:hover,.expired-country-tabs .country-tab.active { opacity:1;border-color:#ff5265;box-shadow:inset 0 -2px #ff5265; }
+.completed-events { margin-top:34px;border:1px solid rgba(255,82,101,.3);background:rgba(19,8,11,.38); }
+.completed-events>summary { display:flex;align-items:center;gap:12px;padding:15px 18px;color:#d78a94;cursor:pointer;list-style:none; }
+.completed-events>summary::-webkit-details-marker { display:none; }
+.completed-events>summary::before { content:"＋";color:#ff7182;font:700 15px "JetBrains Mono",monospace; }
+.completed-events[open]>summary::before { content:"－"; }
+.completed-events>summary span { color:#75434a;font:700 8px "JetBrains Mono",monospace;letter-spacing:.12em; }
+.completed-events>summary strong { flex:1;font-size:14px;letter-spacing:.08em; }
+.completed-events>summary b { display:grid;place-items:center;min-width:25px;height:21px;border-radius:12px;background:#2a1218;color:#ff7182;font:700 9px "JetBrains Mono",monospace; }
+.completed-event-content { padding:0 18px 18px; }
+.completed-event { opacity:.72; }
+.completed-event .event-info { border-color:rgba(255,82,101,.22);filter:saturate(.65); }
+.completed-events-empty { margin:0;padding:18px;border-top:1px solid rgba(255,82,101,.14);color:#795a5e;text-align:center;font-size:11px; }
 .country-tab { padding:11px 16px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer;font-size:12px; }
 .country-tab b { margin-right:9px;font:700 10px "JetBrains Mono",monospace;color:#3f6468; }
 .country-tab.active { border-color:var(--cyan);background:rgba(53,244,230,.08);color:var(--text);box-shadow:inset 0 -2px var(--cyan); }
