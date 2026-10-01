@@ -1,5 +1,158 @@
 // GPS 座標資料庫：依國家、區域及地區分組。
 window.coordinateLibraries = {
+  "adidas": [
+    {
+      "region": "全球品牌聯名活動",
+      "name": "Pokémon GO × adidas",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 活動期間",
+        "period": "2026 年 9 月 25 日～2027 年 1 月 15 日 20:00",
+        "startDate": "2026-09-25",
+        "endDate": "2027-01-15",
+        "endDateTime": "2027-01-15T20:00:00+08:00",
+        "description": "活動期間前往全球 adidas 指定門市或經銷商並開啟遊戲，即可領取活動主題限時調查。",
+        "detailLabel": "限時調查獎勵",
+        "bullets": [
+          "限定換裝道具：adidas Pokémon Jacket 與 adidas Pokémon Cap。",
+          "遊戲資源：XP、星星沙子與路卡利歐超級能量。",
+          "完成調查可獲得遇見路卡利歐的機會。",
+          "門市調查領取截止：台灣時間 2027 年 1 月 15 日 20:00。",
+          "限時調查完成與領獎截止：台灣時間 2027 年 2 月 13 日 20:00。"
+        ],
+        "notice": "各座標卡會顯示所在地當地時間；實際指定門市與可領取狀態請以遊戲內及官方現場資訊為準。",
+        "sources": [
+          { "url": "https://pokemongo.com/zh-Hant/news/pokemon-x-adidas-2026", "label": "活動官網" }
+        ],
+        "redeemCode": "ADIDASxPOKEMON",
+        "redeemLabel": "免費換裝道具兌換碼",
+        "redeemReward": "adidas Pokémon Megaride Shoes",
+        "redeemDeadline": "兌換截止：2027 年 1 月 15 日",
+        "redeemUrl": "https://store.pokemongo.com/offer-redemption?utm_source=FB&utm_medium=Social-APAC&utm_campaign=pokemon-x-adidas-2026&passcode=ADIDASxPOKEMON"
+      },
+      "coordinates": [
+        { "name": "紐約", "area": "美國 · adidas 指定地點", "timezone": "America/New_York", "clockType": "local", "value": "40.756000, -73.978600" },
+        { "name": "墨西哥城", "area": "墨西哥 · adidas 指定地點", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.433700, -99.135700" },
+        { "name": "東京", "area": "日本 · adidas 指定地點", "timezone": "Asia/Tokyo", "clockType": "local", "value": "35.672700, 139.767300" },
+        { "name": "利馬", "area": "秘魯 · adidas 指定地點", "timezone": "America/Lima", "clockType": "local", "value": "-12.090100, -77.052600" },
+        { "name": "雪梨", "area": "澳洲 · adidas 指定地點", "timezone": "Australia/Sydney", "clockType": "local", "value": "-33.874700, 151.105600" },
+        { "name": "奧克蘭", "area": "紐西蘭 · adidas 指定地點", "timezone": "Pacific/Auckland", "clockType": "local", "value": "-36.848600, 174.770000" },
+        { "name": "馬德里", "area": "西班牙 · adidas 指定地點", "timezone": "Europe/Madrid", "clockType": "local", "value": "40.419900, -3.701000" },
+        { "name": "巴黎", "area": "法國 · adidas 指定地點", "timezone": "Europe/Paris", "clockType": "local", "value": "48.873300, 2.329800" },
+        { "name": "聖保羅", "area": "巴西 · adidas 指定地點", "timezone": "America/Sao_Paulo", "clockType": "local", "value": "-23.566500, -46.651700" }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "region": "全球活動情報 · 孵化活動",
+      "name": "黑眼鱷孵化日",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 17 日 11:00～17:00",
+        "startDate": "2026-10-17",
+        "endDate": "2026-10-17",
+        "startDateTime": "2026-10-17T11:00:00+08:00",
+        "endDateTime": "2026-10-17T17:00:00+08:00",
+        "description": "黑眼鱷從 2 公里蛋中孵化的機率將會提高，孵出異色黑眼鱷的機率也會提高。",
+        "detailLabel": "活動獎勵加碼內容",
+        "bullets": [
+          "孵化寶可夢獲得的糖果加倍。",
+          "孵蛋所需的行走距離縮減為 1/2。",
+          "孵出異色黑眼鱷的機率提高。",
+          "旋轉寶可補給站的轉盤時，獲得 2 公里蛋的機率提高。",
+          "免費活動限定限時調查：獎勵包含 1 個孵化器和 XP。",
+          "限時調查必須在台灣時間 2026 年 10 月 17 日 17:00 前完成課題並領取獎勵。"
+        ],
+        "notice": "孵化糖果加倍與孵蛋距離減半無法和 GO Pass 或其他 Pokémon GO 活動獎勵加碼內容疊加。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/sandile-hatch-day-2026",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/sandile-hatch-day-2026.png",
+            "alt": "Pokémon GO 黑眼鱷孵化日活動主視覺",
+            "caption": "黑眼鱷孵化日 · 2026 年 10 月 17 日",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    }
+  ],
+  "india": [
+    {
+      "region": "印度限定活動",
+      "name": "光之祭典回歸 · Festival of Lights",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 印度當地時間",
+        "period": "2026 年 11 月 6 日 10:00～11 月 8 日 20:00",
+        "startDate": "2026-11-06",
+        "endDate": "2026-11-08",
+        "description": "印度限定光之祭典活動，穿著紗麗與庫爾塔的皮卡丘將在一星團體戰登場，並有機會獲得特殊背景卡。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "一星團體戰：穿著紗麗的皮卡丘與穿著庫爾塔的皮卡丘，皆有異色機會及特殊背景卡機會。",
+          "Sparkle O’Clock：每日印度當地時間 18:00、18:30、19:00、19:30，各大量出現 5 分鐘。",
+          "大量出現：小火龍、紗麗皮卡丘、庫爾塔皮卡丘、燈籠魚、咩利羊、噴火駝、燭光靈、燈火幽靈、睡睡菇、光蚪仔。",
+          "分歧限時調查：可選擇遇見紗麗皮卡丘或庫爾塔皮卡丘，並帶有特殊背景卡。",
+          "誘餌模組持續時間延長為 3 倍。",
+          "旋轉寶可補給站可獲得活動貼圖。"
+        ],
+        "notice": "團體戰及野外遇見的服裝皮卡丘，特殊背景卡並非必定出現。來源：TrainersGO。",
+        "images": [
+          {
+            "src": "assets/India/diwali-kurta-pikachu.png",
+            "alt": "穿著庫爾塔的皮卡丘特殊背景",
+            "caption": "印度光之祭典 · 穿著庫爾塔的皮卡丘"
+          },
+          {
+            "src": "assets/India/diwali-saree-pikachu.png",
+            "alt": "穿著紗麗的皮卡丘特殊背景",
+            "caption": "印度光之祭典 · 穿著紗麗的皮卡丘"
+          }
+        ]
+      },
+      "coordinates": [
+        { "name": "洛迪花園", "area": "印度 · 新德里｜Sparkle O’Clock", "timezone": "Asia/Kolkata", "clockType": "sparkle", "accent": "#ffb23e", "value": "28.592900, 77.220600" }
+      ]
+    }
+  ],
+  "spain": [
+    {
+      "region": "西班牙限定活動",
+      "name": "Pokémon GO × Comic-Con Málaga",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 西班牙當地時間",
+        "period": "2026 年 10 月 1 日～10 月 4 日 · 每日 09:00～20:00",
+        "startDate": "2026-10-01",
+        "endDate": "2026-10-04",
+        "description": "活動期間完成限定田野調查與限時調查，有機會遇見帶有馬拉加地點背景的皮卡丘。活動範圍涵蓋 FYCMA 展館、Larios Centro 與馬拉加歷史中心。",
+        "detailLabel": "活動內容與補充資訊",
+        "bullets": [
+          "台灣時間：2026 年 10 月 1 日 15:00～10 月 5 日 02:00。",
+          "馬拉加限定背景皮卡丘可透過限時調查及田野調查取得，地點背景為必定獲得，並有機會遇見異色版本。",
+          "FYCMA｜馬拉加聖地牙哥動漫展：需持動漫展門票入場。",
+          "Larios Centro｜公開攤位：僅 10 月 2 日～10 月 3 日 10:00～20:00 開放，所有人皆可參與。",
+          "GO Snapshot 拍照有機會遇見圖圖犬。",
+          "更多帕底亞地區寶可夢會在野外出現。",
+          "活動現場將增設寶可補給站、道館及主題彩紙特效。"
+        ],
+        "notice": "馬拉加背景皮卡丘圖片為概念示意圖，僅供參考。補充資訊另提供 FYCMA 核心座標。",
+        "images": [
+          {
+            "src": "assets/Spain/malaga-background-pikachu.jpg",
+            "alt": "馬拉加地點背景皮卡丘概念示意圖",
+            "caption": "Pokémon GO × Comic-Con Málaga · 馬拉加地點背景皮卡丘概念圖"
+          }
+        ]
+      },
+      "coordinates": [
+        { "name": "FYCMA｜馬拉加聖地牙哥動漫展", "area": "需持動漫展門票入場", "timezone": "Europe/Madrid", "clockType": "local", "value": "36.704776, -4.459978" },
+        { "name": "FYCMA 核心座標（補充）", "area": "補充資訊提供的展館核心位置", "timezone": "Europe/Madrid", "clockType": "local", "value": "36.705386, -4.459672" },
+        { "name": "Larios Centro｜公開攤位", "area": "僅 10/2～10/3 · 10:00～20:00", "timezone": "Europe/Madrid", "clockType": "local", "value": "36.714768, -4.432157" },
+        { "name": "馬拉加歷史中心", "area": "Málaga Historic Centre", "timezone": "Europe/Madrid", "clockType": "local", "value": "36.719884, -4.423617" }
+      ]
+    }
+  ],
   "asiaLimited": [
     {
       "region": "亞洲限定活動",
@@ -532,6 +685,37 @@ window.coordinateLibraries = {
         "35.545302, 139.455010",
         "35.626370, 139.521513",
         "35.548108, 139.450340"
+      ]
+    },
+    {
+      "region": "關東 · 東京集章活動",
+      "name": "東京 v2",
+      "event": {
+        "description": "東京品川區、港區與江東區的集章座標，共 3 個區域、13 個集章地點。",
+        "detailLabel": "各區集章主題",
+        "bullets": [
+          "品川區：呆呆獸、小火龍。",
+          "港區：瑪力露、拉普拉斯、妙蛙種子。",
+          "江東區：長翅鷗、傑尼龜。"
+        ],
+        "image": "assets/Japan/tokyo-v2-stamp-rally.png",
+        "imageAlt": "東京品川區、港區與江東區集章活動參考圖",
+        "imageCaption": "東京 v2 集章活動 · 品川區、港區與江東區參考圖"
+      },
+      "coordinates": [
+        { "name": "品川區集章 01", "area": "呆呆獸、小火龍", "value": "35.6235780, 139.7482650" },
+        { "name": "品川區集章 02", "area": "呆呆獸、小火龍", "value": "35.6191620, 139.7441900" },
+        { "name": "品川區集章 03", "area": "呆呆獸、小火龍", "value": "35.6154840, 139.7441760" },
+        { "name": "品川區集章 04", "area": "呆呆獸、小火龍", "value": "35.6033010, 139.7439420" },
+        { "name": "港區集章 01", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6585980, 139.7454580" },
+        { "name": "港區集章 02", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6671110, 139.7573940" },
+        { "name": "港區集章 03", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6655750, 139.7462360" },
+        { "name": "港區集章 04", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6669630, 139.7455050" },
+        { "name": "港區集章 05", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6560180, 139.7491100" },
+        { "name": "江東區集章 01", "area": "長翅鷗、傑尼龜", "value": "35.6730490, 139.8164360" },
+        { "name": "江東區集章 02", "area": "長翅鷗、傑尼龜", "value": "35.6748000, 139.8152300" },
+        { "name": "江東區集章 03", "area": "長翅鷗、傑尼龜", "value": "35.6761800, 139.8127400" },
+        { "name": "江東區集章 04", "area": "長翅鷗、傑尼龜", "value": "35.6796400, 139.8074210" }
       ]
     },
     {

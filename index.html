@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#05080b">
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
-  <link rel="stylesheet" href="style.css?v=20260929-4">
+  <link rel="stylesheet" href="style.css?v=20261001-9">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -44,11 +44,21 @@
           <p class="kicker"><span>02</span> TARGET LIBRARY</p>
           <h2 id="library-title">選擇座標區域</h2>
         </div>
-        <div class="country-tabs" role="tablist" aria-label="國家">
+        <div class="tab-navigation">
+        <section class="article-tab-zone" id="article-tab-zone" aria-label="活動文章">
+          <span>EVENT ARTICLE</span>
+          <div class="article-tabs" id="article-country-tabs" role="tablist" aria-label="活動情報">
+            <button class="country-tab events-tab" data-country="events" role="tab" aria-selected="false"><b>EV</b> 活動情報</button>
+          </div>
+        </section>
+        <div class="country-tabs" id="active-country-tabs" role="tablist" aria-label="目前及一般座標">
           <button class="country-tab copied-tab active" data-country="copied" role="tab" aria-selected="true"><b>✓</b> 複製座標 <span class="tab-count" id="copied-tab-count">0</span></button>
+          <button class="country-tab spain-tab" data-country="spain" role="tab" aria-selected="false"><b>ES</b> 西班牙座標</button>
           <button class="country-tab europe-tab" data-country="europe" role="tab" aria-selected="false"><b>EU</b> 歐洲座標</button>
           <button class="country-tab pokexciting-tab" data-country="pokexciting" role="tab" aria-selected="false"><b>PX</b> PokéXciting 座標</button>
+          <button class="country-tab adidas-tab" data-country="adidas" role="tab" aria-selected="false"><b>AD</b> adidas 座標</button>
           <button class="country-tab indonesia-tab" data-country="indonesia" role="tab" aria-selected="false"><b>ID</b> 印尼座標</button>
+          <button class="country-tab india-tab" data-country="india" role="tab" aria-selected="false"><b>IN</b> 印度座標</button>
           <button class="country-tab" data-country="lego" role="tab" aria-selected="false"><b>LG</b> 樂高座標</button>
           <button class="country-tab" data-country="japan" role="tab" aria-selected="false"><b>JP</b> 日本座標</button>
           <button class="country-tab korea-tab" data-country="korea" role="tab" aria-selected="false"><b>KR</b> 韓國座標</button>
@@ -58,6 +68,11 @@
           <button class="country-tab" data-country="hot2026" role="tab" aria-selected="false"><b>26</b> 2026 年熱門</button>
           <button class="country-tab" data-country="hot2025" role="tab" aria-selected="false"><b>25</b> 2025 年熱門</button>
           <button class="country-tab raid-tab" data-country="raid" role="tab" aria-selected="false"><b>⚔</b> 團戰座標</button>
+        </div>
+        <details class="expired-tab-zone" id="expired-tab-zone" hidden>
+          <summary><span>ARCHIVE</span> 過期活動 <b id="expired-tab-count">0</b></summary>
+          <div class="country-tabs expired-country-tabs" id="expired-country-tabs" role="tablist" aria-label="過期活動"></div>
+        </details>
         </div>
       </div>
 
@@ -140,6 +155,10 @@
     NEWS
   </button>
 
+  <button class="floating-sparkle-alert" id="sparkle-alert-open" type="button" aria-label="開啟印度活動提醒" title="Sparkle O'Clock 提醒">
+    <span aria-hidden="true">◷</span><small id="sparkle-alert-count">0</small>
+  </button>
+
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span>✓</span>
     <div><strong id="toast-title">COPIED</strong><small id="toast-label"></small></div>
@@ -175,7 +194,22 @@
     </div>
   </dialog>
 
-  <script src="coordinates-data.js?v=20260929-4"></script>
-  <script src="script.js?v=20260929-4"></script>
+  <dialog class="filter-modal sparkle-alert-modal" id="sparkle-alert-modal" aria-labelledby="sparkle-alert-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="sparkle-alert-close" type="button" aria-label="關閉印度活動提醒">×</button>
+      <p class="kicker"><span>06</span> EVENT ALERT</p>
+      <h2 id="sparkle-alert-title">Sparkle O’Clock 提醒</h2>
+      <p class="filter-modal-note">依印度當地時間追蹤每日 18:00、18:30、19:00、19:30 場次，開始前 10 分鐘提醒；同一場關閉後不會再次觸發。</p>
+      <label class="sparkle-alert-option">
+        <input id="sparkle-alert-enabled" type="checkbox">
+        <span><b>印度 · 洛迪花園</b><small>28.592900, 77.220600</small></span>
+        <em>18:00／18:30／19:00／19:30</em>
+      </label>
+      <button class="filter-copy-button sparkle-alert-save" id="sparkle-alert-save" type="button">SAVE ALERT</button>
+    </div>
+  </dialog>
+
+  <script src="coordinates-data.js?v=20261001-9"></script>
+  <script src="script.js?v=20261001-9"></script>
 </body>
 </html>

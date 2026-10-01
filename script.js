@@ -1,9 +1,13 @@
 const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
 const countryNames = {
+  adidas: "POKÉMON GO × ADIDAS",
+  events: "GLOBAL EVENT ARTICLES",
   lego: "LEGO GLOBAL EVENT",
   indonesia: "INDONESIA LIMITED EVENT",
   pokexciting: "POKÉXCITING ASIA TOUR",
+  india: "INDIA LIMITED EVENT",
+  spain: "SPAIN LIMITED EVENT",
   asiaLimited: "ASIA LIMITED EVENT",
   europe: "EUROPE MUSEUM EVENT",
   copied: "COPIED COORDINATES",
@@ -18,6 +22,12 @@ const countryNames = {
 
 const elements = {
   tabs: [...document.querySelectorAll(".country-tab")],
+  articleTabs: document.querySelector("#article-country-tabs"),
+  articleTabZone: document.querySelector("#article-tab-zone"),
+  activeTabs: document.querySelector("#active-country-tabs"),
+  expiredTabs: document.querySelector("#expired-country-tabs"),
+  expiredTabZone: document.querySelector("#expired-tab-zone"),
+  expiredTabCount: document.querySelector("#expired-tab-count"),
   search: document.querySelector("#search-input"),
   clearSearch: document.querySelector("#clear-search"),
   copyAll: document.querySelector("#copy-all"),
@@ -58,7 +68,13 @@ const elements = {
   newsOpen: document.querySelector("#news-open"),
   newsModal: document.querySelector("#news-modal"),
   newsClose: document.querySelector("#news-close"),
-  newsSections: document.querySelector("#news-sections")
+  newsSections: document.querySelector("#news-sections"),
+  sparkleAlertOpen: document.querySelector("#sparkle-alert-open"),
+  sparkleAlertModal: document.querySelector("#sparkle-alert-modal"),
+  sparkleAlertClose: document.querySelector("#sparkle-alert-close"),
+  sparkleAlertSave: document.querySelector("#sparkle-alert-save"),
+  sparkleAlertEnabled: document.querySelector("#sparkle-alert-enabled"),
+  sparkleAlertCount: document.querySelector("#sparkle-alert-count")
 };
 
 let activeCountry = "copied";
@@ -70,12 +86,14 @@ let pendingUndoLabel = "";
 let pendingRemovalKey = null;
 let pendingRemovalButton = null;
 let pendingRemovalTimer = null;
+const sparkleAlertStorageKey = "geo-pulse-sparkle-alert-v1";
+const sparkleAlertHistoryKey = "geo-pulse-sparkle-alert-history-v1";
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
 const collapsibleJapanGroups = new Set([
   "北海道", "青森", "岩手", "宮城", "秋田", "山形", "福島",
-  "茨城", "栃木", "埼玉", "千葉", "東京", "神奈川",
+  "茨城", "栃木", "埼玉", "千葉", "東京", "東京 v2", "神奈川",
   "新潟", "富山", "石川", "福井", "岐阜", "靜岡", "愛知", "三重",
   "滋賀", "京都", "大阪", "兵庫", "奈良", "和歌山", "鳥取", "島根",
   "岡山", "山口", "德島", "香川", "愛媛", "高知", "福岡", "佐賀",
@@ -130,9 +148,13 @@ function updateCopiedCounter() {
 }
 
 const libraries = {
+  adidas: librarySource.adidas,
+  events: librarySource.events,
   lego: librarySource.lego,
   indonesia: librarySource.indonesia,
   pokexciting: librarySource.pokexciting,
+  india: librarySource.india,
+  spain: librarySource.spain,
   asiaLimited: librarySource.asiaLimited,
   europe: librarySource.europe,
   japan: librarySource.japan,
@@ -249,6 +271,104 @@ function moonlightStatus(timeZone, date = new Date()) {
   if (starts.some((start) => current >= start && current < start + 5)) return "live";
   if (starts.some((start) => current >= start - 10 && current < start)) return "soon";
   return "idle";
+}
+
+function sparkleStatus(timeZone, date = new Date()) {
+  const current = localMinutes(timeZone, date);
+  if (current < 0) return "idle";
+  const starts = [18 * 60, 18 * 60 + 30, 19 * 60, 19 * 60 + 30];
+  if (starts.some((start) => current >= start && current < start + 5)) return "live";
+  if (starts.some((start) => current >= start - 10 && current < start)) return "soon";
+  return "idle";
+}
+
+function loadSparkleAlertEnabled() {
+  try {
+    return localStorage.getItem(sparkleAlertStorageKey) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function loadSparkleAlertHistory() {
+  try {
+    const values = JSON.parse(localStorage.getItem(sparkleAlertHistoryKey) || "[]");
+    return new Set(Array.isArray(values) ? values : []);
+  } catch {
+    return new Set();
+  }
+}
+
+let sparkleAlertEnabled = loadSparkleAlertEnabled();
+let sparkleAlertHistory = loadSparkleAlertHistory();
+
+function zonedDateKey(timeZone, date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function sparkleAlertOccurrence(date = new Date()) {
+  const timeZone = "Asia/Kolkata";
+  const dateKey = zonedDateKey(timeZone, date);
+  if (dateKey < "2026-11-06" || dateKey > "2026-11-08") return null;
+  const current = localMinutes(timeZone, date);
+  const starts = [18 * 60, 18 * 60 + 30, 19 * 60, 19 * 60 + 30];
+  const start = starts.find((value) => current >= value - 10 && current < value + 5);
+  if (start === undefined) return null;
+  const time = `${String(Math.floor(start / 60)).padStart(2, "0")}:${String(start % 60).padStart(2, "0")}`;
+  return {
+    key: `${dateKey}|${time}`,
+    time,
+    state: current < start ? "即將開始" : "活動進行中"
+  };
+}
+
+function updateSparkleAlertButton() {
+  elements.sparkleAlertCount.textContent = sparkleAlertEnabled ? "1" : "0";
+  elements.sparkleAlertOpen.classList.toggle("enabled", sparkleAlertEnabled);
+}
+
+function openSparkleAlertModal() {
+  elements.sparkleAlertEnabled.checked = sparkleAlertEnabled;
+  if (typeof elements.sparkleAlertModal.showModal === "function") elements.sparkleAlertModal.showModal();
+  else elements.sparkleAlertModal.setAttribute("open", "");
+}
+
+function closeSparkleAlertModal() {
+  elements.sparkleAlertModal.close?.();
+  elements.sparkleAlertModal.removeAttribute("open");
+}
+
+function saveSparkleAlert() {
+  sparkleAlertEnabled = elements.sparkleAlertEnabled.checked;
+  try {
+    localStorage.setItem(sparkleAlertStorageKey, String(sparkleAlertEnabled));
+  } catch {
+    // 無法使用儲存空間時，仍保留本次瀏覽期間設定。
+  }
+  updateSparkleAlertButton();
+  closeSparkleAlertModal();
+  checkSparkleAlert();
+}
+
+function checkSparkleAlert(date = new Date()) {
+  if (!sparkleAlertEnabled) return;
+  const occurrence = sparkleAlertOccurrence(date);
+  if (!occurrence || sparkleAlertHistory.has(occurrence.key)) return;
+  sparkleAlertHistory.add(occurrence.key);
+  if (sparkleAlertHistory.size > 24) sparkleAlertHistory = new Set([...sparkleAlertHistory].slice(-16));
+  try {
+    localStorage.setItem(sparkleAlertHistoryKey, JSON.stringify([...sparkleAlertHistory]));
+  } catch {
+    // 儲存失敗時，仍避免在本次瀏覽期間重複提醒。
+  }
+  window.alert(`Sparkle O’Clock 活動提醒\n\n印度｜${occurrence.time}｜${occurrence.state}\n洛迪花園：28.592900, 77.220600`);
 }
 
 function allCoordinates() {
@@ -396,11 +516,40 @@ function eventTimeValue(date, endOfDay = false) {
 }
 
 function eventNewsStatus(event, now = Date.now()) {
-  const start = eventTimeValue(eventStartDate(event));
-  const end = eventTimeValue(event.endDate, true);
+  const start = event.startDateTime ? Date.parse(event.startDateTime) : eventTimeValue(eventStartDate(event));
+  const end = event.endDateTime ? Date.parse(event.endDateTime) : eventTimeValue(event.endDate, true);
   if (Number.isFinite(end) && now > end) return "expired";
   if (Number.isFinite(start) && now < start) return "upcoming";
   return "active";
+}
+
+function libraryIsExpired(country) {
+  if (["copied", "hot2026", "hot2025", "raid"].includes(country)) return false;
+  const countryEvent = eventSource[country];
+  if (countryEvent?.endDate) return eventNewsStatus(countryEvent) === "expired";
+  const groups = libraries[country] || [];
+  return groups.length > 0 && groups.every((group) => {
+    const event = group.event || (group.endDate ? { endDate: group.endDate } : null);
+    return event?.endDate && eventNewsStatus(event) === "expired";
+  });
+}
+
+function organizeCountryTabs() {
+  let expiredCount = 0;
+  elements.tabs.forEach((tab) => {
+    const expired = libraryIsExpired(tab.dataset.country);
+    tab.classList.toggle("archived-tab", expired);
+    if (tab.dataset.country === "events") {
+      elements.articleTabs.appendChild(tab);
+      elements.articleTabZone.classList.toggle("is-expired", expired);
+      return;
+    }
+    (expired ? elements.expiredTabs : elements.activeTabs).appendChild(tab);
+    if (expired) expiredCount += 1;
+  });
+  elements.expiredTabCount.textContent = String(expiredCount).padStart(2, "0");
+  elements.expiredTabZone.hidden = expiredCount === 0;
+  if (activeCountry !== "events" && libraryIsExpired(activeCountry)) elements.expiredTabZone.open = true;
 }
 
 function newsItems() {
@@ -500,17 +649,20 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
   const visited = copiedKeys.has(key);
-  const raid = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType !== "moonlight";
+  const raid = typeof coordinate === "object" && coordinate.timezone && activeCountry === "raid";
   const moonlight = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "moonlight";
+  const sparkle = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "sparkle";
+  const localClockOnly = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "local";
   const nationalTrustImage = activeCountry === "uk" && typeof coordinate === "object" && /^\d{2}\./.test(coordinate.name)
     ? `assets/pokemon_go_national_trust_2026/${coordinate.name}.jpg`
     : "";
   const coordinateImage = typeof coordinate === "object" ? coordinate.image || nationalTrustImage : "";
   const raidTimeState = raid ? raidTimeStatus(coordinate.timezone) : "closed";
   const moonlightTimeState = moonlight && !expired ? moonlightStatus(coordinate.timezone) : "idle";
+  const sparkleTimeState = sparkle && !expired ? sparkleStatus(coordinate.timezone) : "idle";
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}${sparkle ? " sparkle-card" : ""}${sparkleTimeState === "soon" ? " sparkle-soon" : ""}${sparkleTimeState === "live" ? " sparkle-live" : ""}${localClockOnly ? " local-time-card" : ""}`;
   if (raid) {
     button.dataset.raidStart = coordinate.start;
     button.dataset.raidEnd = coordinate.end;
@@ -520,17 +672,23 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
     button.dataset.timezone = coordinate.timezone;
     button.style.setProperty("--region-accent", coordinate.accent || "#8fa4ff");
   }
+  if (sparkle) {
+    button.dataset.timezone = coordinate.timezone;
+    button.style.setProperty("--region-accent", coordinate.accent || "#ffb23e");
+  }
+  if (localClockOnly) button.dataset.timezone = coordinate.timezone;
   const label = typeof coordinate === "object"
-    ? `<span class="coordinate-label"><b>${coordinate.name}${raid ? ` <span class="raid-countdown">(${raidCountdown(coordinate.timezone)})</span>` : ""}</b><small>${coordinate.area}</small>${raid || moonlight ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
+    ? `<span class="coordinate-label"><b>${coordinate.name}${raid ? ` <span class="raid-countdown">(${raidCountdown(coordinate.timezone)})</span>` : ""}</b><small>${coordinate.area}</small>${raid || moonlight || sparkle || localClockOnly ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
     : "";
   const status = expired ? `<em class="expired-label">EXPIRED</em>` : "";
   const copiedStatus = `<em class="copied-label">✓ 已複製</em>`;
   const raidStatus = raid ? `<em class="raid-live-label">${raidTimeState === "peak" ? "RAID TIME" : "ACTIVE HOURS"}</em>` : "";
   const moonlightStatusLabel = moonlight ? `<em class="moonlight-status">${moonlightTimeState === "live" ? "EVENT LIVE" : moonlightTimeState === "soon" ? "STARTING SOON" : "LOCAL TIME"}</em>` : "";
+  const sparkleStatusLabel = sparkle ? `<em class="sparkle-status">${sparkleTimeState === "live" ? "EVENT LIVE" : sparkleTimeState === "soon" ? "STARTING SOON" : "LOCAL TIME"}</em>` : "";
   const coordinatePreview = coordinateImage
     ? `<img class="coordinate-thumb" src="${coordinateImage}" alt="${coordinate.name} 背景圖片" loading="lazy" title="點擊放大圖片">`
     : "";
-  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}${moonlightStatusLabel}<i>⧉</i>`;
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}${moonlightStatusLabel}${sparkleStatusLabel}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
   button.addEventListener("click", async (event) => {
     if (coordinateImage && event.target.closest(".coordinate-thumb")) {
@@ -633,6 +791,13 @@ function render() {
         `<a class="event-source" href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label} <span>↗</span></a>`
       ).join("");
       const sourceLink = sourceLinks ? `<div class="event-source-list">${sourceLinks}</div>` : "";
+      const redeemBlock = group.event.redeemCode
+        ? `<section class="event-redeem">
+            <div><span>${group.event.redeemLabel || "REDEEM CODE"}</span><strong>${group.event.redeemCode}</strong><small>${group.event.redeemReward || ""} · ${group.event.redeemDeadline || ""}</small></div>
+            <button class="event-redeem-copy" type="button">複製序號 <b>⧉</b></button>
+            ${group.event.redeemUrl ? `<a href="${group.event.redeemUrl}" target="_blank" rel="noopener noreferrer">前往 Web Store <b>↗</b></a>` : ""}
+          </section>`
+        : "";
       const periodInfo = group.event.period
         ? `<div class="event-period"><span>${group.event.periodLabel || "EVENT PERIOD / 台灣時間"}</span><strong>${group.event.period}</strong></div>`
         : "";
@@ -646,7 +811,7 @@ function render() {
       }] : []);
       const eventImage = eventImages.length
         ? `<div class="event-image-gallery">${eventImages.map((image, index) => `
-            <button class="event-image-trigger" type="button" data-image-index="${index}" aria-label="放大查看 ${image.alt}">
+            <button class="event-image-trigger${image.wide ? " wide" : ""}" type="button" data-image-index="${index}" aria-label="放大查看 ${image.alt}">
               <img src="${image.src}" alt="${image.alt}" loading="lazy">
               <span>點擊放大 <b>↗</b></span>
             </button>`).join("")}</div>`
@@ -657,8 +822,12 @@ function render() {
         <p>${group.event.description}</p>
         <div class="raid-note"><b>★ ${detailLabel}</b>${bulletList}</div>
         ${notice}
+        ${redeemBlock}
         ${sourceLink}
         ${eventImage}`;
+      eventInfo.querySelector(".event-redeem-copy")?.addEventListener("click", () => {
+        copyText(group.event.redeemCode, group.event.redeemLabel || "活動兌換序號");
+      });
       eventInfo.querySelectorAll(".event-image-trigger").forEach((trigger) => trigger.addEventListener("click", () => {
         const image = eventImages[Number(trigger.dataset.imageIndex)];
         openImageModal(image.src, image.alt, image.caption);
@@ -731,6 +900,23 @@ function updateRaidClocks() {
     card.classList.toggle("moonlight-live", timeState === "live");
     const status = card.querySelector(".moonlight-status");
     if (status) status.textContent = timeState === "live" ? "EVENT LIVE" : timeState === "soon" ? "STARTING SOON" : "LOCAL TIME";
+    const clock = card.querySelector(".local-clock");
+    if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
+  });
+  document.querySelectorAll(".sparkle-card").forEach((card) => {
+    if (card.classList.contains("expired")) {
+      card.classList.remove("sparkle-soon", "sparkle-live");
+      return;
+    }
+    const timeState = sparkleStatus(card.dataset.timezone);
+    card.classList.toggle("sparkle-soon", timeState === "soon");
+    card.classList.toggle("sparkle-live", timeState === "live");
+    const status = card.querySelector(".sparkle-status");
+    if (status) status.textContent = timeState === "live" ? "EVENT LIVE" : timeState === "soon" ? "STARTING SOON" : "LOCAL TIME";
+    const clock = card.querySelector(".local-clock");
+    if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
+  });
+  document.querySelectorAll(".local-time-card").forEach((card) => {
     const clock = card.querySelector(".local-clock");
     if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
   });
@@ -814,10 +1000,22 @@ elements.newsClose.addEventListener("click", closeNewsModal);
 elements.newsModal.addEventListener("click", (event) => {
   if (event.target === elements.newsModal) closeNewsModal();
 });
+elements.sparkleAlertOpen.addEventListener("click", openSparkleAlertModal);
+elements.sparkleAlertClose.addEventListener("click", closeSparkleAlertModal);
+elements.sparkleAlertSave.addEventListener("click", saveSparkleAlert);
+elements.sparkleAlertModal.addEventListener("click", (event) => {
+  if (event.target === elements.sparkleAlertModal) closeSparkleAlertModal();
+});
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
+updateSparkleAlertButton();
+organizeCountryTabs();
 switchCountry(activeCountry);
-setInterval(updateRaidClocks, 30000);
+checkSparkleAlert();
+setInterval(() => {
+  updateRaidClocks();
+  checkSparkleAlert();
+}, 30000);
