@@ -516,6 +516,14 @@ function eventTimeValue(date, endOfDay = false) {
 }
 
 function eventNewsStatus(event, now = Date.now()) {
+  if (event.periods?.length) {
+    const periods = event.periods
+      .map((period) => ({ start: Date.parse(period.startDateTime), end: Date.parse(period.endDateTime) }))
+      .filter((period) => Number.isFinite(period.start) && Number.isFinite(period.end));
+    if (periods.some((period) => now >= period.start && now <= period.end)) return "active";
+    if (periods.some((period) => now < period.start)) return "upcoming";
+    if (periods.length) return "expired";
+  }
   const start = event.startDateTime ? Date.parse(event.startDateTime) : eventTimeValue(eventStartDate(event));
   const end = event.endDateTime ? Date.parse(event.endDateTime) : eventTimeValue(event.endDate, true);
   if (Number.isFinite(end) && now > end) return "expired";

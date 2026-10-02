@@ -77,6 +77,42 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "全球活動情報 · GO 火箭隊",
+      "name": "豐收節：佔領",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 2 日 00:00～10 月 5 日 20:00",
+        "startDate": "2026-10-02",
+        "endDate": "2026-10-05",
+        "startDateTime": "2026-10-02T00:00:00+08:00",
+        "endDateTime": "2026-10-05T20:00:00+08:00",
+        "description": "GO 火箭隊在豐收節期間展開佔領行動；提升 GO Pass：豐收節級別可取得超級火箭隊雷達，追蹤只會在寶可補給站出現的坂木並解救暗影捷克羅姆。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "異色滋汁鼴在 Pokémon GO 首次登場，並提高遇見異色熔岩蟲的機率。",
+          "GO 火箭隊熱氣球及受佔領寶可補給站的出現機率提高。",
+          "可以使用特殊招式學習器，讓暗影寶可夢遺忘特殊招式「遷怒」。",
+          "一星和三星暗影團體戰捕捉的寶可夢，其攻擊、防禦與 HP 數值將有更多變化。",
+          "野外可能遇見瓦斯彈、熔岩蟲、呆火駝及鴨嘴火獸等活動主題寶可夢。",
+          "全新暗影寶可夢：膽小蟲、偽螳草與沙丘娃。",
+          "活動田野調查可取得一般招式學習器、特殊招式學習器與神秘零件。",
+          "GO Pass 解鎖獎勵領取期限為台灣時間 2026 年 10 月 7 日 20:00。"
+        ],
+        "notice": "暗影寶可夢與淨化後的寶可夢無法和其他寶可夢合體。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/harvest-festival-tgr-2026",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/harvest-festival-takeover-2026.png",
+            "alt": "豐收節佔領活動的暗影捷克羅姆與全新暗影寶可夢",
+            "caption": "豐收節：佔領 · 暗影捷克羅姆",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
       "region": "全球活動情報 · 極巨對戰",
       "name": "超極巨化閃焰王牌極巨對戰日",
       "event": {
@@ -98,7 +134,15 @@ window.coordinateLibraries = {
         ],
         "notice": "活動入場券及限時調查均於台灣時間 2026 年 10 月 3 日 17:00 截止。",
         "sourceUrl": "https://pokemongo.com/zh-Hant/news/gigantamax-cinderace-max-battle-day-2026",
-        "sourceLabel": "活動官網"
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/gigantamax-cinderace-max-battle-day-2026.png",
+            "alt": "超極巨化閃焰王牌極巨對戰日",
+            "caption": "超極巨化閃焰王牌極巨對戰日",
+            "wide": true
+          }
+        ]
       },
       "coordinates": []
     },
@@ -192,6 +236,85 @@ window.coordinateLibraries = {
             "src": "assets/Events/sandile-hatch-day-2026.png",
             "alt": "Pokémon GO 黑眼鱷孵化日活動主視覺",
             "caption": "黑眼鱷孵化日 · 2026 年 10 月 17 日",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 季節活動",
+      "name": "《Pokémon GO》將降下「小隕星雨」",
+      "event": {
+        "periodLabel": "METEOR SHOWER PERIODS / 台灣時間",
+        "period": "2026 年 10 月 19 日～2027 年 8 月 15 日 · 指定流星雨期間",
+        "startDate": "2026-10-19",
+        "endDate": "2027-08-15",
+        "periods": [
+          { "startDateTime": "2026-10-19T17:00:00+08:00", "endDateTime": "2026-10-24T23:59:59+08:00" },
+          { "startDateTime": "2026-11-14T17:00:00+08:00", "endDateTime": "2026-11-19T23:59:59+08:00" },
+          { "startDateTime": "2026-12-11T17:00:00+08:00", "endDateTime": "2026-12-16T23:59:59+08:00" },
+          { "startDateTime": "2027-05-03T17:00:00+08:00", "endDateTime": "2027-05-08T23:59:59+08:00" },
+          { "startDateTime": "2027-07-28T17:00:00+08:00", "endDateTime": "2027-08-02T23:59:59+08:00" },
+          { "startDateTime": "2027-08-10T17:00:00+08:00", "endDateTime": "2027-08-15T23:59:59+08:00" }
+        ],
+        "description": "流星寶可夢小隕星在 Pokémon GO 首次登場，共有紅、橙、黃、綠、淺藍、藍與紫色 7 種核心。流星雨期間可在地圖上遇見流星樣子的小隕星，捕捉時能獲得更多星星沙子。",
+        "detailLabel": "流星雨時程與活動內容",
+        "bullets": [
+          "獵戶座流星雨：2026 年 10 月 19 日 17:00～10 月 24 日 23:59。",
+          "獅子座流星雨：2026 年 11 月 14 日 17:00～11 月 19 日 23:59。",
+          "雙子座流星雨：2026 年 12 月 11 日 17:00～12 月 16 日 23:59；南北半球將分別登場兩種不同顏色核心。",
+          "水瓶座 η 流星雨：2027 年 5 月 3 日 17:00～5 月 8 日 23:59。",
+          "水瓶座 δ 南流星雨：2027 年 7 月 28 日 17:00～8 月 2 日 23:59。",
+          "英仙座流星雨：2027 年 8 月 10 日 17:00～8 月 15 日 23:59。",
+          "每段小隕星雨期間的每日 17:00～21:00，遊戲天空會出現流星，地圖上遇見小隕星的機率提高。",
+          "小隕星以流星的樣子上場對戰；HP 降至 50% 或以下時露出核心，攻擊提高、防禦降低。",
+          "登場初期僅會在 GO 火箭隊、隊長與 GO 對戰聯盟對戰中依 HP 改變形態。"
+        ],
+        "notice": "各流星雨期間會有至少一種新核心登場；小隕星無法參加 Latin America International Championships 2027。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/minior-meteor-showers-2026",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/minior-meteor-showers-2026.png",
+            "alt": "小隕星雨與七種不同顏色核心的小隕星",
+            "caption": "小隕星雨 · 七種不同顏色核心的小隕星",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 極巨對戰",
+      "name": "極巨化由克希／艾姆利多／亞克諾姆極巨對戰日",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 24 日 14:00～17:00",
+        "startDate": "2026-10-24",
+        "endDate": "2026-10-24",
+        "startDateTime": "2026-10-24T14:00:00+08:00",
+        "endDateTime": "2026-10-24T17:00:00+08:00",
+        "description": "極巨化由克希、艾姆利多與亞克諾姆將在傳說極巨對戰首度登場，並依不同地區出現；三者皆有機會遇見異色版本。",
+        "detailLabel": "登場地區與活動加碼",
+        "bullets": [
+          "亞太地區：極巨化由克希。",
+          "歐洲、中東、非洲與印度地區：極巨化艾姆利多。",
+          "美洲與格陵蘭地區：極巨化亞克諾姆。",
+          "每日蒐集極巨粒子的上限增加至 1,600，極巨化對戰會出現在所有能量點。",
+          "能量點刷新頻率提高、地圖出現額外能量點，從能量點取得的極巨粒子增加為 8 倍。",
+          "可以額外進行 2 次特殊交換，單日最高上限為 3 次。",
+          "10 月 24 日 08:00～10 月 25 日 11:00，遠距團體戰入場券使用上限由 10 次提高至 20 次。",
+          "10 月 24 日 00:00～17:00，探索取得的極巨粒子加倍，所需探索距離縮短為 1/4。"
+        ],
+        "notice": "探索距離加碼必須先蒐集所有可從「看看附近」選單取得的極巨粒子後才會生效。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/dynamax-uxie-mesprit-azelf-max-battle-day-2026",
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/dynamax-lake-trio-max-battle-day-2026.png",
+            "alt": "極巨化由克希、艾姆利多與亞克諾姆極巨對戰日",
+            "caption": "極巨化由克希／艾姆利多／亞克諾姆極巨對戰日",
             "wide": true
           }
         ]
@@ -506,12 +629,12 @@ window.coordinateLibraries = {
         ]
       },
       "coordinates": [
-        { "name": "活動地點", "area": "印尼 · Patterns of the Wild", "value": "-6.139850, 106.815511" },
-        { "name": "國家紀念塔（Monas）", "area": "雅加達 · 市中心核心地標與密集補給站", "value": "-6.175392, 106.827153" },
-        { "name": "GBK 體育場園區", "area": "雅加達 · Gelora Bung Karno", "value": "-6.218335, 106.802216" },
-        { "name": "PIK 海濱商圈", "area": "雅加達 · Pantai Indah Kapuk", "value": "-6.109520, 106.740232" },
-        { "name": "奔庫爾公園（Taman Bungkul）", "area": "泗水 · 社群活動熱門地點", "value": "-7.291340, 112.739770" },
-        { "name": "庫塔海灘（Kuta Beach）", "area": "峇里島 · 沿海熱門景點", "value": "-8.718500, 115.169100" }
+        { "name": "活動地點", "area": "雅加達 · Patterns of the Wild｜UTC+7", "timezone": "Asia/Jakarta", "clockType": "local", "value": "-6.139850, 106.815511" },
+        { "name": "國家紀念塔（Monas）", "area": "雅加達 · 市中心核心地標與密集補給站｜UTC+7", "timezone": "Asia/Jakarta", "clockType": "local", "value": "-6.175392, 106.827153" },
+        { "name": "GBK 體育場園區", "area": "雅加達 · Gelora Bung Karno｜UTC+7", "timezone": "Asia/Jakarta", "clockType": "local", "value": "-6.218335, 106.802216" },
+        { "name": "PIK 海濱商圈", "area": "雅加達 · Pantai Indah Kapuk｜UTC+7", "timezone": "Asia/Jakarta", "clockType": "local", "value": "-6.109520, 106.740232" },
+        { "name": "奔庫爾公園（Taman Bungkul）", "area": "泗水 · 社群活動熱門地點｜UTC+7", "timezone": "Asia/Jakarta", "clockType": "local", "value": "-7.291340, 112.739770" },
+        { "name": "庫塔海灘（Kuta Beach）", "area": "峇里島 · 沿海熱門景點｜UTC+8", "timezone": "Asia/Makassar", "clockType": "local", "value": "-8.718500, 115.169100" }
       ]
     }
   ],
