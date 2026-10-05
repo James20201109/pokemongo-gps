@@ -452,12 +452,12 @@ window.coordinateLibraries = {
         "imageCaption": "太空人皮卡丘 · 歐洲博物館限定地區背景"
       },
       "coordinates": [
-        { "name": "倫敦科學博物館", "area": "英國 · 倫敦", "value": "51.497300, -0.176480" },
-        { "name": "圖盧茲太空城", "area": "法國 · 圖盧茲", "value": "43.586960, 1.493160" },
-        { "name": "紐倫堡德意志博物館", "area": "德國 · 紐倫堡", "value": "49.453690, 11.074760" },
-        { "name": "瓦倫西亞科學博物館", "area": "西班牙 · 瓦倫西亞", "value": "39.456390, -0.352780" },
-        { "name": "諾德韋克太空博覽會", "area": "荷蘭 · 諾德韋克", "value": "52.215300, 4.420620" },
-        { "name": "歐洲太空中心", "area": "比利時", "value": "50.007000, 5.220000" }
+        { "name": "倫敦科學博物館", "area": "英國 · 倫敦", "timezone": "Europe/London", "clockType": "local", "value": "51.497300, -0.176480" },
+        { "name": "圖盧茲太空城", "area": "法國 · 圖盧茲", "timezone": "Europe/Paris", "clockType": "local", "value": "43.586960, 1.493160" },
+        { "name": "紐倫堡德意志博物館", "area": "德國 · 紐倫堡", "timezone": "Europe/Berlin", "clockType": "local", "value": "49.453690, 11.074760" },
+        { "name": "瓦倫西亞科學博物館", "area": "西班牙 · 瓦倫西亞", "timezone": "Europe/Madrid", "clockType": "local", "value": "39.456390, -0.352780" },
+        { "name": "諾德韋克太空博覽會", "area": "荷蘭 · 諾德韋克", "timezone": "Europe/Amsterdam", "clockType": "local", "value": "52.215300, 4.420620" },
+        { "name": "歐洲太空中心", "area": "比利時", "timezone": "Europe/Brussels", "clockType": "local", "value": "50.007000, 5.220000" }
       ]
     }
   ],
