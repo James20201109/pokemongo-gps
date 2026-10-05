@@ -159,6 +159,10 @@
     <span aria-hidden="true">◷</span><small id="sparkle-alert-count">0</small>
   </button>
 
+  <button class="floating-gym-counter" id="gym-counter-open" type="button" aria-label="開啟道館戰果計數器" title="道館戰果計數器">
+    <span aria-hidden="true">GYM</span><small id="gym-counter-badge">0</small>
+  </button>
+
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span>✓</span>
     <div><strong id="toast-title">COPIED</strong><small id="toast-label"></small></div>
@@ -209,7 +213,70 @@
     </div>
   </dialog>
 
+  <dialog class="filter-modal gym-counter-modal" id="gym-counter-modal" aria-labelledby="gym-counter-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="gym-counter-close" type="button" aria-label="關閉道館戰果計數器">×</button>
+      <p class="kicker"><span>07</span> GYM RESULT COUNTER</p>
+      <h2 id="gym-counter-title">道館戰果計數器</h2>
+      <p class="filter-modal-note">每次戰果請選擇下列四種結果之一；IV100 為附加紀錄，不會增加總次數。所有紀錄會保存在此瀏覽器。</p>
+
+      <section class="gym-counter-total" aria-label="總次數">
+        <span>TOTAL RUNS / 總次數</span>
+        <strong id="gym-counter-total">0</strong>
+      </section>
+
+      <div class="gym-counter-list">
+        <article class="gym-counter-row normal" data-counter-key="normal">
+          <div><span>01</span><strong>普色</strong></div>
+          <div class="gym-counter-controls">
+            <button type="button" data-counter-change="-1" aria-label="普色減一">−</button>
+            <output id="gym-counter-normal">0</output>
+            <button type="button" data-counter-change="1" aria-label="普色加一">＋</button>
+          </div>
+        </article>
+        <article class="gym-counter-row shiny" data-counter-key="shiny">
+          <div><span>02</span><strong>純異色</strong></div>
+          <div class="gym-counter-controls">
+            <button type="button" data-counter-change="-1" aria-label="純異色減一">−</button>
+            <output id="gym-counter-shiny">0</output>
+            <button type="button" data-counter-change="1" aria-label="純異色加一">＋</button>
+          </div>
+        </article>
+        <article class="gym-counter-row background" data-counter-key="normalBackground">
+          <div><span>03</span><strong>普色背卡</strong></div>
+          <div class="gym-counter-controls">
+            <button type="button" data-counter-change="-1" aria-label="普色背卡減一">−</button>
+            <output id="gym-counter-normal-background">0</output>
+            <button type="button" data-counter-change="1" aria-label="普色背卡加一">＋</button>
+          </div>
+        </article>
+        <article class="gym-counter-row shiny-background" data-counter-key="shinyBackground">
+          <div><span>04</span><strong>異色背卡</strong></div>
+          <div class="gym-counter-controls">
+            <button type="button" data-counter-change="-1" aria-label="異色背卡減一">−</button>
+            <output id="gym-counter-shiny-background">0</output>
+            <button type="button" data-counter-change="1" aria-label="異色背卡加一">＋</button>
+          </div>
+        </article>
+        <article class="gym-counter-row perfect" data-counter-key="perfectIv">
+          <div><span>IV</span><strong>IV100</strong><small>不計入總次數</small></div>
+          <div class="gym-counter-controls">
+            <button type="button" data-counter-change="-1" aria-label="IV100減一">−</button>
+            <output id="gym-counter-perfect-iv">0</output>
+            <button type="button" data-counter-change="1" aria-label="IV100加一">＋</button>
+          </div>
+        </article>
+      </div>
+
+      <p class="gym-counter-feedback" id="gym-counter-feedback" role="status" aria-live="polite">READY_</p>
+      <div class="gym-counter-actions">
+        <button id="gym-counter-undo" type="button">復原上一步</button>
+        <button id="gym-counter-reset" type="button">重置全部</button>
+      </div>
+    </div>
+  </dialog>
+
   <script src="coordinates-data.js?v=20261002-5"></script>
-  <script src="script.js?v=20261002-1"></script>
+  <script src="script.js?v=20261005-1"></script>
 </body>
 </html>

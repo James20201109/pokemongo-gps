@@ -74,7 +74,20 @@ const elements = {
   sparkleAlertClose: document.querySelector("#sparkle-alert-close"),
   sparkleAlertSave: document.querySelector("#sparkle-alert-save"),
   sparkleAlertEnabled: document.querySelector("#sparkle-alert-enabled"),
-  sparkleAlertCount: document.querySelector("#sparkle-alert-count")
+  sparkleAlertCount: document.querySelector("#sparkle-alert-count"),
+  gymCounterOpen: document.querySelector("#gym-counter-open"),
+  gymCounterModal: document.querySelector("#gym-counter-modal"),
+  gymCounterClose: document.querySelector("#gym-counter-close"),
+  gymCounterBadge: document.querySelector("#gym-counter-badge"),
+  gymCounterTotal: document.querySelector("#gym-counter-total"),
+  gymCounterNormal: document.querySelector("#gym-counter-normal"),
+  gymCounterShiny: document.querySelector("#gym-counter-shiny"),
+  gymCounterNormalBackground: document.querySelector("#gym-counter-normal-background"),
+  gymCounterShinyBackground: document.querySelector("#gym-counter-shiny-background"),
+  gymCounterPerfectIv: document.querySelector("#gym-counter-perfect-iv"),
+  gymCounterFeedback: document.querySelector("#gym-counter-feedback"),
+  gymCounterUndo: document.querySelector("#gym-counter-undo"),
+  gymCounterReset: document.querySelector("#gym-counter-reset")
 };
 
 let activeCountry = "copied";
@@ -91,6 +104,15 @@ const sparkleAlertHistoryKey = "geo-pulse-sparkle-alert-history-v1";
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
+const gymCounterStorageKey = "geo-pulse-gym-counter-v1";
+const gymCounterLabels = {
+  normal: "普色",
+  shiny: "純異色",
+  normalBackground: "普色背卡",
+  shinyBackground: "異色背卡",
+  perfectIv: "IV100"
+};
+const gymCounterTotalKeys = ["normal", "shiny", "normalBackground", "shinyBackground"];
 const collapsibleJapanGroups = new Set([
   "北海道", "青森", "岩手", "宮城", "秋田", "山形", "福島",
   "茨城", "栃木", "埼玉", "千葉", "東京", "東京 v2", "神奈川",
@@ -132,6 +154,113 @@ function loadCopiedKeys() {
 }
 
 const copiedKeys = loadCopiedKeys();
+
+function loadGymCounter() {
+  const empty = { normal: 0, shiny: 0, normalBackground: 0, shinyBackground: 0, perfectIv: 0, history: [] };
+  try {
+    const saved = JSON.parse(localStorage.getItem(gymCounterStorageKey) || "null");
+    if (!saved || typeof saved !== "object") return empty;
+    Object.keys(gymCounterLabels).forEach((key) => {
+      const value = Number(saved[key]);
+      empty[key] = Number.isInteger(value) && value >= 0 ? value : 0;
+    });
+    empty.history = Array.isArray(saved.history)
+      ? saved.history.filter((item) => gymCounterLabels[item?.key] && [1, -1].includes(item.delta)).slice(-100)
+      : [];
+    return empty;
+  } catch {
+    return empty;
+  }
+}
+
+const gymCounter = loadGymCounter();
+let gymCounterResetArmed = false;
+let gymCounterResetTimer;
+
+function gymCounterTotal() {
+  return gymCounterTotalKeys.reduce((total, key) => total + gymCounter[key], 0);
+}
+
+function saveGymCounter() {
+  try {
+    localStorage.setItem(gymCounterStorageKey, JSON.stringify(gymCounter));
+  } catch {
+    // 瀏覽器禁止儲存時，計數器仍可在本次頁面開啟期間使用。
+  }
+}
+
+function renderGymCounter(message = "") {
+  const total = gymCounterTotal();
+  elements.gymCounterTotal.textContent = total.toLocaleString("zh-TW");
+  elements.gymCounterBadge.textContent = total > 999 ? "999+" : String(total);
+  elements.gymCounterNormal.textContent = gymCounter.normal.toLocaleString("zh-TW");
+  elements.gymCounterShiny.textContent = gymCounter.shiny.toLocaleString("zh-TW");
+  elements.gymCounterNormalBackground.textContent = gymCounter.normalBackground.toLocaleString("zh-TW");
+  elements.gymCounterShinyBackground.textContent = gymCounter.shinyBackground.toLocaleString("zh-TW");
+  elements.gymCounterPerfectIv.textContent = gymCounter.perfectIv.toLocaleString("zh-TW");
+  elements.gymCounterUndo.disabled = gymCounter.history.length === 0;
+  elements.gymCounterModal.querySelectorAll("[data-counter-key]").forEach((row) => {
+    row.querySelector('[data-counter-change="-1"]').disabled = gymCounter[row.dataset.counterKey] === 0;
+  });
+  if (message) elements.gymCounterFeedback.textContent = message;
+}
+
+function changeGymCounter(key, delta, recordHistory = true) {
+  if (!gymCounterLabels[key] || ![1, -1].includes(delta)) return;
+  if (delta < 0 && gymCounter[key] === 0) return;
+  gymCounter[key] += delta;
+  if (recordHistory) gymCounter.history.push({ key, delta });
+  gymCounter.history = gymCounter.history.slice(-100);
+  saveGymCounter();
+  const verb = delta > 0 ? "新增" : "減少";
+  renderGymCounter(`${verb}：${gymCounterLabels[key]} · ${gymCounter[key]}`);
+}
+
+function openGymCounterModal() {
+  renderGymCounter();
+  if (typeof elements.gymCounterModal.showModal === "function") {
+    elements.gymCounterModal.showModal();
+  } else {
+    elements.gymCounterModal.setAttribute("open", "");
+  }
+}
+
+function closeGymCounterModal() {
+  elements.gymCounterModal.close?.();
+  elements.gymCounterModal.removeAttribute("open");
+}
+
+function undoGymCounter() {
+  const last = gymCounter.history.pop();
+  if (!last) return;
+  gymCounter[last.key] = Math.max(0, gymCounter[last.key] - last.delta);
+  saveGymCounter();
+  renderGymCounter(`已復原：${gymCounterLabels[last.key]}`);
+}
+
+function resetGymCounter() {
+  if (!gymCounterResetArmed) {
+    gymCounterResetArmed = true;
+    elements.gymCounterReset.textContent = "再次點擊確認重置";
+    elements.gymCounterReset.classList.add("confirming");
+    elements.gymCounterFeedback.textContent = "請再次點擊重置按鈕確認清除全部紀錄";
+    clearTimeout(gymCounterResetTimer);
+    gymCounterResetTimer = setTimeout(() => {
+      gymCounterResetArmed = false;
+      elements.gymCounterReset.textContent = "重置全部";
+      elements.gymCounterReset.classList.remove("confirming");
+    }, 4000);
+    return;
+  }
+  clearTimeout(gymCounterResetTimer);
+  Object.keys(gymCounterLabels).forEach((key) => { gymCounter[key] = 0; });
+  gymCounter.history = [];
+  gymCounterResetArmed = false;
+  elements.gymCounterReset.textContent = "重置全部";
+  elements.gymCounterReset.classList.remove("confirming");
+  saveGymCounter();
+  renderGymCounter("全部紀錄已重置");
+}
 
 function saveCopiedKeys() {
   try {
@@ -1049,12 +1178,26 @@ elements.sparkleAlertSave.addEventListener("click", saveSparkleAlert);
 elements.sparkleAlertModal.addEventListener("click", (event) => {
   if (event.target === elements.sparkleAlertModal) closeSparkleAlertModal();
 });
+elements.gymCounterOpen.addEventListener("click", openGymCounterModal);
+elements.gymCounterClose.addEventListener("click", closeGymCounterModal);
+elements.gymCounterModal.addEventListener("click", (event) => {
+  if (event.target === elements.gymCounterModal) closeGymCounterModal();
+});
+elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const row = button.closest("[data-counter-key]");
+    changeGymCounter(row.dataset.counterKey, Number(button.dataset.counterChange));
+  });
+});
+elements.gymCounterUndo.addEventListener("click", undoGymCounter);
+elements.gymCounterReset.addEventListener("click", resetGymCounter);
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
 updateSparkleAlertButton();
+renderGymCounter();
 organizeCountryTabs();
 switchCountry(activeCountry);
 checkSparkleAlert();
