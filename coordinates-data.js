@@ -1787,16 +1787,16 @@ window.coordinateLibraries = {
       "region": "全球熱門座標",
       "name": "2026 年熱門地點",
       "coordinates": [
-        { "name": "新北市", "area": "台灣", "value": "25.011000, 121.462800" },
-        { "name": "39 號碼頭", "area": "美國加州 · 舊金山", "value": "37.808600, -122.409800" },
-        { "name": "中央公園", "area": "美國紐約", "value": "40.785100, -73.968300" },
-        { "name": "伊比拉布艾拉公園", "area": "巴西 · 聖保羅", "value": "-23.587400, -46.657600" },
-        { "name": "阿雷格里港", "area": "巴西", "value": "-30.027700, -51.228700" },
-        { "name": "薩拉戈薩", "area": "西班牙", "value": "41.648800, -0.889100" },
-        { "name": "巴塞隆納", "area": "西班牙", "value": "41.385100, 2.173400" },
-        { "name": "韋拉克魯斯", "area": "墨西哥", "value": "19.173800, -96.134200" },
-        { "name": "錢凱", "area": "秘魯", "value": "-12.043200, -77.028200" },
-        { "name": "代代木公園", "area": "日本東京", "value": "35.671700, 139.694900" }
+        { "name": "新北市", "area": "台灣", "timezone": "Asia/Taipei", "clockType": "local", "value": "25.011000, 121.462800" },
+        { "name": "39 號碼頭", "area": "美國加州 · 舊金山", "timezone": "America/Los_Angeles", "clockType": "local", "value": "37.808600, -122.409800" },
+        { "name": "中央公園", "area": "美國紐約", "timezone": "America/New_York", "clockType": "local", "value": "40.785100, -73.968300" },
+        { "name": "伊比拉布艾拉公園", "area": "巴西 · 聖保羅", "timezone": "America/Sao_Paulo", "clockType": "local", "value": "-23.587400, -46.657600" },
+        { "name": "阿雷格里港", "area": "巴西", "timezone": "America/Sao_Paulo", "clockType": "local", "value": "-30.027700, -51.228700" },
+        { "name": "薩拉戈薩", "area": "西班牙", "timezone": "Europe/Madrid", "clockType": "local", "value": "41.648800, -0.889100" },
+        { "name": "巴塞隆納", "area": "西班牙", "timezone": "Europe/Madrid", "clockType": "local", "value": "41.385100, 2.173400" },
+        { "name": "韋拉克魯斯", "area": "墨西哥", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.173800, -96.134200" },
+        { "name": "錢凱", "area": "秘魯", "timezone": "America/Lima", "clockType": "local", "value": "-12.043200, -77.028200" },
+        { "name": "代代木公園", "area": "日本東京", "timezone": "Asia/Tokyo", "clockType": "local", "value": "35.671700, 139.694900" }
       ]
     }
   ],
@@ -1807,16 +1807,16 @@ window.coordinateLibraries = {
       "sourceUrl": "https://tw.locachange.com/location-changer/best-places-to-spoof-pokemon-go/",
       "sourceLabel": "查看 2025 年資料來源",
       "coordinates": [
-        { "name": "奧特亞廣場", "area": "紐西蘭 · 奧克蘭", "value": "-36.902409, 174.807807" },
-        { "name": "科德爾斯公園", "area": "西班牙 · 巴塞隆納", "value": "41.496293, 2.133689" },
-        { "name": "39 號碼頭", "area": "美國 · 舊金山", "value": "37.809326, -122.409981" },
-        { "name": "薩拉戈薩", "area": "西班牙", "value": "41.662211, -0.894182" },
-        { "name": "中央公園", "area": "美國 · 紐約", "value": "40.780300, -73.963000" },
-        { "name": "康索拉桑", "area": "巴西 · 聖保羅", "value": "-23.551200, -46.658400" },
-        { "name": "阿雷格里港", "area": "巴西", "value": "-30.031016, -51.234585" },
-        { "name": "大笨鐘／薩沃伊酒店", "area": "英國 · 倫敦", "value": "51.510100, -0.120600" },
-        { "name": "環形碼頭", "area": "澳大利亞 · 雪梨", "value": "-33.861756, 151.210884" },
-        { "name": "阿納海姆迪士尼樂園", "area": "美國 · 加利福尼亞", "value": "33.812511, -117.918976" }
+        { "name": "奧特亞廣場", "area": "紐西蘭 · 奧克蘭", "timezone": "Pacific/Auckland", "clockType": "local", "value": "-36.902409, 174.807807" },
+        { "name": "科德爾斯公園", "area": "西班牙 · 巴塞隆納", "timezone": "Europe/Madrid", "clockType": "local", "value": "41.496293, 2.133689" },
+        { "name": "39 號碼頭", "area": "美國 · 舊金山", "timezone": "America/Los_Angeles", "clockType": "local", "value": "37.809326, -122.409981" },
+        { "name": "薩拉戈薩", "area": "西班牙", "timezone": "Europe/Madrid", "clockType": "local", "value": "41.662211, -0.894182" },
+        { "name": "中央公園", "area": "美國 · 紐約", "timezone": "America/New_York", "clockType": "local", "value": "40.780300, -73.963000" },
+        { "name": "康索拉桑", "area": "巴西 · 聖保羅", "timezone": "America/Sao_Paulo", "clockType": "local", "value": "-23.551200, -46.658400" },
+        { "name": "阿雷格里港", "area": "巴西", "timezone": "America/Sao_Paulo", "clockType": "local", "value": "-30.031016, -51.234585" },
+        { "name": "大笨鐘／薩沃伊酒店", "area": "英國 · 倫敦", "timezone": "Europe/London", "clockType": "local", "value": "51.510100, -0.120600" },
+        { "name": "環形碼頭", "area": "澳大利亞 · 雪梨", "timezone": "Australia/Sydney", "clockType": "local", "value": "-33.861756, 151.210884" },
+        { "name": "阿納海姆迪士尼樂園", "area": "美國 · 加利福尼亞", "timezone": "America/Los_Angeles", "clockType": "local", "value": "33.812511, -117.918976" }
       ]
     }
   ],
@@ -1869,6 +1869,49 @@ window.coordinateLibraries = {
     }
   ]
 };
+
+// 為各座標補上所在地時區；已明確設定的特殊時區會優先保留。
+(() => {
+  const libraryDefaults = {
+    japan: "Asia/Tokyo",
+    korea: "Asia/Seoul",
+    uk: "Europe/London"
+  };
+  const pokexcitingTimezones = {
+    "馬來西亞 · 吉隆坡": "Asia/Kuala_Lumpur",
+    "台灣 · 台北市": "Asia/Taipei",
+    "新加坡": "Asia/Singapore",
+    "菲律賓 · 馬尼拉": "Asia/Manila"
+  };
+  const legoTimezones = {
+    "LEGO Store · 紐約": "America/New_York",
+    "LEGO Store · 倫敦": "Europe/London",
+    "LEGO Store · 柏林": "Europe/Berlin",
+    "LEGO Store · 巴黎": "Europe/Paris",
+    "LEGO Store · 華沙": "Europe/Warsaw",
+    "LEGO Store · 雪梨": "Australia/Sydney"
+  };
+  const usTimezones = {
+    "舊金山大橋背卡 · 集章趣": "America/Los_Angeles",
+    "克里夫蘭守護者隊 · Cleveland Guardians": "America/New_York",
+    "化石博物館皮卡丘": "America/Chicago"
+  };
+
+  Object.entries(window.coordinateLibraries).forEach(([library, groups]) => {
+    groups.forEach((group) => {
+      (group.coordinates || []).forEach((coordinate) => {
+        if (!coordinate || typeof coordinate !== "object" || coordinate.timezone) return;
+        const timezone = libraryDefaults[library]
+          || (library === "pokexciting" ? pokexcitingTimezones[group.name] : "")
+          || (library === "lego" ? legoTimezones[coordinate.name] : "")
+          || (library === "us" ? usTimezones[group.name] : "");
+        if (!timezone) return;
+        coordinate.timezone = timezone;
+        coordinate.clockType = "local";
+      });
+    });
+  });
+})();
 
 // 國家分頁共用的活動資訊。
 window.coordinateEvents = {
