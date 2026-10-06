@@ -1,8 +1,10 @@
 const librarySource = window.coordinateLibraries;
 const eventSource = window.coordinateEvents || {};
+const friendDirectory = window.friendDirectory || [];
 const countryNames = {
   adidas: "POKÉMON GO × ADIDAS",
   events: "GLOBAL EVENT ARTICLES",
+  friends: "STATIC FRIEND DIRECTORY",
   lego: "LEGO GLOBAL EVENT",
   indonesia: "INDONESIA LIMITED EVENT",
   pokexciting: "POKÉXCITING ASIA TOUR",
@@ -22,6 +24,7 @@ const countryNames = {
 
 const elements = {
   tabs: [...document.querySelectorAll(".country-tab")],
+  friendsTab: document.querySelector('[data-country="friends"]'),
   articleTabs: document.querySelector("#article-country-tabs"),
   articleTabZone: document.querySelector("#article-tab-zone"),
   activeTabs: document.querySelector("#active-country-tabs"),
@@ -60,6 +63,12 @@ const elements = {
   imageModalContent: document.querySelector("#image-modal-content"),
   imageModalCaption: document.querySelector("#image-modal-caption"),
   imageModalClose: document.querySelector("#image-modal-close"),
+  friendQrModal: document.querySelector("#friend-qr-modal"),
+  friendQrClose: document.querySelector("#friend-qr-close"),
+  friendQrTitle: document.querySelector("#friend-qr-title"),
+  friendQrCanvas: document.querySelector("#friend-qr-canvas"),
+  friendQrCode: document.querySelector("#friend-qr-code"),
+  friendQrCopy: document.querySelector("#friend-qr-copy"),
   trashFilterOpen: document.querySelector("#trash-filter-open"),
   trashFilterModal: document.querySelector("#trash-filter-modal"),
   trashFilterClose: document.querySelector("#trash-filter-close"),
@@ -103,8 +112,12 @@ const sparkleAlertStorageKey = "geo-pulse-sparkle-alert-v1";
 const sparkleAlertHistoryKey = "geo-pulse-sparkle-alert-history-v1";
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
+const friendsUnlockedStorageKey = "geo-pulse-friends-unlocked-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
 const gymCounterStorageKey = "geo-pulse-gym-counter-v1";
+let friendsUnlocked = false;
+let friendUnlockClicks = 0;
+let friendUnlockTimer;
 const gymCounterLabels = {
   normal: "普色",
   shiny: "純異色",
@@ -279,6 +292,7 @@ function updateCopiedCounter() {
 const libraries = {
   adidas: librarySource.adidas,
   events: librarySource.events,
+  friends: [],
   lego: librarySource.lego,
   indonesia: librarySource.indonesia,
   pokexciting: librarySource.pokexciting,
@@ -295,9 +309,20 @@ const libraries = {
   raid: librarySource.raid
 };
 
+function loadFriendsUnlocked() {
+  try {
+    return localStorage.getItem(friendsUnlockedStorageKey) === "1";
+  } catch {
+    return false;
+  }
+}
+
+friendsUnlocked = loadFriendsUnlocked();
+
 function loadActiveCountry() {
   try {
     const saved = localStorage.getItem(activeTabStorageKey);
+    if (saved === "friends" && !friendsUnlocked) return "copied";
     return saved && (saved === "copied" || Object.hasOwn(libraries, saved)) ? saved : "copied";
   } catch {
     return "copied";
@@ -313,6 +338,24 @@ function coordinateValue(coordinate) {
 function coordinateKey(country, groupName, coordinate) {
   const name = typeof coordinate === "object" ? coordinate.name : "";
   return `${country}|${groupName}|${name}|${coordinateValue(coordinate)}`;
+}
+
+function normalizedTrainerCode(code = "") {
+  return String(code).replace(/\D/g, "").slice(0, 12);
+}
+
+function formattedTrainerCode(code = "") {
+  const normalized = normalizedTrainerCode(code);
+  return normalized.length === 12 ? normalized.replace(/(\d{4})(?=\d)/g, "$1 ") : "尚未提供訓練家編號";
+}
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function isExpired(endDate) {
@@ -859,8 +902,116 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   return button;
 }
 
+let activeFriendQrCode = "";
+
+function closeFriendQrModal() {
+  elements.friendQrModal.close();
+  activeFriendQrCode = "";
+}
+
+function openFriendQr(friend) {
+  const code = normalizedTrainerCode(friend.trainerCode);
+  if (code.length !== 12) return;
+  activeFriendQrCode = code;
+  elements.friendQrTitle.textContent = `${friend.nickname} · 好友 QR Code`;
+  elements.friendQrCode.textContent = formattedTrainerCode(code);
+  const context = elements.friendQrCanvas.getContext("2d");
+  context.clearRect(0, 0, elements.friendQrCanvas.width, elements.friendQrCanvas.height);
+  if (typeof QRious === "undefined") {
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, elements.friendQrCanvas.width, elements.friendQrCanvas.height);
+    context.fillStyle = "#111111";
+    context.font = "700 14px sans-serif";
+    context.textAlign = "center";
+    context.fillText("QR CODE LOAD ERROR", 128, 128);
+  } else {
+    new QRious({
+      element: elements.friendQrCanvas,
+      value: code,
+      size: 256,
+      level: "M",
+      padding: 16,
+      foreground: "#061013",
+      background: "#ffffff"
+    });
+  }
+  elements.friendQrModal.showModal();
+}
+
+function renderFriends(query) {
+  const matches = friendDirectory.filter((friend) => {
+    const searchable = [
+      friend.nickname,
+      friend.trainerCode,
+      formattedTrainerCode(friend.trainerCode),
+      ...(friend.locations || []).flatMap((location) => [location.name, location.value])
+    ].join(" ").toLowerCase();
+    return searchable.includes(query);
+  });
+  const directory = document.createElement("div");
+  directory.className = "friend-directory";
+  const friendCoordinates = [];
+  const friendCoordinateKeys = [];
+
+  matches.forEach((friend, friendIndex) => {
+    const code = normalizedTrainerCode(friend.trainerCode);
+    const hasCode = code.length === 12;
+    const card = document.createElement("article");
+    card.className = `friend-card${hasCode ? "" : " missing-code"}`;
+    card.innerHTML = `
+      <header class="friend-card-head">
+        <div><span>${String(friendIndex + 1).padStart(2, "0")} / TRAINER</span><h3>${escapeHtml(friend.nickname)}</h3></div>
+        <b class="friend-code-status">${hasCode ? "CODE READY" : "CODE PENDING"}</b>
+      </header>
+      <section class="friend-code-block">
+        <span>TRAINER CODE / 訓練家編號</span>
+        <strong class="friend-code${hasCode ? "" : " missing"}">${escapeHtml(formattedTrainerCode(code))}</strong>
+        <div class="friend-actions">
+          <button class="friend-copy-code" type="button"${hasCode ? "" : " disabled"}>複製編號 <b>⧉</b></button>
+          <button class="friend-show-qr" type="button"${hasCode ? "" : " disabled"}>顯示 QR CODE <b>▦</b></button>
+        </div>
+      </section>
+      <section class="friend-location-list">
+        <span>REGULAR LOCATIONS / 常用地點</span>
+        ${(friend.locations || []).length ? friend.locations.map((location) => `
+          <article class="friend-location">
+            <div><b>${escapeHtml(location.name)}</b><code>${escapeHtml(location.value)}</code></div>
+            <button class="friend-location-copy" type="button" data-coordinate="${escapeHtml(location.value)}" data-label="${escapeHtml(`${friend.nickname} · ${location.name}`)}">複製座標</button>
+          </article>`).join("") : '<p class="friend-location-empty">尚未提供常用座標</p>'}
+      </section>`;
+    card.querySelector(".friend-copy-code")?.addEventListener("click", () => copyText(code, `${friend.nickname} · 好友編號`));
+    card.querySelector(".friend-show-qr")?.addEventListener("click", () => openFriendQr(friend));
+    card.querySelectorAll(".friend-location-copy").forEach((button) => {
+      button.addEventListener("click", () => copyText(button.dataset.coordinate, button.dataset.label));
+    });
+    (friend.locations || []).forEach((location) => {
+      friendCoordinates.push({ name: `${friend.nickname} · ${location.name}`, value: location.value });
+      friendCoordinateKeys.push(`friends|${friend.nickname}|${location.name}|${location.value}`);
+    });
+    directory.appendChild(card);
+  });
+
+  elements.library.replaceChildren(directory);
+  visibleCoordinates = friendCoordinates;
+  visibleCoordinateKeys = friendCoordinateKeys;
+  elements.resultCount.textContent = friendCoordinates.length;
+  elements.visibleCount.textContent = String(matches.length).padStart(3, "0");
+  elements.groupCount.textContent = matches.length;
+  elements.countryLabel.textContent = countryNames.friends;
+  elements.empty.hidden = matches.length > 0;
+  elements.emptyTitle.textContent = "找不到符合的好友";
+  elements.emptyDescription.textContent = "請改用暱稱、訓練家編號、地點或座標搜尋。";
+  elements.copyAll.disabled = friendCoordinates.length === 0;
+  elements.eventBanner.hidden = true;
+  updateCopiedCounter();
+}
+
 function render() {
   const query = elements.search.value.trim().toLowerCase();
+  if (activeCountry === "friends") {
+    renderFriends(query);
+    return;
+  }
   const fragment = document.createDocumentFragment();
   visibleCoordinates = [];
   visibleCoordinateKeys = [];
@@ -1111,6 +1262,31 @@ function switchCountry(country) {
   render();
 }
 
+function handleFriendsTabClick() {
+  if (friendsUnlocked) {
+    switchCountry("friends");
+    return;
+  }
+  clearTimeout(friendUnlockTimer);
+  friendUnlockClicks += 1;
+
+  if (friendUnlockClicks >= 3) {
+    friendsUnlocked = true;
+    friendUnlockClicks = 0;
+    try {
+      localStorage.setItem(friendsUnlockedStorageKey, "1");
+    } catch {
+      // 無法寫入儲存空間時，只在本次頁面開啟期間維持解鎖。
+    }
+    switchCountry("friends");
+    return;
+  }
+
+  friendUnlockTimer = setTimeout(() => {
+    friendUnlockClicks = 0;
+  }, 1800);
+}
+
 function parseCoordinate(input) {
   const normalized = input.replace(/[，、]/g, ",").replace(/[−–—]/g, "-").trim();
   const mapMatch = normalized.match(/@([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)/);
@@ -1126,7 +1302,13 @@ function parseCoordinate(input) {
   return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 }
 
-elements.tabs.forEach((tab) => tab.addEventListener("click", () => switchCountry(tab.dataset.country)));
+elements.tabs.forEach((tab) => tab.addEventListener("click", () => {
+  if (tab.dataset.country === "friends") {
+    handleFriendsTabClick();
+  } else {
+    switchCountry(tab.dataset.country);
+  }
+}));
 elements.search.addEventListener("input", render);
 elements.clearSearch.addEventListener("click", () => {
   elements.search.value = "";
@@ -1135,6 +1317,7 @@ elements.clearSearch.addEventListener("click", () => {
 });
 elements.copyAll.addEventListener("click", async () => {
   await copyText(visibleCoordinates.map(coordinateValue).join("\n"), `${visibleCoordinates.length} COORDINATES`);
+  if (activeCountry === "friends") return;
   visibleCoordinateKeys.forEach((key) => copiedKeys.add(key));
   saveCopiedKeys();
   render();
@@ -1158,6 +1341,13 @@ elements.converterForm.addEventListener("submit", (event) => {
 elements.imageModalClose.addEventListener("click", closeImageModal);
 elements.imageModal.addEventListener("click", (event) => {
   if (event.target === elements.imageModal) closeImageModal();
+});
+elements.friendQrClose.addEventListener("click", closeFriendQrModal);
+elements.friendQrModal.addEventListener("click", (event) => {
+  if (event.target === elements.friendQrModal) closeFriendQrModal();
+});
+elements.friendQrCopy.addEventListener("click", () => {
+  if (activeFriendQrCode) copyText(activeFriendQrCode, "好友編號");
 });
 elements.trashFilterOpen.addEventListener("click", openTrashFilterModal);
 elements.trashFilterClose.addEventListener("click", closeTrashFilterModal);

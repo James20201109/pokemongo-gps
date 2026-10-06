@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#05080b">
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
-  <link rel="stylesheet" href="style.css?v=20261001-10">
+  <link rel="stylesheet" href="style.css?v=20261006-3">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -68,6 +68,7 @@
           <button class="country-tab" data-country="hot2026" role="tab" aria-selected="false"><b>26</b> 2026 年熱門</button>
           <button class="country-tab" data-country="hot2025" role="tab" aria-selected="false"><b>25</b> 2025 年熱門</button>
           <button class="country-tab raid-tab" data-country="raid" role="tab" aria-selected="false"><b>⚔</b> 團戰座標</button>
+          <button class="country-tab friends-tab" data-country="friends" role="tab" aria-selected="false"><b>FR</b> 好友區</button>
         </div>
         <details class="expired-tab-zone" id="expired-tab-zone" hidden>
           <summary><span>ARCHIVE</span> 過期活動 <b id="expired-tab-count">0</b></summary>
@@ -177,6 +178,20 @@
     </div>
   </dialog>
 
+  <dialog class="filter-modal friend-qr-modal" id="friend-qr-modal" aria-labelledby="friend-qr-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="friend-qr-close" type="button" aria-label="關閉好友 QR Code">×</button>
+      <p class="kicker"><span>FR</span> TRAINER CODE</p>
+      <h2 id="friend-qr-title">好友 QR Code</h2>
+      <p class="filter-modal-note">QR Code 內容為 12 位訓練家編號，可使用手機相機讀取；是否能由 Pokémon GO 直接辨識，依遊戲目前支援格式為準。</p>
+      <div class="friend-qr-output">
+        <canvas id="friend-qr-canvas" width="256" height="256" aria-label="好友編號 QR Code"></canvas>
+        <strong id="friend-qr-code"></strong>
+      </div>
+      <button class="filter-copy-button" id="friend-qr-copy" type="button">複製好友編號 <span>⧉</span></button>
+    </div>
+  </dialog>
+
   <dialog class="filter-modal" id="trash-filter-modal" aria-labelledby="trash-filter-title">
     <div class="filter-modal-panel">
       <button class="filter-modal-close" id="trash-filter-close" type="button" aria-label="關閉視窗">×</button>
@@ -277,6 +292,8 @@
   </dialog>
 
   <script src="coordinates-data.js?v=20261006-3"></script>
-  <script src="script.js?v=20261005-1"></script>
+  <script src="friends-data.js?v=20261006-2"></script>
+  <script src="assets/vendor/qrious-4.0.2.min.js"></script>
+  <script src="script.js?v=20261006-3"></script>
 </body>
 </html>
