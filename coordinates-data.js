@@ -243,6 +243,47 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "亞太地區活動情報 · 實體活動",
+      "name": "Pokémon RUN 30",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 各地活動日期",
+        "period": "2026 年 10 月 17 日～2027 年 1 月 24 日 · 亞太地區巡迴",
+        "startDate": "2026-10-17",
+        "endDate": "2027-01-24",
+        "periods": [
+          { "startDateTime": "2026-10-17T00:00:00+08:00", "endDateTime": "2026-10-18T23:59:59+08:00" },
+          { "startDateTime": "2026-10-31T00:00:00+08:00", "endDateTime": "2026-11-01T23:59:59+08:00" },
+          { "startDateTime": "2026-11-07T00:00:00+08:00", "endDateTime": "2026-11-08T23:59:59+08:00" },
+          { "startDateTime": "2026-11-14T00:00:00+08:00", "endDateTime": "2026-11-15T23:59:59+08:00" },
+          { "startDateTime": "2026-11-21T00:00:00+08:00", "endDateTime": "2026-11-22T23:59:59+08:00" },
+          { "startDateTime": "2026-12-12T00:00:00+07:00", "endDateTime": "2026-12-13T23:59:59+07:00" },
+          { "startDateTime": "2027-01-09T00:00:00+07:00", "endDateTime": "2027-01-10T23:59:59+07:00" },
+          { "startDateTime": "2027-01-23T00:00:00+08:00", "endDateTime": "2027-01-24T23:59:59+08:00" }
+        ],
+        "description": "Pokémon RUN 30 於亞太地區巡迴舉辦。活動範圍內將提高歷代最初夥伴寶可夢與皮卡丘的出現機率，使用一般薰香時更有機會遇見活動限定的未知圖騰。",
+        "detailLabel": "活動重點：未知圖騰 N／R／U",
+        "bullets": [
+          "未知圖騰 N：使用一般薰香時有機會遇見，並有異色機會。",
+          "未知圖騰 R：使用一般薰香時有機會遇見，並有異色機會。",
+          "未知圖騰 U：使用一般薰香時有機會遇見，並有異色機會。",
+          "台灣台中中央公園：2026 年 10 月 17 日～10 月 18 日。",
+          "台灣高雄夢時代：2026 年 10 月 31 日～11 月 1 日。",
+          "新加坡加冷匯：2026 年 11 月 7 日～11 月 8 日。",
+          "台灣新北大都會公園：2026 年 11 月 14 日～11 月 15 日。",
+          "馬來西亞 KLCC Plaza Petronas：2026 年 11 月 21 日～11 月 22 日。",
+          "印尼朋卡諾體育場主場館：2026 年 12 月 12 日～12 月 13 日。",
+          "泰國 Central World 戶外廣場：2027 年 1 月 9 日～1 月 10 日。",
+          "香港科學園：2027 年 1 月 23 日～1 月 24 日。",
+          "活動加碼：一般薰香持續時間加倍、旋轉新寶可補給站獲得 10 倍 XP、旋轉補給站獲得 2 倍 XP、孵蛋距離縮短為 1/2。",
+          "活動範圍內可免費領取兩組活動限定限時調查，獎勵包含 XP、星星沙子、薰香、精靈球、特級對戰入場券，以及遇見皮卡丘與最初夥伴寶可夢的機會。"
+        ],
+        "notice": "未知圖騰 N、R、U 需使用一般薰香才有機會遇見，不包含散步小薰香。各場活動與限時調查截止時間依當地現場公告為準。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/pokemon-run-30-2026",
+        "sourceLabel": "活動官網"
+      },
+      "coordinates": []
+    },
+    {
       "region": "全球活動情報 · 季節活動",
       "name": "《Pokémon GO》將降下「小隕星雨」",
       "event": {
@@ -315,6 +356,43 @@ window.coordinateLibraries = {
             "src": "assets/Events/dynamax-lake-trio-max-battle-day-2026.png",
             "alt": "極巨化由克希、艾姆利多與亞克諾姆極巨對戰日",
             "caption": "極巨化由克希／艾姆利多／亞克諾姆極巨對戰日",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 萬聖節",
+      "name": "Pokémon GO 2026 萬聖節（Part 1）",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 當地時間",
+        "period": "2026 年 10 月 27 日 10:00～11 月 1 日 10:00",
+        "startDate": "2026-10-27",
+        "endDate": "2026-11-01",
+        "description": "2026 萬聖節 Part 1 帶來全新裝扮寶可夢、活動主題寶可夢、萬聖節服飾與 GO Pass 獎勵，並提高捕捉寶可夢可獲得的糖果與星星沙子。",
+        "detailLabel": "特色寶可夢與活動內容",
+        "bullets": [
+          "全新裝扮寶可夢：戴帽子與披肩的皮卡丘、戴高禮帽的大嘴蝠，以及綁蝴蝶結的來悲茶。",
+          "野外、蛋與其他活動內容中可遇見活動主題寶可夢；運氣好的話，還有機會遇見異色寶可夢。",
+          "全新萬聖節主題個人秀服飾與換裝道具將於活動開始時在遊戲內商店上架販售。",
+          "GO Pass 免費版：捕捉寶可夢獲得的糖果加倍、星星沙子加倍。",
+          "GO Pass 豪華版：捕捉寶可夢獲得的糖果提高為 3 倍、星星沙子提高為 3 倍，另含專屬服飾與更多獎勵。",
+          "詭異造型萬聖節禮盒有機會提供萬聖節主題換裝道具或其他活動道具。"
+        ],
+        "notice": "活動內容與時間皆以各地當地時間為準；實際出現方式與獎勵請以遊戲內公告為準。",
+        "sourceUrl": "https://www.threads.com/@poknini8/post/DeIZwJxkteS/media?xmt=AQG0x4Cf-rhNCdQG6C8KFjl1l8cT_kJRPeCa0qqZUVdFfjO1HWKyuNBw5sFO8y0arl3E8hUA",
+        "sourceLabel": "參考文獻",
+        "images": [
+          {
+            "src": "assets/Events/halloween-2026-part-1-pikachu.png",
+            "alt": "戴帽子與披肩的萬聖節皮卡丘",
+            "caption": "Pokémon GO 2026 萬聖節 Part 1 · 主視覺"
+          },
+          {
+            "src": "assets/Events/halloween-2026-part-1-details.png",
+            "alt": "Pokémon GO 2026 萬聖節 Part 1 活動內容",
+            "caption": "活動寶可夢、換裝道具與萬聖節禮盒",
             "wide": true
           }
         ]
@@ -520,7 +598,12 @@ window.coordinateLibraries = {
         "imageCaption": "PokéXciting! in 台北 · 台北 101 背景"
       },
       "coordinates": [
-        { "name": "台北 101 背景（右下 ↘️）", "area": "台灣 · 台北市信義區", "value": "25.037260, 121.566990" }
+        { "name": "台北 101 背景（右下 ↘️）", "area": "台灣 · 台北市信義區", "value": "25.037260, 121.566990" },
+        { "name": "台北蓋章點 02", "area": "台灣 · 台北市信義區", "value": "25.038400, 121.567200" },
+        { "name": "台北蓋章點 03", "area": "台灣 · 台北市信義區", "value": "25.035400, 121.567000" },
+        { "name": "台北蓋章點 04", "area": "台灣 · 台北市信義區", "value": "25.036600, 121.565100" },
+        { "name": "台北蓋章點 05", "area": "台灣 · 台北市信義區", "value": "25.033100, 121.564500" },
+        { "name": "台北蓋章點 06", "area": "台灣 · 台北市信義區", "value": "25.035800, 121.571500" }
       ]
     },
     {
