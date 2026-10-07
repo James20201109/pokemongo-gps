@@ -1662,6 +1662,33 @@ window.coordinateLibraries = {
       "coordinates": [
         { "name": "PokéPark KANTO", "area": "寶可夢中心團體戰", "value": "35.626210, 139.521670" }
       ]
+    },
+    {
+      "region": "日本限定團體戰 · 特殊背景",
+      "name": "維羅博士的助手皮卡丘",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 活動期間",
+        "period": "待公布",
+        "description": "維羅博士的助手皮卡丘將於指定地點的團體戰登場，捕捉時有機會取得特殊背景卡。",
+        "detailLabel": "團體戰備註",
+        "detail": "特殊背景並非必定出現。",
+        "notice": "此為非必背的團體戰；活動期間目前尚未提供，待取得資訊後補充。",
+        "images": [
+          {
+            "src": "assets/Japan/professor-willow-assistant-pikachu.png",
+            "alt": "維羅博士的助手皮卡丘",
+            "caption": "維羅博士的助手皮卡丘 · 角色參考圖"
+          },
+          {
+            "src": "assets/Japan/professor-willow-assistant-pikachu-background.png",
+            "alt": "維羅博士的助手皮卡丘特殊背景卡",
+            "caption": "維羅博士的助手皮卡丘 · 特殊背景參考圖"
+          }
+        ]
+      },
+      "coordinates": [
+        { "name": "維羅博士的助手皮卡丘", "area": "日本 · 團體戰（特殊背景非必定）", "value": "35.729070, 139.719190" }
+      ]
     }
   ],
   "korea": [

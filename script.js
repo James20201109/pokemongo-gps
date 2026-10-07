@@ -96,7 +96,8 @@ const elements = {
   gymCounterPerfectIv: document.querySelector("#gym-counter-perfect-iv"),
   gymCounterFeedback: document.querySelector("#gym-counter-feedback"),
   gymCounterUndo: document.querySelector("#gym-counter-undo"),
-  gymCounterReset: document.querySelector("#gym-counter-reset")
+  gymCounterReset: document.querySelector("#gym-counter-reset"),
+  backToTop: document.querySelector("#back-to-top")
 };
 
 let activeCountry = "copied";
@@ -1302,6 +1303,30 @@ function parseCoordinate(input) {
   return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 }
 
+function updateBackToTopVisibility() {
+  elements.backToTop.classList.toggle("visible", window.scrollY > 500);
+}
+
+function scrollBackToTop() {
+  const start = window.scrollY;
+  if (!start) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.scrollTo(0, 0);
+    return;
+  }
+  const startedAt = performance.now();
+  const duration = 950;
+  const animate = (now) => {
+    const progress = Math.min((now - startedAt) / duration, 1);
+    const eased = progress < .5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    window.scrollTo(0, Math.round(start * (1 - eased)));
+    if (progress < 1) requestAnimationFrame(animate);
+  };
+  requestAnimationFrame(animate);
+}
+
 elements.tabs.forEach((tab) => tab.addEventListener("click", () => {
   if (tab.dataset.country === "friends") {
     handleFriendsTabClick();
@@ -1381,6 +1406,8 @@ elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((butt
 });
 elements.gymCounterUndo.addEventListener("click", undoGymCounter);
 elements.gymCounterReset.addEventListener("click", resetGymCounter);
+elements.backToTop.addEventListener("click", scrollBackToTop);
+window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
 });
@@ -1388,6 +1415,7 @@ elements.toast.addEventListener("click", () => {
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
 updateSparkleAlertButton();
 renderGymCounter();
+updateBackToTopVisibility();
 organizeCountryTabs();
 switchCountry(activeCountry);
 checkSparkleAlert();

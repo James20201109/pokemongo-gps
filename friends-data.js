@@ -37,5 +37,12 @@ window.friendDirectory = [
     nickname: "兔弟弟（Ya...）",
     trainerCode: "335924960236",
     locations: []
+  },
+  {
+    nickname: "小C",
+    trainerCode: "",
+    locations: [
+      { name: "長眠處", value: "24.113156, 120.647263" }
+    ]
   }
 ];
