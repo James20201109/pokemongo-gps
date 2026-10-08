@@ -34,6 +34,7 @@ const elements = {
   search: document.querySelector("#search-input"),
   clearSearch: document.querySelector("#clear-search"),
   copyAll: document.querySelector("#copy-all"),
+  shareView: document.querySelector("#share-view"),
   clearCopied: document.querySelector("#clear-copied"),
   copiedCount: document.querySelector("#copied-count"),
   copiedTabCount: document.querySelector("#copied-tab-count"),
@@ -101,6 +102,7 @@ const elements = {
 };
 
 let activeCountry = "copied";
+let pendingSharedGroup = "";
 let visibleCoordinates = [];
 let visibleCoordinateKeys = [];
 let toastTimer;
@@ -321,6 +323,20 @@ function loadFriendsUnlocked() {
 friendsUnlocked = loadFriendsUnlocked();
 
 function loadActiveCountry() {
+  const params = new URLSearchParams(window.location.search);
+  const sharedCountry = params.get("tab") || "";
+  const validSharedCountry = sharedCountry === "copied" || Object.hasOwn(libraries, sharedCountry);
+  if (validSharedCountry && sharedCountry === "friends" && !friendsUnlocked) {
+    const safeUrl = new URL(window.location.href);
+    safeUrl.searchParams.set("tab", "copied");
+    safeUrl.searchParams.delete("group");
+    window.history.replaceState(null, "", safeUrl);
+    return "copied";
+  }
+  if (validSharedCountry && (sharedCountry !== "friends" || friendsUnlocked)) {
+    pendingSharedGroup = params.get("group") || "";
+    return sharedCountry;
+  }
   try {
     const saved = localStorage.getItem(activeTabStorageKey);
     if (saved === "friends" && !friendsUnlocked) return "copied";
@@ -593,6 +609,49 @@ async function copyText(text, label) {
   elements.toast.classList.add("show");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 1800);
+}
+
+function shareUrl(country, group = "") {
+  const url = new URL(window.location.href);
+  url.searchParams.set("tab", country);
+  if (group) url.searchParams.set("group", group);
+  else url.searchParams.delete("group");
+  url.hash = "";
+  return url.toString();
+}
+
+function updateShareUrl(country, group = "") {
+  if (country === "friends") return;
+  window.history.replaceState(null, "", shareUrl(country, group));
+}
+
+async function shareLink(country, group = "") {
+  const title = group ? `${group}｜Pokémon GO 資訊` : `${countryNames[country]}｜Pokémon GO 資訊`;
+  const url = shareUrl(country, group);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text: group ? `開啟「${group}」區塊` : "開啟這個座標頁籤", url });
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+    }
+  }
+  await copyText(url, group ? `${group} 分享網址` : "頁籤分享網址");
+}
+
+function focusSharedGroup(groupName) {
+  if (!groupName) return;
+  requestAnimationFrame(() => {
+    const target = [...elements.library.querySelectorAll(".region-block")]
+      .find((section) => section.dataset.shareId === groupName);
+    if (!target) return;
+    const archive = target.closest(".completed-events");
+    if (archive) archive.open = true;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    target.classList.add("share-target");
+    window.setTimeout(() => target.classList.remove("share-target"), 2400);
+  });
 }
 
 function offerUndo(key, label) {
@@ -1003,6 +1062,7 @@ function renderFriends(query) {
   elements.emptyTitle.textContent = "找不到符合的好友";
   elements.emptyDescription.textContent = "請改用暱稱、訓練家編號、地點或座標搜尋。";
   elements.copyAll.disabled = friendCoordinates.length === 0;
+  elements.shareView.hidden = true;
   elements.eventBanner.hidden = true;
   updateCopiedCounter();
 }
@@ -1054,10 +1114,12 @@ function render() {
     visibleCoordinateKeys.push(...matchKeys);
     const section = document.createElement("section");
     section.className = "region-block";
+    const groupShareId = group.shareId || group.name;
+    section.dataset.shareId = groupShareId;
     const collapsible = activeCountry === "japan" && collapsibleJapanGroups.has(group.name);
     const groupStateKey = `${activeCountry}|${group.name}`;
     section.dataset.groupKey = groupStateKey;
-    const expanded = !collapsible || expandedGroups.has(groupStateKey);
+    const expanded = !collapsible || expandedGroups.has(groupStateKey) || pendingSharedGroup === groupShareId;
     section.classList.toggle("is-collapsed", collapsible && !expanded);
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
     const groupSource = group.sourceUrl
@@ -1067,7 +1129,11 @@ function render() {
       ? `<button class="group-collapse" type="button" aria-expanded="${expanded}" aria-label="${expanded ? "收合" : "展開"}${group.name}座標"><span aria-hidden="true">${expanded ? "−" : "＋"}</span></button>`
       : "";
     const groupStamp = stampedJapanGroups.has(group.name) ? `<span class="group-stamp" aria-hidden="true">蓋</span>` : "";
-    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    const shareControl = activeCountry === "copied"
+      ? ""
+      : `<button class="group-share" type="button" aria-label="分享${escapeHtml(group.name)}區塊" title="分享此區塊"><span aria-hidden="true">↗</span></button>`;
+    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${shareControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    section.querySelector(".group-share")?.addEventListener("click", () => shareLink(activeCountry, groupShareId));
     section.querySelector(".group-collapse")?.addEventListener("click", () => {
       if (expandedGroups.has(groupStateKey)) {
         expandedGroups.delete(groupStateKey);
@@ -1184,6 +1250,7 @@ function render() {
     ? "回到其他頁籤點擊座標，紀錄就會出現在這裡。"
     : "請更換搜尋條件。";
   elements.copyAll.disabled = visibleCoordinates.length === 0;
+  elements.shareView.hidden = activeCountry === "copied" || activeCountry === "friends";
   updateCopiedCounter();
 
   const countryEvent = eventSource[activeCountry];
@@ -1200,6 +1267,11 @@ function render() {
     }
   }
   updateRaidClocks();
+  if (pendingSharedGroup) {
+    const sharedGroup = pendingSharedGroup;
+    pendingSharedGroup = "";
+    focusSharedGroup(sharedGroup);
+  }
 }
 
 function updateRaidClocks() {
@@ -1246,7 +1318,7 @@ function updateRaidClocks() {
   });
 }
 
-function switchCountry(country) {
+function switchCountry(country, options = {}) {
   activeCountry = country;
   const koreaActive = libraries.korea.some((group) => group.event && eventNewsStatus(group.event) === "active");
   try {
@@ -1260,6 +1332,7 @@ function switchCountry(country) {
     tab.classList.toggle("active", active);
     tab.setAttribute("aria-selected", String(active));
   });
+  if (options.updateUrl !== false) updateShareUrl(country);
   render();
 }
 
@@ -1347,6 +1420,7 @@ elements.copyAll.addEventListener("click", async () => {
   saveCopiedKeys();
   render();
 });
+elements.shareView.addEventListener("click", () => shareLink(activeCountry));
 elements.clearCopied.addEventListener("click", () => {
   copiedKeys.clear();
   try {
@@ -1417,7 +1491,7 @@ updateSparkleAlertButton();
 renderGymCounter();
 updateBackToTopVisibility();
 organizeCountryTabs();
-switchCountry(activeCountry);
+switchCountry(activeCountry, { updateUrl: false });
 checkSparkleAlert();
 setInterval(() => {
   updateRaidClocks();
