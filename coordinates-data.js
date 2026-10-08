@@ -363,6 +363,50 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "韓國限定活動情報 · 實體活動",
+      "name": "2026 FC首爾活動",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 韓國當地時間",
+        "period": "2026 年 10 月 24 日 09:00～20:00",
+        "startDate": "2026-10-24",
+        "endDate": "2026-10-24",
+        "startDateTime": "2026-10-24T09:00:00+09:00",
+        "endDateTime": "2026-10-24T20:00:00+09:00",
+        "description": "Pokémon GO 將於首爾世界盃競技場周邊舉辦一日限定活動，帶來火屬性寶可夢、首爾地點背景卡與現場遊玩加碼。",
+        "detailLabel": "活動內容與獎勵",
+        "bullets": [
+          "野外較常出現卡蒂狗、火伊布、火稚雞、戴魯比、小獅獅與火斑喵等火屬性寶可夢。",
+          "一星團體戰可挑戰小火龍；捕捉時有機會取得首爾地點背景卡。",
+          "免費限時調查獎勵包含 8,042 XP、5,997 星星沙子、50 顆小火龍糖果與 1 張特級對戰入場券。",
+          "完成限時調查最終可遇見帶有首爾地點背景卡的噴火龍。",
+          "誘餌模組持續時間延長為 2 小時。",
+          "投出 Nice 以上精準投擲可獲得額外捕捉糖果，並提高遇見異色寶可夢的機率。",
+          "活動區域的遊戲地圖將出現活動主題彩紙效果。",
+          "Pokémon GO 現場攤位開放時間為 09:00～14:00。"
+        ],
+        "notice": "活動僅限 2026 年 10 月 24 日當日，遊戲內容適用於南韓首爾世界盃競技場周邊指定範圍。",
+        "sourceUrl": "https://pokemongo.com/ko/news/fc-seoul-2026",
+        "sourceLabel": "韓文官方公告",
+        "images": [
+          {
+            "src": "assets/Events/fc-seoul-event-2026.png",
+            "alt": "2026 FC首爾 Pokémon GO 活動主視覺",
+            "caption": "2026 FC首爾活動 · 首爾世界盃競技場",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": [
+        {
+          "name": "首爾世界盃競技場",
+          "area": "南韓 · 首爾特別市麻浦區",
+          "timezone": "Asia/Seoul",
+          "clockType": "local",
+          "value": "37.568222, 126.897361"
+        }
+      ]
+    },
+    {
       "region": "全球活動情報 · 萬聖節",
       "name": "Pokémon GO 2026 萬聖節（Part 1）",
       "event": {
@@ -535,7 +579,7 @@ window.coordinateLibraries = {
         { "name": "紐倫堡德意志博物館", "area": "德國 · 紐倫堡", "timezone": "Europe/Berlin", "clockType": "local", "value": "49.453690, 11.074760" },
         { "name": "瓦倫西亞科學博物館", "area": "西班牙 · 瓦倫西亞", "timezone": "Europe/Madrid", "clockType": "local", "value": "39.456390, -0.352780" },
         { "name": "諾德韋克太空博覽會", "area": "荷蘭 · 諾德韋克", "timezone": "Europe/Amsterdam", "clockType": "local", "value": "52.215300, 4.420620" },
-        { "name": "歐洲太空中心", "area": "比利時", "timezone": "Europe/Brussels", "clockType": "local", "value": "50.007000, 5.220000" }
+        { "name": "歐洲太空中心", "area": "比利時", "timezone": "Europe/Brussels", "clockType": "local", "value": "50.008111, 5.220802" }
       ]
     }
   ],
