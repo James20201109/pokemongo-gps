@@ -60,6 +60,9 @@ const elements = {
   toastTitle: document.querySelector("#toast-title"),
   toastLabel: document.querySelector("#toast-label"),
   toastUndo: document.querySelector("#toast-undo"),
+  officialSitesOpen: document.querySelector("#official-sites-open"),
+  officialSitesModal: document.querySelector("#official-sites-modal"),
+  officialSitesClose: document.querySelector("#official-sites-close"),
   imageModal: document.querySelector("#image-modal"),
   imageModalContent: document.querySelector("#image-modal-content"),
   imageModalCaption: document.querySelector("#image-modal-caption"),
@@ -715,6 +718,19 @@ function openImageModal(image, alt, caption) {
   } else {
     elements.imageModal.setAttribute("open", "");
   }
+}
+
+function openOfficialSitesModal() {
+  if (typeof elements.officialSitesModal.showModal === "function") {
+    elements.officialSitesModal.showModal();
+  } else {
+    elements.officialSitesModal.setAttribute("open", "");
+  }
+}
+
+function closeOfficialSitesModal() {
+  if (typeof elements.officialSitesModal.close === "function") elements.officialSitesModal.close();
+  else elements.officialSitesModal.removeAttribute("open");
 }
 
 function closeImageModal() {
@@ -1440,6 +1456,11 @@ elements.converterForm.addEventListener("submit", (event) => {
 elements.imageModalClose.addEventListener("click", closeImageModal);
 elements.imageModal.addEventListener("click", (event) => {
   if (event.target === elements.imageModal) closeImageModal();
+});
+elements.officialSitesOpen.addEventListener("click", openOfficialSitesModal);
+elements.officialSitesClose.addEventListener("click", closeOfficialSitesModal);
+elements.officialSitesModal.addEventListener("click", (event) => {
+  if (event.target === elements.officialSitesModal) closeOfficialSitesModal();
 });
 elements.friendQrClose.addEventListener("click", closeFriendQrModal);
 elements.friendQrModal.addEventListener("click", (event) => {

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#05080b">
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
-  <link rel="stylesheet" href="style.css?v=20261007-2">
+  <link rel="stylesheet" href="style.css?v=20261008-2">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -15,7 +15,9 @@
       <span class="brand-symbol"><i></i></span>
       <span>GEO//PULSE<small>COORDINATE TERMINAL</small></span>
     </a>
-    <div class="system-state"><i></i> SYSTEM ONLINE</div>
+    <div class="topbar-actions">
+      <button class="official-sites-open" id="official-sites-open" type="button"><span>◎</span> 官方網站</button>
+    </div>
   </header>
 
   <main>
@@ -175,6 +177,41 @@
     <button id="toast-undo" type="button" hidden>還原</button>
   </div>
 
+  <dialog class="filter-modal official-sites-modal" id="official-sites-modal" aria-labelledby="official-sites-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="official-sites-close" type="button" aria-label="關閉官方網站選單">×</button>
+      <p class="kicker"><span>WEB</span> OFFICIAL PORTAL</p>
+      <h2 id="official-sites-title">Pokémon GO 官方網站</h2>
+      <p class="filter-modal-note">選擇語言後將以新分頁開啟官方網站。部分地區限定公告只會刊登於當地語言版本。</p>
+
+      <section class="official-sites-section" aria-labelledby="official-sites-primary-title">
+        <h3 id="official-sites-primary-title">常用語言</h3>
+        <div class="official-site-grid primary">
+          <a href="https://pokemongo.com/zh-Hant" target="_blank" rel="noopener noreferrer"><span>繁</span><strong>繁體中文</strong><small>Traditional Chinese</small><b>↗</b></a>
+          <a href="https://pokemongo.com/en" target="_blank" rel="noopener noreferrer"><span>EN</span><strong>English</strong><small>英文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/ja" target="_blank" rel="noopener noreferrer"><span>日</span><strong>日本語</strong><small>日文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/ko" target="_blank" rel="noopener noreferrer"><span>한</span><strong>한국어</strong><small>韓文</small><b>↗</b></a>
+        </div>
+      </section>
+
+      <details class="official-sites-more">
+        <summary>更多語言 <span>＋</span></summary>
+        <div class="official-site-grid">
+          <a href="https://pokemongo.com/fr" target="_blank" rel="noopener noreferrer"><span>FR</span><strong>Français</strong><small>法文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/de" target="_blank" rel="noopener noreferrer"><span>DE</span><strong>Deutsch</strong><small>德文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/it" target="_blank" rel="noopener noreferrer"><span>IT</span><strong>Italiano</strong><small>義大利文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/es" target="_blank" rel="noopener noreferrer"><span>ES</span><strong>Español</strong><small>西班牙文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/es-MX" target="_blank" rel="noopener noreferrer"><span>MX</span><strong>Español</strong><small>拉丁美洲西班牙文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/pt-BR" target="_blank" rel="noopener noreferrer"><span>BR</span><strong>Português</strong><small>巴西葡萄牙文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/th" target="_blank" rel="noopener noreferrer"><span>TH</span><strong>ไทย</strong><small>泰文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/tr" target="_blank" rel="noopener noreferrer"><span>TR</span><strong>Türkçe</strong><small>土耳其文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/hi" target="_blank" rel="noopener noreferrer"><span>HI</span><strong>हिन्दी</strong><small>印地文</small><b>↗</b></a>
+          <a href="https://pokemongo.com/id" target="_blank" rel="noopener noreferrer"><span>ID</span><strong>Bahasa Indonesia</strong><small>印尼文</small><b>↗</b></a>
+        </div>
+      </details>
+    </div>
+  </dialog>
+
   <dialog class="image-modal" id="image-modal" aria-labelledby="image-modal-caption">
     <div class="image-modal-panel">
       <button class="image-modal-close" id="image-modal-close" type="button" aria-label="關閉圖片">×</button>
@@ -296,9 +333,9 @@
     </div>
   </dialog>
 
-  <script src="coordinates-data.js?v=20261008-2"></script>
+  <script src="coordinates-data.js?v=20261008-3"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
-  <script src="script.js?v=20261007-2"></script>
+  <script src="script.js?v=20261008-1"></script>
 </body>
 </html>

@@ -284,6 +284,51 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "日本限定活動情報 · 合作活動",
+      "name": "AEON MALL 萬聖節活動",
+      "event": {
+        "periodLabel": "EVENT PERIOD / 日本當地時間",
+        "period": "2026 年 10 月 19 日～11 月 1 日",
+        "startDate": "2026-10-19",
+        "endDate": "2026-11-01",
+        "startDateTime": "2026-10-19T00:00:00+09:00",
+        "endDateTime": "2026-11-01T23:59:59+09:00",
+        "description": "前往日本全國指定 AEON MALL，即可領取前後兩階段的特別限時調查，並享有強化的誘餌模組效果。完成每一階段調查後，都能遇見戴著魔女帽的皮卡丘。",
+        "detailLabel": "限時調查與活動加碼",
+        "bullets": [
+          "限時調查 Part 1 領取期間：2026 年 10 月 19 日～10 月 25 日。",
+          "Part 1 完成與領獎期限：2026 年 11 月 8 日 20:00。",
+          "限時調查 Part 2 領取期間：2026 年 10 月 26 日～11 月 1 日。",
+          "Part 2 完成與領獎期限：2026 年 11 月 15 日 20:00。",
+          "推進每一階段調查，可遇見多種符合萬聖節氣氛的寶可夢。",
+          "完整完成 Part 1 或 Part 2，皆可遇見戴著魔女帽的皮卡丘。",
+          "每個帳號可分別領取並遊玩 Part 1 與 Part 2 各一次。",
+          "活動期間在指定 AEON MALL 內的寶可補給站使用誘餌模組，效果時間延長為 2 小時並獲得強化。",
+          "活動期間另有機會參加可獲得 Pokémon GO 遊戲道具的 AEON MALL 抽獎活動。"
+        ],
+        "notice": "必須在各階段的領取期間造訪日本指定 AEON MALL 才能取得限時調查；適用店舖請以 AEON MALL 官方活動頁為準。",
+        "sources": [
+          {
+            "url": "https://pokemongo.com/ja/news/202610aeonmall-halloween",
+            "label": "Pokémon GO 日文官方公告"
+          },
+          {
+            "url": "https://online-event.aeonmall.com/pokemon/#go",
+            "label": "AEON MALL 適用店舖"
+          }
+        ],
+        "images": [
+          {
+            "src": "assets/Events/aeon-mall-halloween-2026.png",
+            "alt": "AEON MALL Pokémon GO 萬聖節活動主視覺",
+            "caption": "AEON MALL 萬聖節活動 · 戴著魔女帽的皮卡丘",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
       "region": "全球活動情報 · 季節活動",
       "name": "《Pokémon GO》將降下「小隕星雨」",
       "event": {
