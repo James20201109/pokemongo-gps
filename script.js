@@ -614,6 +614,63 @@ async function copyText(text, label) {
   toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 1800);
 }
 
+function ukGymIsOpen(date = new Date()) {
+  const taipeiHour = Number(new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Taipei",
+    hour: "2-digit",
+    hourCycle: "h23"
+  }).format(date));
+  return taipeiHour >= 10 && taipeiHour < 23;
+}
+
+function localHour(timezone, date = new Date()) {
+  return Number(new Intl.DateTimeFormat("en-GB", {
+    timeZone: timezone,
+    hour: "2-digit",
+    hourCycle: "h23"
+  }).format(date));
+}
+
+function europeGymIsOpen(timezone, date = new Date()) {
+  const hour = localHour(timezone, date);
+  return hour >= 10 && hour < 17;
+}
+
+function showUkGymStatus() {
+  const open = ukGymIsOpen();
+  pendingUndoKey = null;
+  elements.toast.classList.remove("undoable", "uk-open", "uk-closed");
+  elements.toast.classList.add(open ? "uk-open" : "uk-closed");
+  elements.toastUndo.hidden = true;
+  elements.toastTitle.textContent = open ? "英國道館開放中" : "英國道館已關閉";
+  elements.toastLabel.textContent = open
+    ? "27 處座標目前可使用 · 台灣時間 23:00 關閉"
+    : "台灣時間每日 10:00 重新開放";
+  elements.toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    elements.toast.classList.remove("show", "uk-open", "uk-closed");
+  }, 3200);
+}
+
+function showEuropeGymStatus() {
+  const coordinates = libraries.europe.flatMap((group) => group.coordinates || []);
+  const openCount = coordinates.filter((coordinate) => coordinate.timezone && europeGymIsOpen(coordinate.timezone)).length;
+  const allOpen = openCount === coordinates.length;
+  const allClosed = openCount === 0;
+  pendingUndoKey = null;
+  elements.toast.classList.remove("undoable", "uk-open", "uk-closed");
+  elements.toast.classList.add(allClosed ? "uk-closed" : "uk-open");
+  elements.toastUndo.hidden = true;
+  elements.toastTitle.textContent = allOpen ? "歐洲活動道館全數開放" : allClosed ? "歐洲活動道館目前關閉" : "歐洲活動道館部分開放";
+  elements.toastLabel.textContent = `${openCount} / ${coordinates.length} 處開放中 · 各地每日 10:00～17:00`;
+  elements.toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    elements.toast.classList.remove("show", "uk-open", "uk-closed");
+  }, 3200);
+}
+
 function shareUrl(country, group = "") {
   const url = new URL(window.location.href);
   url.searchParams.set("tab", country);
@@ -909,6 +966,8 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const moonlight = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "moonlight";
   const sparkle = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "sparkle";
   const localClockOnly = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "local";
+  const ukGymClosed = activeCountry === "uk" && !ukGymIsOpen();
+  const europeGymClosed = activeCountry === "europe" && typeof coordinate === "object" && coordinate.timezone && !europeGymIsOpen(coordinate.timezone);
   const nationalTrustImage = activeCountry === "uk" && typeof coordinate === "object" && /^\d{2}\./.test(coordinate.name)
     ? `assets/pokemon_go_national_trust_2026/${coordinate.name}.jpg`
     : "";
@@ -918,7 +977,9 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const sparkleTimeState = sparkle && !expired ? sparkleStatus(coordinate.timezone) : "idle";
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}${sparkle ? " sparkle-card" : ""}${sparkleTimeState === "soon" ? " sparkle-soon" : ""}${sparkleTimeState === "live" ? " sparkle-live" : ""}${localClockOnly ? " local-time-card" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}${sparkle ? " sparkle-card" : ""}${sparkleTimeState === "soon" ? " sparkle-soon" : ""}${sparkleTimeState === "live" ? " sparkle-live" : ""}${localClockOnly ? " local-time-card" : ""}${ukGymClosed ? " uk-gym-closed" : ""}${europeGymClosed ? " europe-gym-closed" : ""}`;
+  if (ukGymClosed) button.title = "英國道館目前關閉｜台灣時間每日 10:00 開放、23:00 關閉";
+  if (europeGymClosed) button.title = "活動道館目前關閉｜當地時間每日 10:00 開放、17:00 關閉";
   if (raid) {
     button.dataset.raidStart = coordinate.start;
     button.dataset.raidEnd = coordinate.end;
@@ -1095,6 +1156,27 @@ function render() {
   let visibleGroups = 0;
 
   const activeGroups = activeCountry === "copied" ? copiedGroups() : [...libraries[activeCountry]];
+  if (activeCountry === "us") {
+    activeGroups.sort((a, b) => {
+      const aExpired = a.event && eventNewsStatus(a.event) === "expired";
+      const bExpired = b.event && eventNewsStatus(b.event) === "expired";
+      if (aExpired !== bExpired) return aExpired ? 1 : -1;
+      const aEnd = eventTimeValue(a.event?.endDate, true);
+      const bEnd = eventTimeValue(b.event?.endDate, true);
+      if (!Number.isFinite(aEnd) || !Number.isFinite(bEnd)) return 0;
+      return aExpired ? bEnd - aEnd : aEnd - bEnd;
+    });
+  }
+  if (activeCountry === "pokexciting") {
+    activeGroups.sort((a, b) => {
+      const aEnd = eventTimeValue(a.event?.activityEndDate, true);
+      const bEnd = eventTimeValue(b.event?.activityEndDate, true);
+      const aExpired = Number.isFinite(aEnd) && Date.now() > aEnd;
+      const bExpired = Number.isFinite(bEnd) && Date.now() > bEnd;
+      if (aExpired !== bExpired) return aExpired ? 1 : -1;
+      return 0;
+    });
+  }
   if (activeCountry === "events") {
     activeGroups.sort((a, b) => {
       const aEvent = a.event || {};
@@ -1132,10 +1214,12 @@ function render() {
     section.className = "region-block";
     const groupShareId = group.shareId || group.name;
     section.dataset.shareId = groupShareId;
-    const collapsible = activeCountry === "japan" && collapsibleJapanGroups.has(group.name);
+    const expiredUsGroup = activeCountry === "us" && group.event && eventNewsStatus(group.event) === "expired";
+    const collapsible = (activeCountry === "japan" && collapsibleJapanGroups.has(group.name)) || expiredUsGroup;
     const groupStateKey = `${activeCountry}|${group.name}`;
     section.dataset.groupKey = groupStateKey;
     const expanded = !collapsible || expandedGroups.has(groupStateKey) || pendingSharedGroup === groupShareId;
+    section.classList.toggle("is-expired", Boolean(expiredUsGroup));
     section.classList.toggle("is-collapsed", collapsible && !expanded);
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
     const groupSource = group.sourceUrl
@@ -1218,6 +1302,7 @@ function render() {
         const image = eventImages[Number(trigger.dataset.imageIndex)];
         openImageModal(image.src, image.alt, image.caption);
       }));
+      eventInfo.hidden = collapsible && !expanded;
       section.appendChild(eventInfo);
     }
     if (matches.length) {
@@ -1332,6 +1417,28 @@ function updateRaidClocks() {
     const clock = card.querySelector(".local-clock");
     if (clock) clock.textContent = `◷ 當地 ${localTime(card.dataset.timezone)}`;
   });
+  if (activeCountry === "uk") {
+    const closed = !ukGymIsOpen();
+    document.querySelectorAll(".coordinate-item").forEach((card) => {
+      card.classList.toggle("uk-gym-closed", closed);
+      if (closed) {
+        card.title = "英國道館目前關閉｜台灣時間每日 10:00 開放、23:00 關閉";
+      } else {
+        card.removeAttribute("title");
+      }
+    });
+  }
+  if (activeCountry === "europe") {
+    document.querySelectorAll(".coordinate-item[data-timezone]").forEach((card) => {
+      const closed = !europeGymIsOpen(card.dataset.timezone);
+      card.classList.toggle("europe-gym-closed", closed);
+      if (closed) {
+        card.title = "活動道館目前關閉｜當地時間每日 10:00 開放、17:00 關閉";
+      } else {
+        card.removeAttribute("title");
+      }
+    });
+  }
 }
 
 function switchCountry(country, options = {}) {
@@ -1421,6 +1528,8 @@ elements.tabs.forEach((tab) => tab.addEventListener("click", () => {
     handleFriendsTabClick();
   } else {
     switchCountry(tab.dataset.country);
+    if (tab.dataset.country === "uk") showUkGymStatus();
+    if (tab.dataset.country === "europe") showEuropeGymStatus();
   }
 }));
 elements.search.addEventListener("input", render);

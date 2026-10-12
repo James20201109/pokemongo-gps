@@ -610,6 +610,7 @@ window.coordinateLibraries = {
           "新寶可夢：太空飛行員皮卡丘。",
           "異色：首次登場即開放異色版本。",
           "團體戰：太空飛行員皮卡丘於一星團體戰登場。",
+          "活動道館營運時間：各地當地時間每日 10:00 開放、17:00 關閉。",
           "限時調查：完成課題可遇見太空飛行員皮卡丘等獎勵。",
           "調查截止：2026 年 10 月 12 日 23:59。",
           "活動範圍：全球。"
@@ -635,6 +636,7 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 台灣時間",
         "period": "2026 年 9 月 12 日～9 月 13 日 · 10:00～22:00",
+        "activityEndDate": "2026-09-13",
         "startDate": "2026-09-12",
         "endDate": "2029-09-11",
         "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
@@ -672,6 +674,7 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2026 年 10 月 10 日～10 月 11 日",
+        "activityEndDate": "2026-10-11",
         "startDate": "2026-09-12",
         "endDate": "2029-09-11",
         "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
@@ -701,6 +704,7 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2026 年 11 月 7 日～11 月 8 日",
+        "activityEndDate": "2026-11-08",
         "startDate": "2026-09-12",
         "endDate": "2029-09-11",
         "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
@@ -725,6 +729,7 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2027 年 1 月 23 日～1 月 24 日",
+        "activityEndDate": "2027-01-24",
         "startDate": "2026-09-12",
         "endDate": "2029-09-11",
         "stampPeriod": "2026 年 9 月 12 日～2029 年 9 月 11 日",
@@ -749,6 +754,7 @@ window.coordinateLibraries = {
       "event": {
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2027 年 2 月 13 日～2 月 14 日",
+        "activityEndDate": "2027-02-14",
         "endDate": "2027-02-14",
         "description": "活動會場尚待公布，座標將於取得官方或現場資訊後補充。",
         "detailLabel": "座標狀態",
@@ -1861,7 +1867,7 @@ window.coordinateLibraries = {
       "region": "英格蘭南部海岸",
       "name": "Southern England Coast · Hoppip（毽子草）",
       "coordinates": [
-        { "name": "14.Cliveden", "area": "Buckinghamshire", "value": "51.556900, -0.681700" },
+        { "name": "14.Cliveden", "area": "Buckinghamshire", "value": "51.559917, -0.689328" },
         { "name": "15.Mottisfont", "area": "Hampshire", "value": "51.041100, -1.535200" },
         { "name": "16.Nymans", "area": "West Sussex", "value": "51.049200, -0.195200" },
         { "name": "17.Polesden Lacey", "area": "Surrey", "value": "51.258800, -0.374100" },
