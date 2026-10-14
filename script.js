@@ -31,6 +31,30 @@ const elements = {
   expiredTabs: document.querySelector("#expired-country-tabs"),
   expiredTabZone: document.querySelector("#expired-tab-zone"),
   expiredTabCount: document.querySelector("#expired-tab-count"),
+  nowMode: document.querySelector("#now-mode"),
+  nowModeClock: document.querySelector("#now-mode-clock"),
+  nowLiveCard: document.querySelector("#now-live-card"),
+  nowLiveStatus: document.querySelector("#now-live-status"),
+  nowLiveCount: document.querySelector("#now-live-count"),
+  nowLiveTitle: document.querySelector("#now-live-title"),
+  nowLiveDetail: document.querySelector("#now-live-detail"),
+  nowLiveCountdown: document.querySelector("#now-live-countdown"),
+  nowLiveCaption: document.querySelector("#now-live-caption"),
+  nowNextCard: document.querySelector("#now-next-card"),
+  nowNextTitle: document.querySelector("#now-next-title"),
+  nowNextPeriod: document.querySelector("#now-next-period"),
+  nowNextCountdown: document.querySelector("#now-next-countdown"),
+  nowUkCard: document.querySelector("#now-uk-card"),
+  nowUkStatus: document.querySelector("#now-uk-status"),
+  nowEuropeCard: document.querySelector("#now-europe-card"),
+  nowEuropeStatus: document.querySelector("#now-europe-status"),
+  nowShortCard: document.querySelector("#now-short-card"),
+  nowShortTitle: document.querySelector("#now-short-title"),
+  nowShortStatus: document.querySelector("#now-short-status"),
+  nowMonthlyCard: document.querySelector("#now-monthly-card"),
+  nowMonthlyTitle: document.querySelector("#now-monthly-title"),
+  nowMonthlyStatus: document.querySelector("#now-monthly-status"),
+  nowViewEvents: document.querySelector("#now-view-events"),
   search: document.querySelector("#search-input"),
   clearSearch: document.querySelector("#clear-search"),
   copyAll: document.querySelector("#copy-all"),
@@ -620,7 +644,7 @@ function ukGymIsOpen(date = new Date()) {
     hour: "2-digit",
     hourCycle: "h23"
   }).format(date));
-  return taipeiHour >= 10 && taipeiHour < 23;
+  return taipeiHour >= 17 || taipeiHour < 1;
 }
 
 function localHour(timezone, date = new Date()) {
@@ -644,8 +668,8 @@ function showUkGymStatus() {
   elements.toastUndo.hidden = true;
   elements.toastTitle.textContent = open ? "英國道館開放中" : "英國道館已關閉";
   elements.toastLabel.textContent = open
-    ? "27 處座標目前可使用 · 台灣時間 23:00 關閉"
-    : "台灣時間每日 10:00 重新開放";
+    ? "27 處座標目前可使用 · 台灣時間隔日 01:00 關閉"
+    : "台灣時間每日 17:00 重新開放";
   elements.toast.classList.add("show");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
@@ -836,6 +860,174 @@ function eventNewsStatus(event, now = Date.now()) {
   return "active";
 }
 
+function eventWindows(event) {
+  if (event.periods?.length) {
+    return event.periods
+      .map((period) => ({ start: Date.parse(period.startDateTime), end: Date.parse(period.endDateTime) }))
+      .filter((period) => Number.isFinite(period.start) && Number.isFinite(period.end));
+  }
+  const start = event.startDateTime ? Date.parse(event.startDateTime) : eventTimeValue(eventStartDate(event));
+  const end = event.endDateTime ? Date.parse(event.endDateTime) : eventTimeValue(event.endDate, true);
+  return Number.isFinite(start) && Number.isFinite(end) ? [{ start, end }] : [];
+}
+
+function formatNowDuration(milliseconds) {
+  const minutes = Math.max(1, Math.ceil(milliseconds / 60000));
+  if (minutes < 60) return `${minutes} 分鐘`;
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  if (hours < 24) return remainingMinutes ? `${hours} 小時 ${remainingMinutes} 分` : `${hours} 小時`;
+  const days = Math.floor(hours / 24);
+  const remainingHours = hours % 24;
+  return remainingHours ? `${days} 天 ${remainingHours} 小時` : `${days} 天`;
+}
+
+function formatNowPeriod(start, end) {
+  const formatter = new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  });
+  return `${formatter.format(new Date(start))}～${formatter.format(new Date(end))}`;
+}
+
+function nowEventItems() {
+  return (libraries.events || []).flatMap((group) => {
+    if (!group.event) return [];
+    return eventWindows(group.event).map((window) => ({
+      country: "events",
+      groupName: group.name,
+      region: group.region,
+      title: group.name,
+      event: group.event,
+      window
+    }));
+  });
+}
+
+function openNowEvent(item) {
+  if (!item) return;
+  navigateToNewsItem(item);
+}
+
+function setNowStatus(card, status) {
+  card.classList.remove("is-open", "is-closed", "is-soon");
+  if (status) card.classList.add(status);
+}
+
+function renderNowMode(now = Date.now()) {
+  if (!elements.nowMode) return;
+  const items = nowEventItems();
+  const regularItems = items.filter((item) => item.event.category !== "monthly-pass");
+  const activeItems = regularItems
+    .filter((item) => now >= item.window.start && now <= item.window.end)
+    .sort((a, b) => a.window.end - b.window.end);
+  const upcomingItems = regularItems
+    .filter((item) => item.window.start > now)
+    .sort((a, b) => a.window.start - b.window.start);
+  const live = activeItems[0];
+  const next = upcomingItems[0];
+
+  elements.nowModeClock.textContent = new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).format(new Date(now));
+
+  elements.nowLiveCard.classList.toggle("is-empty", !live);
+  elements.nowLiveCard.classList.toggle("is-soon", false);
+  if (live) {
+    elements.nowLiveStatus.textContent = "LIVE NOW";
+    elements.nowLiveCount.textContent = activeItems.length > 1 ? `+${activeItems.length - 1} 項進行中` : "";
+    elements.nowLiveTitle.textContent = live.title;
+    elements.nowLiveDetail.textContent = `${live.region} · ${formatNowPeriod(live.window.start, live.window.end)}`;
+    elements.nowLiveCountdown.textContent = formatNowDuration(live.window.end - now);
+    elements.nowLiveCaption.textContent = "後結束";
+    elements.nowLiveCard.onclick = () => openNowEvent(live);
+    elements.nowLiveCard.setAttribute("aria-label", `開啟進行中的活動：${live.title}`);
+  } else {
+    elements.nowLiveStatus.textContent = "NO LIVE EVENT";
+    elements.nowLiveCount.textContent = "";
+    elements.nowLiveTitle.textContent = "目前沒有進行中的全球活動";
+    elements.nowLiveDetail.textContent = next ? `下一場：${next.title}` : "活動資料更新後會顯示在這裡";
+    elements.nowLiveCountdown.textContent = next ? formatNowDuration(next.window.start - now) : "--";
+    elements.nowLiveCaption.textContent = next ? "後開始" : "";
+    elements.nowLiveCard.onclick = next ? () => openNowEvent(next) : null;
+    elements.nowLiveCard.setAttribute("aria-label", next ? `開啟下一場活動：${next.title}` : "目前沒有活動");
+  }
+
+  if (next) {
+    const startsSoon = next.window.start - now <= 2 * 60 * 60 * 1000;
+    elements.nowNextCard.classList.toggle("is-soon", startsSoon);
+    elements.nowNextTitle.textContent = next.title;
+    elements.nowNextPeriod.textContent = formatNowPeriod(next.window.start, next.window.end);
+    elements.nowNextCountdown.textContent = startsSoon ? `${formatNowDuration(next.window.start - now)}後開始 · 即將開始` : `${formatNowDuration(next.window.start - now)}後開始`;
+    elements.nowNextCard.onclick = () => openNowEvent(next);
+  } else {
+    elements.nowNextCard.classList.remove("is-soon");
+    elements.nowNextTitle.textContent = "目前沒有下一場活動";
+    elements.nowNextPeriod.textContent = "";
+    elements.nowNextCountdown.textContent = "等待活動資料更新";
+    elements.nowNextCard.onclick = null;
+  }
+
+  const ukOpen = ukGymIsOpen(new Date(now));
+  setNowStatus(elements.nowUkCard, ukOpen ? "is-open" : "is-closed");
+  elements.nowUkStatus.textContent = ukOpen ? "27 處開放中 · 台灣隔日 01:00 關閉" : "目前已關閉 · 台灣 17:00 開放";
+
+  const europeCoordinates = libraries.europe.flatMap((group) => group.coordinates || []);
+  const europeOpenCount = europeCoordinates.filter((coordinate) => coordinate.timezone && europeGymIsOpen(coordinate.timezone, new Date(now))).length;
+  setNowStatus(elements.nowEuropeCard, europeOpenCount ? "is-open" : "is-closed");
+  elements.nowEuropeStatus.textContent = `${europeOpenCount} / ${europeCoordinates.length} 處開放 · 當地 10:00～17:00`;
+
+  const shortItems = regularItems
+    .filter((item) => item.window.end - item.window.start <= 24 * 60 * 60 * 1000 && item.window.end >= now)
+    .sort((a, b) => {
+      const aActive = now >= a.window.start ? 0 : 1;
+      const bActive = now >= b.window.start ? 0 : 1;
+      return aActive - bActive || a.window.start - b.window.start;
+    });
+  const short = shortItems[0];
+  if (short) {
+    const shortActive = now >= short.window.start;
+    setNowStatus(elements.nowShortCard, shortActive ? "is-open" : short.window.start - now <= 2 * 60 * 60 * 1000 ? "is-soon" : "");
+    elements.nowShortTitle.textContent = short.title;
+    elements.nowShortStatus.textContent = shortActive
+      ? `${formatNowDuration(short.window.end - now)}後結束`
+      : `${formatNowDuration(short.window.start - now)}後開始`;
+    elements.nowShortCard.onclick = () => openNowEvent(short);
+  } else {
+    setNowStatus(elements.nowShortCard, "");
+    elements.nowShortTitle.textContent = "近期短時活動";
+    elements.nowShortStatus.textContent = "目前沒有已排程項目";
+    elements.nowShortCard.onclick = null;
+  }
+
+  const monthlyItems = items
+    .filter((item) => item.event.category === "monthly-pass" && item.window.end >= now)
+    .sort((a, b) => a.window.start - b.window.start);
+  const monthly = monthlyItems.find((item) => now >= item.window.start) || monthlyItems[0];
+  if (monthly) {
+    const monthlyActive = now >= monthly.window.start;
+    elements.nowMonthlyTitle.textContent = monthly.title;
+    elements.nowMonthlyStatus.textContent = monthlyActive
+      ? `${formatNowDuration(monthly.window.end - now)}後結束 · 免費版可參加`
+      : `${formatNowDuration(monthly.window.start - now)}後開始`;
+    elements.nowMonthlyCard.onclick = () => openNowEvent(monthly);
+  } else {
+    elements.nowMonthlyTitle.textContent = "本月 GO Pass";
+    elements.nowMonthlyStatus.textContent = "目前沒有資料";
+    elements.nowMonthlyCard.onclick = null;
+  }
+}
+
 function libraryIsExpired(country) {
   if (["copied", "hot2026", "hot2025", "raid"].includes(country)) return false;
   const countryEvent = eventSource[country];
@@ -954,7 +1146,7 @@ function openNewsModal() {
 }
 
 function closeNewsModal() {
-  elements.newsModal.close?.();
+  if (elements.newsModal.open) elements.newsModal.close?.();
   elements.newsModal.removeAttribute("open");
 }
 
@@ -978,7 +1170,7 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}${sparkle ? " sparkle-card" : ""}${sparkleTimeState === "soon" ? " sparkle-soon" : ""}${sparkleTimeState === "live" ? " sparkle-live" : ""}${localClockOnly ? " local-time-card" : ""}${ukGymClosed ? " uk-gym-closed" : ""}${europeGymClosed ? " europe-gym-closed" : ""}`;
-  if (ukGymClosed) button.title = "英國道館目前關閉｜台灣時間每日 10:00 開放、23:00 關閉";
+  if (ukGymClosed) button.title = "英國道館目前關閉｜台灣時間每日 17:00 開放、隔日 01:00 關閉";
   if (europeGymClosed) button.title = "活動道館目前關閉｜當地時間每日 10:00 開放、17:00 關閉";
   if (raid) {
     button.dataset.raidStart = coordinate.start;
@@ -1422,7 +1614,7 @@ function updateRaidClocks() {
     document.querySelectorAll(".coordinate-item").forEach((card) => {
       card.classList.toggle("uk-gym-closed", closed);
       if (closed) {
-        card.title = "英國道館目前關閉｜台灣時間每日 10:00 開放、23:00 關閉";
+        card.title = "英國道館目前關閉｜台灣時間每日 17:00 開放、隔日 01:00 關閉";
       } else {
         card.removeAttribute("title");
       }
@@ -1611,7 +1803,22 @@ elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((butt
 elements.gymCounterUndo.addEventListener("click", undoGymCounter);
 elements.gymCounterReset.addEventListener("click", resetGymCounter);
 elements.backToTop.addEventListener("click", scrollBackToTop);
+elements.nowUkCard.addEventListener("click", () => {
+  switchCountry("uk");
+  requestAnimationFrame(() => elements.library.scrollIntoView({ behavior: "smooth", block: "start" }));
+});
+elements.nowEuropeCard.addEventListener("click", () => {
+  switchCountry("europe");
+  requestAnimationFrame(() => elements.library.scrollIntoView({ behavior: "smooth", block: "start" }));
+});
+elements.nowViewEvents.addEventListener("click", () => {
+  switchCountry("events");
+  requestAnimationFrame(() => elements.library.scrollIntoView({ behavior: "smooth", block: "start" }));
+});
 window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) renderNowMode();
+});
 elements.toast.addEventListener("click", () => {
   if (elements.toast.classList.contains("undoable")) restorePendingUndo();
 });
@@ -1622,8 +1829,10 @@ renderGymCounter();
 updateBackToTopVisibility();
 organizeCountryTabs();
 switchCountry(activeCountry, { updateUrl: false });
+renderNowMode();
 checkSparkleAlert();
 setInterval(() => {
   updateRaidClocks();
+  renderNowMode();
   checkSparkleAlert();
 }, 30000);

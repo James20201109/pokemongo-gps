@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#05080b">
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
-  <link rel="stylesheet" href="style.css?v=20261012-4">
+  <link rel="stylesheet" href="style.css?v=20261014-2">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -21,6 +21,37 @@
   </header>
 
   <main>
+    <section class="now-mode" id="now-mode" aria-labelledby="now-mode-title">
+      <header class="now-mode-head">
+        <div>
+          <p><i></i> NOW MODE / 即時活動控制台</p>
+          <h2 id="now-mode-title">現在能玩什麼</h2>
+        </div>
+        <time id="now-mode-clock"></time>
+      </header>
+      <div class="now-mode-primary">
+        <button class="now-live-card" id="now-live-card" type="button">
+          <span class="now-status"><i></i><b id="now-live-status">LIVE NOW</b><em id="now-live-count"></em></span>
+          <strong id="now-live-title">正在讀取活動…</strong>
+          <small id="now-live-detail"></small>
+          <span class="now-countdown"><b id="now-live-countdown"></b><small id="now-live-caption">後結束</small></span>
+        </button>
+        <button class="now-next-card" id="now-next-card" type="button">
+          <span>NEXT EVENT</span>
+          <strong id="now-next-title">正在讀取下一場活動…</strong>
+          <small id="now-next-period"></small>
+          <b id="now-next-countdown"></b>
+        </button>
+      </div>
+      <div class="now-mode-status-grid">
+        <button class="now-status-card" id="now-uk-card" type="button"><span><i></i>GYM STATUS</span><strong>英國道館</strong><small id="now-uk-status"></small></button>
+        <button class="now-status-card" id="now-europe-card" type="button"><span><i></i>LOCAL STATUS</span><strong>歐洲博物館</strong><small id="now-europe-status"></small></button>
+        <button class="now-status-card" id="now-short-card" type="button"><span><i></i>SHORT EVENT</span><strong id="now-short-title">近期短時活動</strong><small id="now-short-status"></small></button>
+        <button class="now-status-card monthly" id="now-monthly-card" type="button"><span><i></i>MONTHLY PASS</span><strong id="now-monthly-title">本月 GO Pass</strong><small id="now-monthly-status"></small></button>
+      </div>
+      <button class="now-view-events" id="now-view-events" type="button">查看全部活動 <span>↗</span></button>
+    </section>
+
     <section class="hero">
       <div class="hero-copy">
         <p class="kicker"><span>01</span> GLOBAL POSITION DATABASE</p>
@@ -333,9 +364,9 @@
     </div>
   </dialog>
 
-  <script src="coordinates-data.js?v=20261012-4"></script>
+  <script src="coordinates-data.js?v=20261014-2"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
-  <script src="script.js?v=20261012-4"></script>
+  <script src="script.js?v=20261014-3"></script>
 </body>
 </html>

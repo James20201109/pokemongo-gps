@@ -44,6 +44,35 @@ window.coordinateLibraries = {
   ],
   "events": [
     {
+      "region": "全球活動情報 · 每月常駐",
+      "name": "GO Pass：10月",
+      "shareId": "go-pass-october-2026",
+      "event": {
+        "category": "monthly-pass",
+        "scope": "global",
+        "access": "free-with-optional-upgrade",
+        "periodLabel": "MONTHLY PASS / 台灣時間",
+        "period": "2026 年 10 月 6 日 10:00～11 月 3 日 10:00",
+        "startDate": "2026-10-06",
+        "endDate": "2026-11-03",
+        "startDateTime": "2026-10-06T10:00:00+08:00",
+        "endDateTime": "2026-11-03T10:00:00+08:00",
+        "description": "免費版 GO Pass：10月會由系統發放；完成 Pass 課題並提升級別，即可取得蓋歐卡遭遇與各項遊戲資源。",
+        "detailLabel": "免費版內容與里程碑",
+        "bullets": [
+          "免費獎勵包含蓋歐卡遭遇、神奇糖果 XL、特級對戰入場券與幸運蛋等內容。",
+          "里程碑可解鎖交換糖果、友情禮物容量、散步小薰香時間及孵蛋獎勵加成。",
+          "10 月 31 日 00:00～11 月 1 日 23:59 期間，GO 點數沒有每日累積上限。",
+          "免費版獎勵領取期限為台灣時間 2026 年 11 月 5 日 10:00。",
+          "GO Pass 豪華版為選購升級，不是參加免費版的必要條件。"
+        ],
+        "notice": "MONTHLY PASS 為整月常駐內容；亮晶晶首飾屬於付費豪華版獎勵。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/go-pass-october-2026",
+        "sourceLabel": "活動官網"
+      },
+      "coordinates": []
+    },
+    {
       "region": "全球活動情報 · 季節活動",
       "name": "豐收節：收集啃果蟲",
       "event": {
