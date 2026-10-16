@@ -68,7 +68,15 @@ window.coordinateLibraries = {
         ],
         "notice": "MONTHLY PASS 為整月常駐內容；亮晶晶首飾屬於付費豪華版獎勵。",
         "sourceUrl": "https://pokemongo.com/zh-Hant/news/go-pass-october-2026",
-        "sourceLabel": "活動官網"
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/go-pass-october-2026.png",
+            "alt": "GO Pass 2026 年 10 月活動主視覺，包含蓋歐卡與亮晶晶首飾",
+            "caption": "GO Pass：10月 · 蓋歐卡與亮晶晶首飾",
+            "wide": true
+          }
+        ]
       },
       "coordinates": []
     },
@@ -276,10 +284,11 @@ window.coordinateLibraries = {
       "name": "Pokémon RUN 30",
       "event": {
         "periodLabel": "EVENT PERIOD / 各地活動日期",
-        "period": "2026 年 10 月 17 日～2027 年 1 月 24 日 · 亞太地區巡迴",
-        "startDate": "2026-10-17",
+        "period": "2026 年 10 月 3 日～2027 年 1 月 24 日 · 亞太地區巡迴",
+        "startDate": "2026-10-03",
         "endDate": "2027-01-24",
         "periods": [
+          { "startDateTime": "2026-10-03T00:00:00+08:00", "endDateTime": "2026-10-04T23:59:59+08:00" },
           { "startDateTime": "2026-10-17T00:00:00+08:00", "endDateTime": "2026-10-18T23:59:59+08:00" },
           { "startDateTime": "2026-10-31T00:00:00+08:00", "endDateTime": "2026-11-01T23:59:59+08:00" },
           { "startDateTime": "2026-11-07T00:00:00+08:00", "endDateTime": "2026-11-08T23:59:59+08:00" },
@@ -295,6 +304,7 @@ window.coordinateLibraries = {
           "未知圖騰 N：使用一般薰香時有機會遇見，並有異色機會。",
           "未知圖騰 R：使用一般薰香時有機會遇見，並有異色機會。",
           "未知圖騰 U：使用一般薰香時有機會遇見，並有異色機會。",
+          "菲律賓 SM Mall of Asia：2026 年 10 月 3 日～10 月 4 日。",
           "台灣台中中央公園：2026 年 10 月 17 日～10 月 18 日。",
           "台灣高雄夢時代：2026 年 10 月 31 日～11 月 1 日。",
           "新加坡加冷匯：2026 年 11 月 7 日～11 月 8 日。",
@@ -308,7 +318,15 @@ window.coordinateLibraries = {
         ],
         "notice": "未知圖騰 N、R、U 需使用一般薰香才有機會遇見，不包含散步小薰香。各場活動與限時調查截止時間依當地現場公告為準。",
         "sourceUrl": "https://pokemongo.com/zh-Hant/news/pokemon-run-30-2026",
-        "sourceLabel": "活動官網"
+        "sourceLabel": "活動官網",
+        "images": [
+          {
+            "src": "assets/Events/pokemon-run-30-2026.png",
+            "alt": "Pokémon RUN 30 活動主視覺，包含皮卡丘與歷代最初夥伴寶可夢",
+            "caption": "Pokémon RUN 30 · 亞太地區巡迴",
+            "wide": true
+          }
+        ]
       },
       "coordinates": []
     },
@@ -488,6 +506,8 @@ window.coordinateLibraries = {
         "period": "2026 年 10 月 27 日 10:00～11 月 1 日 10:00",
         "startDate": "2026-10-27",
         "endDate": "2026-11-01",
+        "startDateTime": "2026-10-27T10:00:00+08:00",
+        "endDateTime": "2026-11-01T10:00:00+08:00",
         "description": "2026 萬聖節 Part 1 帶來全新裝扮寶可夢、活動主題寶可夢、萬聖節服飾與 GO Pass 獎勵，並提高捕捉寶可夢可獲得的糖果與星星沙子。",
         "detailLabel": "特色寶可夢與活動內容",
         "bullets": [
@@ -499,8 +519,16 @@ window.coordinateLibraries = {
           "詭異造型萬聖節禮盒有機會提供萬聖節主題換裝道具或其他活動道具。"
         ],
         "notice": "活動內容與時間皆以各地當地時間為準；實際出現方式與獎勵請以遊戲內公告為準。",
-        "sourceUrl": "https://www.threads.com/@poknini8/post/DeIZwJxkteS/media?xmt=AQG0x4Cf-rhNCdQG6C8KFjl1l8cT_kJRPeCa0qqZUVdFfjO1HWKyuNBw5sFO8y0arl3E8hUA",
-        "sourceLabel": "參考文獻",
+        "sources": [
+          {
+            "url": "https://pokemongo.com/zh-Hant/news/halloween-part-1-2026",
+            "label": "Pokémon GO 官方公告"
+          },
+          {
+            "url": "https://www.threads.com/@poknini8/post/DeIZwJxkteS/media?xmt=AQG0x4Cf-rhNCdQG6C8KFjl1l8cT_kJRPeCa0qqZUVdFfjO1HWKyuNBw5sFO8y0arl3E8hUA",
+            "label": "原始參考資料"
+          }
+        ],
         "images": [
           {
             "src": "assets/Events/halloween-2026-part-1-pikachu.png",
@@ -514,6 +542,365 @@ window.coordinateLibraries = {
             "wide": true
           }
         ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "台灣限定活動情報 · 合作活動",
+      "name": "全台新光三越限定明信片",
+      "shareId": "skm-postcards-2026",
+      "event": {
+        "scope": "taiwan",
+        "access": "free",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 1 日～12 月 31 日",
+        "startDate": "2026-10-01",
+        "endDate": "2026-12-31",
+        "description": "為慶祝寶可夢 30 週年，造訪全台新光三越指定店點並旋轉附近的寶可補給站，即可蒐集限定遊戲內明信片。",
+        "detailLabel": "限定明信片",
+        "bullets": [
+          "全台共有 6 款不同樣式的限定明信片。",
+          "台北、桃園、台中、嘉義、台南與高雄各有 1 款。",
+          "活動地點為全台新光三越指定店點；實際店點以新光三越公告為準。",
+          "10 月 10 日～11 日，台北信義區另配合 PokéXciting! in 台北舉辦現場遊戲內容。"
+        ],
+        "notice": "這是全台指定店點的明信片活動，與台北 PokéXciting! 集章活動為不同內容。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/2026oct-skmtw",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          {
+            "src": "assets/Events/skm-postcards-2026.png",
+            "alt": "寶可夢 30 週年全台新光三越限定明信片示意圖",
+            "caption": "全台新光三越限定明信片 · 共 6 款",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "亞洲限定活動情報 · 商場活動",
+      "name": "寶可夢 30 週年商場探險",
+      "shareId": "apac-mall-exploration-2026",
+      "event": {
+        "scope": "asia-pacific",
+        "access": "free",
+        "periodLabel": "EVENT PERIOD / 各地指定日期",
+        "period": "2026 年 10 月 1 日～2027 年 3 月 28 日 · 指定商場",
+        "startDate": "2026-10-01",
+        "endDate": "2027-03-28",
+        "description": "前往亞太地區指定商場可領取一次限時調查，解鎖與戴著派對帽的皮卡丘及其他活動主題寶可夢相遇的機會。",
+        "detailLabel": "活動地點與加碼",
+        "bullets": [
+          "限時調查每個帳號只能領取 1 次，領取後 10 天到期。",
+          "指定區域使用誘餌模組時，效果延長為 4 小時。",
+          "馬來西亞 Ombak KLCC：2026 年 10 月 1 日～12 月 31 日。",
+          "菲律賓 SM Mall of Asia：2026 年 10 月 1 日～2027 年 1 月 31 日。",
+          "菲律賓另有 SM East Ortigas、SM Southmall、SM North EDSA、SM Marikina、SM Seaside Cebu、SM Davao 與 SM CDO Downtown 等分期場次。",
+          "新加坡樟宜國際機場：2026 年 11 月 7 日～2027 年 2 月 28 日；星耀樟宜至 2027 年 1 月 31 日。",
+          "香港又一城 Festival Walk：2026 年 11 月 9 日～2027 年 1 月 3 日。",
+          "泰國活動地點與日期尚待官方公布。"
+        ],
+        "notice": "這是指定商場限時調查活動，與 PokéXciting! 巡迴集章活動不同。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/apac-mall-exploration-2026",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          {
+            "src": "assets/Events/apac-mall-exploration-2026.png",
+            "alt": "寶可夢 30 週年商場探險活動主視覺，戴著派對帽的皮卡丘",
+            "caption": "寶可夢 30 週年商場探險 · 派對帽皮卡丘",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "日本限定活動情報 · 合作活動",
+      "name": "日本橋＆八重洲・傳說寶可夢調查",
+      "shareId": "legend-research-nihonbashi-yaesu-2026",
+      "event": {
+        "scope": "japan-local",
+        "access": "free",
+        "periodLabel": "EVENT PERIOD / 日本當地日期",
+        "period": "2026 年 9 月 9 日～11 月 29 日",
+        "startDate": "2026-09-09",
+        "endDate": "2026-11-29",
+        "description": "日本橋與八重洲周邊舉辦「與傳說寶可夢相遇・傳說調查」合作活動，會場設置採用活動限定圖片的寶可補給站與道館。",
+        "detailLabel": "活動內容",
+        "bullets": [
+          "活動範圍位於日本東京的日本橋與八重洲周邊。",
+          "活動期間將在會場新增可使用的寶可補給站與道館。",
+          "新增設施會使用本次合作活動的特殊圖片。",
+          "實際調查內容、參加方式與會場資訊請以合作活動官方頁面為準。"
+        ],
+        "notice": "這是日本地區限定合作活動；Pokémon GO 官方公告目前僅說明特殊寶可補給站與道館，未公布限定寶可夢或遊戲獎勵。",
+        "sourceUrl": "https://pokemongo.com/ja/news/legend_research_jp",
+        "sourceLabel": "Pokémon GO 日本官方公告"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 萬聖節",
+      "name": "Pokémon GO 2026 萬聖節（Part 2）",
+      "shareId": "halloween-part-2-2026",
+      "event": {
+        "scope": "global",
+        "access": "free-with-optional-upgrade",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 11 月 1 日 10:00～11 月 5 日 20:00",
+        "startDate": "2026-11-01",
+        "endDate": "2026-11-05",
+        "startDateTime": "2026-11-01T10:00:00+08:00",
+        "endDateTime": "2026-11-05T20:00:00+08:00",
+        "description": "異色墓仔狗於萬聖節 Part 2 首次登場，超級勾魂眼亦將開放提升至超級頂尖級並學會額外特殊招式。",
+        "detailLabel": "活動內容與 GO Pass",
+        "bullets": [
+          "異色墓仔狗首次登場，可從野外、GO Pass 課題與田野調查遇見。",
+          "野外可能遇見燭光靈、萬聖節服飾木木梟、墓仔狗與萬聖節服飾耿鬼等寶可夢。",
+          "一星團體戰：穿戴帽子和披肩的皮卡丘、戴著蝴蝶結的來悲茶。",
+          "超級勾魂眼可提升至超級頂尖級，並學會特殊招式「黑夜魔影＋」。",
+          "GO Pass：萬聖節 2026 延續至 11 月 5 日 20:00；免費版里程碑可解鎖捕捉糖果與星星沙子加倍。",
+          "GO Pass 豪華版可將捕捉糖果與星星沙子提高至 3 倍，並取得甜點師服飾等額外獎勵。",
+          "GO Pass 獎勵領取期限為台灣時間 2026 年 11 月 7 日 20:00。"
+        ],
+        "notice": "GO Pass 豪華版為付費選購內容；活動入場券與豪華版的供應情況可能因地區而異。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/halloween-part-2-2026",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          {
+            "src": "assets/Events/halloween-2026-part-2.png",
+            "alt": "Pokémon GO 2026 萬聖節 Part 2 活動主視覺，包含墓仔狗與超級勾魂眼",
+            "caption": "Pokémon GO 2026 萬聖節 Part 2",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 極致超級團體戰",
+      "name": "水晶燈火靈極致超級團體戰日",
+      "shareId": "chandelure-super-mega-raid-day-2026",
+      "event": {
+        "scope": "global",
+        "access": "free-with-optional-ticket",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 10 月 31 日 14:00～17:00",
+        "startDate": "2026-10-31",
+        "endDate": "2026-10-31",
+        "startDateTime": "2026-10-31T14:00:00+08:00",
+        "endDateTime": "2026-10-31T17:00:00+08:00",
+        "description": "超級水晶燈火靈將在極致超級團體戰中首度登場，並可提升至超級頂尖級、使用額外特殊招式「奇異之風＋」。",
+        "detailLabel": "團體戰、全球大挑戰與獎勵",
+        "bullets": [
+          "超級水晶燈火靈首次登場，並有機會遇見異色水晶燈火靈。",
+          "水晶燈火靈可提升至超級頂尖級；超級進化期間可使用特殊招式「奇異之風＋」。",
+          "旋轉道館轉盤可免費取得最多 6 張團體戰入場券。",
+          "從極致超級團體戰捕捉的水晶燈火靈將直接解鎖第 1 級超級等級。",
+          "活動期間遇見異色水晶燈火靈的機率提高。",
+          "免費限時調查獎勵包含 1 張特級對戰入場券，以及遇見班基拉斯的機會。",
+          "全球大挑戰：台灣時間 10 月 31 日 08:00～11 月 1 日 11:00；完成越多階段，後續奇異之風＋與超級頂尖級 CP 加成越高。",
+          "遠距團體戰參與上限於全球大挑戰期間提高至 20 次。",
+          "另有付費活動入場券，可增加免費入場券上限、神奇糖果 XL 機率、XP 與星星沙子。"
+        ],
+        "notice": "主要團體戰日可免費參加；付費入場券僅提供額外獎勵。全球大挑戰解鎖的加成預計於台灣時間 11 月 3 日 04:00～11 月 16 日 04:00 生效。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/chandelure-super-mega-raid-day-2026",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          {
+            "src": "assets/Events/chandelure-super-mega-raid-day-2026.png",
+            "alt": "水晶燈火靈極致超級團體戰日活動主視覺",
+            "caption": "水晶燈火靈極致超級團體戰日",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "付費現場活動情報 · 曠野地帶",
+      "name": "Pokémon GO 曠野地帶 2026：仙台／墨西哥城",
+      "shareId": "go-wild-area-2026-live",
+      "event": {
+        "category": "ticketed-live-event",
+        "scope": "live",
+        "access": "ticket-required",
+        "periodLabel": "SAVE THE DATE / 當地日期",
+        "period": "2026 年 11 月 6 日～11 月 8 日",
+        "startDate": "2026-11-06",
+        "endDate": "2026-11-08",
+        "description": "Pokémon GO 曠野地帶 2026 將在日本宮城縣／仙台與墨西哥城同步舉辦城市型現場活動。",
+        "detailLabel": "現場活動地點",
+        "bullets": [
+          "日本：宮城縣各地與主要會場仙台市。",
+          "墨西哥：首都墨西哥城。",
+          "活動將包含現場限定遊戲內容，需購買現場活動入場券。",
+          "詳細遊戲內容、場地範圍與售票資訊以官方後續公告為準。"
+        ],
+        "notice": "付費現場活動；不是 11 月 9 日開始的曠野週，也不是 11 月 14 日～15 日的全球活動。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-go-wild-area-2026",
+        "sourceLabel": "Pokémon GO 官方日期公告"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 曠野地帶",
+      "name": "曠野週",
+      "shareId": "into-the-wild-2026",
+      "event": {
+        "scope": "global",
+        "access": "free-with-optional-upgrade",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 11 月 9 日 10:00～11 月 13 日 20:00",
+        "startDate": "2026-11-09",
+        "endDate": "2026-11-15",
+        "startDateTime": "2026-11-09T10:00:00+08:00",
+        "endDateTime": "2026-11-15T18:00:00+08:00",
+        "description": "以鋼屬性與龍屬性寶可夢為主題的曠野週登場。極巨化雷吉鐸拉戈將首度出現在傳說極巨對戰，極巨化美錄坦則可透過免費的 GO Pass：曠野週取得；活動期間的傳說團體戰與傳說極巨對戰另有全新特別背卡機會。",
+        "detailLabel": "活動重點、對戰時程與 GO Pass",
+        "bullets": [
+          "首度登場：傳說極巨對戰的極巨化雷吉鐸拉戈，以及 GO Pass：曠野週獎勵的極巨化美錄坦；兩者皆有異色機會。",
+          "遠距團體戰：11 月 9 日～13 日每日上限提高至 30 次；11 月 14 日～15 日可參與無限次遠距團體戰。",
+          "11 月 9 日 10:00～11 月 15 日 18:00，神秘盒子等待間隔縮短，並有機會遇見異色美錄坦；使用重要的寶箱也有機會遇見異色索財靈。",
+          "一星極巨對戰為拉魯拉絲，二星極巨對戰為腕力。",
+          "傳說極巨對戰時間每日 18:00～19:00：11 月 11 日雷吉斯奇魯、11 月 12 日雷吉鐸拉戈、11 月 13 日拉帝亞斯與拉帝歐斯。",
+          "三星團體戰為赤面龍與拖拖蚓；傳說團體戰為蒼響（劍之王）與藏瑪然特（盾之王）。",
+          "團體戰時間：11 月 9 日 18:00～19:00 蒼響（劍之王）；11 月 10 日 18:00～19:00 藏瑪然特（盾之王）。擊敗後可分別取得劍王能量或盾王能量。",
+          "活動限定招式：雷吉斯奇魯學會金屬爪、雷吉鐸拉戈學會龍息、拉帝亞斯學會薄霧球、拉帝歐斯學會潔淨光芒。",
+          "活動期間參加傳說團體戰與傳說極巨對戰，捕捉到的寶可夢有機會帶有顯示捕捉時間的全新特別背卡。",
+          "野外可能遇見小磁怪、嗡蝠與托戈德瑪爾等活動寶可夢，另有曠野地帶主題田野調查。",
+          "全球大挑戰完成後，可提高蒼響「巨獸斬」與藏瑪然特「巨獸彈」的冒險效果，並加快極巨對戰能量條累積速度。",
+          "免費 GO Pass：曠野週於 11 月 9 日 10:00 系統發放，可累積 GO 點數至 11 月 15 日 18:00；11 月 14 日～15 日沒有 GO 點數累積上限。",
+          "免費 GO Pass 獎勵包含極巨化美錄坦遭遇、活動寶可夢、GO 曠野地帶 2026 T恤（紫）、星星沙子、XP、精靈球與糖果；25 級里程碑可讓活動期間放入孵化器的蛋所需距離減半。",
+          "付費 GO Pass 豪華版可取得銀色王冠、額外的極巨化美錄坦遭遇、鋁鋼龍長褲及其他道具；豪華版售價 14.99 美元，豪華版＋10級售價 19.99 美元或等值當地貨幣。",
+          "銀色王冠可為好夥伴以上的寶可夢進行極限特訓，將攻擊、防禦或 HP 其中一項提升至上限；本次銀色王冠須在 11 月 22 日 23:59 前使用，使用後有 365 天完成課題。"
+        ],
+        "notice": "主活動於 11 月 13 日 20:00 結束；異色美錄坦、異色索財靈、GO Pass、主題貼圖與部分團體戰加碼延續至 11 月 15 日 18:00。GO Pass 獎勵領取期限為 11 月 17 日 23:59。11 月 9 日～15 日暫停推出每日新發現。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/into-the-wild-2026",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          {
+            "src": "assets/Events/into-the-wild-2026.png",
+            "alt": "Pokémon GO 曠野週活動主視覺，包含極巨化美錄坦、銀色王冠與鋁鋼龍長褲",
+            "caption": "曠野週 · 極巨化美錄坦與 GO Pass 豪華版獎勵",
+            "wide": true
+          },
+          {
+            "src": "assets/Events/into-the-wild-2026-details-zh.jpg",
+            "alt": "曠野週中文活動資訊圖，整理團體戰、極巨對戰、野外遭遇與 GO Pass",
+            "caption": "曠野週 · 中文活動內容整理",
+            "wide": true
+          },
+          {
+            "src": "assets/Events/into-the-wild-2026-details-en.jpg",
+            "alt": "Into the Wild 英文活動資訊圖，整理團體戰、極巨對戰、特殊招式與 GO Pass",
+            "caption": "Into the Wild · English event overview",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 曠野地帶",
+      "name": "Pokémon GO 曠野地帶 2026：全球",
+      "shareId": "go-wild-area-global-2026",
+      "event": {
+        "category": "ticketed-global-event",
+        "scope": "global",
+        "access": "ticket-required",
+        "periodLabel": "SAVE THE DATE / 全球活動",
+        "period": "2026 年 11 月 14 日～11 月 15 日",
+        "startDate": "2026-11-14",
+        "endDate": "2026-11-15",
+        "description": "Pokémon GO 曠野地帶 2026 的全球壓軸活動，世界各地的訓練家皆可參加。",
+        "detailLabel": "目前已公布資訊",
+        "bullets": [
+          "全球活動日期為 2026 年 11 月 14 日與 11 月 15 日。",
+          "官方將推出全球活動遊戲內入場券。",
+          "完整遊戲內容、每日活動時間與票券權益仍待官方後續公布。"
+        ],
+        "notice": "SAVE THE DATE：目前僅公布日期與售票安排，並非 11 月 9 日～13 日的曠野週。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-go-wild-area-2026",
+        "sourceLabel": "Pokémon GO 官方日期公告"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · SAVE THE DATE",
+      "name": "2026 年 11 月社群日",
+      "shareId": "community-day-november-2026-save-the-date",
+      "event": {
+        "category": "save-the-date",
+        "scope": "global",
+        "access": "free",
+        "periodLabel": "SAVE THE DATE / 當地日期",
+        "period": "2026 年 11 月 21 日",
+        "startDate": "2026-11-21",
+        "endDate": "2026-11-21",
+        "description": "官方已公布 2026 年 11 月社群日日期，主角寶可夢、活動時間、特殊招式與獎勵內容仍待後續公告。",
+        "detailLabel": "目前已公布資訊",
+        "bullets": [
+          "活動日期：2026 年 11 月 21 日。",
+          "主角寶可夢尚未公布。",
+          "活動時段、特殊招式、加碼內容與付費特殊調查仍待官方公布。"
+        ],
+        "notice": "SAVE THE DATE：目前只有活動日期，請勿將尚未公布的主角或獎勵視為正式資訊。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-s24",
+        "sourceLabel": "Pokémon GO 官方日期公告"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · SAVE THE DATE",
+      "name": "2026 年 11 月極致超級團體戰日",
+      "shareId": "super-mega-raid-day-november-2026-save-the-date",
+      "event": {
+        "category": "save-the-date",
+        "scope": "global",
+        "access": "free-with-optional-ticket",
+        "periodLabel": "SAVE THE DATE / 當地日期",
+        "period": "2026 年 11 月 28 日",
+        "startDate": "2026-11-28",
+        "endDate": "2026-11-28",
+        "description": "官方已公布 2026 年 11 月極致超級團體戰日日期，主角寶可夢、活動時間與獎勵內容仍待後續公告。",
+        "detailLabel": "目前已公布資訊",
+        "bullets": [
+          "活動日期：2026 年 11 月 28 日。",
+          "登場的超級進化寶可夢尚未公布。",
+          "活動時段、免費團體戰入場券、全球大挑戰與付費票券內容仍待官方公布。"
+        ],
+        "notice": "SAVE THE DATE：目前只有活動日期；正式名稱、主角與詳細內容公布後再更新。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-s24",
+        "sourceLabel": "Pokémon GO 官方日期公告"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · SAVE THE DATE",
+      "name": "Pokémon GO Tour 2027：阿羅拉",
+      "shareId": "go-tour-2027-save-the-date",
+      "event": {
+        "category": "save-the-date",
+        "scope": "global-and-live",
+        "access": "ticket-required",
+        "periodLabel": "SAVE THE DATE / 官方公布日期",
+        "period": "2027 年 2 月 19 日～2 月 28 日 · 現場與全球活動",
+        "startDate": "2027-02-19",
+        "endDate": "2027-02-28",
+        "description": "以阿羅拉地區為主題的 Pokémon GO Tour 將於 2027 年 2 月回歸，現場活動於高雄與洛杉磯舉辦，下一週則舉行全球活動。",
+        "detailLabel": "已公布日期",
+        "bullets": [
+          "高雄與洛杉磯現場活動：2027 年 2 月 19 日～2 月 21 日。",
+          "全球活動：2027 年 2 月 27 日～2 月 28 日。",
+          "活動靈感來自《精靈寶可夢 太陽／月亮》與《究極之日／究極之月》的阿羅拉地區。",
+          "現場與全球活動入場券預計於下一個季節開放購買。",
+          "詳細遊戲內容與售票資訊仍待官方公布。"
+        ],
+        "notice": "SAVE THE DATE：目前只適合做日期提醒，完整活動內容尚未公布。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-go-tour-2027",
+        "sourceLabel": "Pokémon GO 官方日期公告"
       },
       "coordinates": []
     }

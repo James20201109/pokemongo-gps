@@ -33,6 +33,9 @@ const elements = {
   expiredTabCount: document.querySelector("#expired-tab-count"),
   nowMode: document.querySelector("#now-mode"),
   nowModeClock: document.querySelector("#now-mode-clock"),
+  nowModeToggle: document.querySelector("#now-mode-toggle"),
+  nowModeToggleLabel: document.querySelector(".now-mode-toggle-label"),
+  nowModeContent: document.querySelector("#now-mode-content"),
   nowLiveCard: document.querySelector("#now-live-card"),
   nowLiveStatus: document.querySelector("#now-live-status"),
   nowLiveCount: document.querySelector("#now-live-count"),
@@ -90,6 +93,7 @@ const elements = {
   imageModal: document.querySelector("#image-modal"),
   imageModalContent: document.querySelector("#image-modal-content"),
   imageModalCaption: document.querySelector("#image-modal-caption"),
+  imageModalDownload: document.querySelector("#image-modal-download"),
   imageModalClose: document.querySelector("#image-modal-close"),
   friendQrModal: document.querySelector("#friend-qr-modal"),
   friendQrClose: document.querySelector("#friend-qr-close"),
@@ -145,6 +149,7 @@ const activeTabStorageKey = "geo-pulse-active-tab-v1";
 const friendsUnlockedStorageKey = "geo-pulse-friends-unlocked-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
 const gymCounterStorageKey = "geo-pulse-gym-counter-v1";
+const nowModeCollapsedStorageKey = "geo-pulse-now-mode-collapsed-v1";
 let friendsUnlocked = false;
 let friendUnlockClicks = 0;
 let friendUnlockTimer;
@@ -219,6 +224,29 @@ function loadGymCounter() {
 const gymCounter = loadGymCounter();
 let gymCounterResetArmed = false;
 let gymCounterResetTimer;
+
+function loadNowModeCollapsed() {
+  try {
+    return localStorage.getItem(nowModeCollapsedStorageKey) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setNowModeCollapsed(collapsed, { save = true } = {}) {
+  if (!elements.nowMode || !elements.nowModeContent || !elements.nowModeToggle) return;
+  elements.nowMode.classList.toggle("is-collapsed", collapsed);
+  elements.nowModeContent.hidden = collapsed;
+  elements.nowModeToggle.setAttribute("aria-expanded", String(!collapsed));
+  elements.nowModeToggle.setAttribute("aria-label", collapsed ? "展開即時活動控制台" : "收合即時活動控制台");
+  elements.nowModeToggleLabel.textContent = collapsed ? "展開" : "收合";
+  if (!save) return;
+  try {
+    localStorage.setItem(nowModeCollapsedStorageKey, collapsed ? "1" : "0");
+  } catch {
+    // 瀏覽器禁止儲存時，仍保留本次頁面開啟期間的收合狀態。
+  }
+}
 
 function gymCounterTotal() {
   return gymCounterTotalKeys.reduce((total, key) => total + gymCounter[key], 0);
@@ -793,7 +821,12 @@ function armRemovalConfirmation(key, button, label) {
 function openImageModal(image, alt, caption) {
   elements.imageModalContent.src = image;
   elements.imageModalContent.alt = alt;
-  elements.imageModalCaption.textContent = caption;
+  elements.imageModalCaption.textContent = caption || alt || "活動圖片";
+  const imagePath = String(image || "");
+  const fileName = decodeURIComponent(imagePath.split("?")[0].split("/").pop() || "pokemon-go-event-image");
+  elements.imageModalDownload.href = imagePath;
+  elements.imageModalDownload.download = fileName;
+  elements.imageModalDownload.setAttribute("aria-label", `下載 ${caption || alt || fileName}`);
   if (typeof elements.imageModal.showModal === "function") {
     elements.imageModal.showModal();
   } else {
@@ -817,6 +850,8 @@ function closeOfficialSitesModal() {
 function closeImageModal() {
   elements.imageModal.close?.();
   elements.imageModal.removeAttribute("open");
+  elements.imageModalContent.removeAttribute("src");
+  elements.imageModalDownload.removeAttribute("href");
 }
 
 function openTrashFilterModal() {
@@ -1803,6 +1838,9 @@ elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((butt
 elements.gymCounterUndo.addEventListener("click", undoGymCounter);
 elements.gymCounterReset.addEventListener("click", resetGymCounter);
 elements.backToTop.addEventListener("click", scrollBackToTop);
+elements.nowModeToggle.addEventListener("click", () => {
+  setNowModeCollapsed(elements.nowModeToggle.getAttribute("aria-expanded") === "true");
+});
 elements.nowUkCard.addEventListener("click", () => {
   switchCountry("uk");
   requestAnimationFrame(() => elements.library.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -1826,6 +1864,7 @@ elements.toast.addEventListener("click", () => {
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
 updateSparkleAlertButton();
 renderGymCounter();
+setNowModeCollapsed(loadNowModeCollapsed(), { save: false });
 updateBackToTopVisibility();
 organizeCountryTabs();
 switchCountry(activeCountry, { updateUrl: false });
