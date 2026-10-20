@@ -129,7 +129,12 @@ const elements = {
   gymCounterFeedback: document.querySelector("#gym-counter-feedback"),
   gymCounterUndo: document.querySelector("#gym-counter-undo"),
   gymCounterReset: document.querySelector("#gym-counter-reset"),
-  backToTop: document.querySelector("#back-to-top")
+  backToTop: document.querySelector("#back-to-top"),
+  mobileToolsOpen: document.querySelector("#mobile-tools-open"),
+  mobileTools: document.querySelector("#mobile-tools"),
+  mobileToolsBadge: document.querySelector("#mobile-tools-badge"),
+  mobileAlertCount: document.querySelector("#mobile-alert-count"),
+  mobileGymCount: document.querySelector("#mobile-gym-count")
 };
 
 let activeCountry = "copied";
@@ -142,12 +147,14 @@ let pendingUndoLabel = "";
 let pendingRemovalKey = null;
 let pendingRemovalButton = null;
 let pendingRemovalTimer = null;
+let mobileToolsCloseTimer = null;
 const sparkleAlertStorageKey = "geo-pulse-sparkle-alert-v1";
 const sparkleAlertHistoryKey = "geo-pulse-sparkle-alert-history-v1";
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
 const friendsUnlockedStorageKey = "geo-pulse-friends-unlocked-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
+const collapsedEventGroupsStorageKey = "geo-pulse-collapsed-event-groups-v1";
 const gymCounterStorageKey = "geo-pulse-gym-counter-v1";
 const nowModeCollapsedStorageKey = "geo-pulse-now-mode-collapsed-v1";
 let friendsUnlocked = false;
@@ -184,11 +191,30 @@ function loadExpandedGroups() {
 
 const expandedGroups = loadExpandedGroups();
 
+function loadCollapsedEventGroups() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(collapsedEventGroupsStorageKey) || "[]");
+    return new Set(Array.isArray(saved) ? saved : []);
+  } catch {
+    return new Set();
+  }
+}
+
+const collapsedEventGroups = loadCollapsedEventGroups();
+
 function saveExpandedGroups() {
   try {
     localStorage.setItem(expandedGroupsStorageKey, JSON.stringify([...expandedGroups]));
   } catch {
     // 瀏覽器禁止儲存時，仍保留本次頁面開啟期間的展開狀態。
+  }
+}
+
+function saveCollapsedEventGroups() {
+  try {
+    localStorage.setItem(collapsedEventGroupsStorageKey, JSON.stringify([...collapsedEventGroups]));
+  } catch {
+    // 瀏覽器禁止儲存時，仍保留本次頁面開啟期間的活動收合狀態。
   }
 }
 
@@ -264,6 +290,7 @@ function renderGymCounter(message = "") {
   const total = gymCounterTotal();
   elements.gymCounterTotal.textContent = total.toLocaleString("zh-TW");
   elements.gymCounterBadge.textContent = total > 999 ? "999+" : String(total);
+  elements.mobileGymCount.textContent = total > 999 ? "999+" : String(total);
   elements.gymCounterNormal.textContent = gymCounter.normal.toLocaleString("zh-TW");
   elements.gymCounterShiny.textContent = gymCounter.shiny.toLocaleString("zh-TW");
   elements.gymCounterNormalBackground.textContent = gymCounter.normalBackground.toLocaleString("zh-TW");
@@ -274,6 +301,7 @@ function renderGymCounter(message = "") {
     row.querySelector('[data-counter-change="-1"]').disabled = gymCounter[row.dataset.counterKey] === 0;
   });
   if (message) elements.gymCounterFeedback.textContent = message;
+  updateMobileToolsBadge();
 }
 
 function changeGymCounter(key, delta, recordHistory = true) {
@@ -575,7 +603,9 @@ function sparkleAlertOccurrence(date = new Date()) {
 
 function updateSparkleAlertButton() {
   elements.sparkleAlertCount.textContent = sparkleAlertEnabled ? "1" : "0";
+  elements.mobileAlertCount.textContent = sparkleAlertEnabled ? "1" : "0";
   elements.sparkleAlertOpen.classList.toggle("enabled", sparkleAlertEnabled);
+  updateMobileToolsBadge();
 }
 
 function openSparkleAlertModal() {
@@ -1193,6 +1223,10 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const moonlight = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "moonlight";
   const sparkle = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "sparkle";
   const localClockOnly = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "local";
+  const venueEvent = typeof coordinate === "object" && coordinate.activityStartDateTime && coordinate.activityEndDateTime;
+  const venueEventLive = venueEvent
+    && Date.now() >= Date.parse(coordinate.activityStartDateTime)
+    && Date.now() <= Date.parse(coordinate.activityEndDateTime);
   const ukGymClosed = activeCountry === "uk" && !ukGymIsOpen();
   const europeGymClosed = activeCountry === "europe" && typeof coordinate === "object" && coordinate.timezone && !europeGymIsOpen(coordinate.timezone);
   const nationalTrustImage = activeCountry === "uk" && typeof coordinate === "object" && /^\d{2}\./.test(coordinate.name)
@@ -1204,7 +1238,7 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const sparkleTimeState = sparkle && !expired ? sparkleStatus(coordinate.timezone) : "idle";
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}${sparkle ? " sparkle-card" : ""}${sparkleTimeState === "soon" ? " sparkle-soon" : ""}${sparkleTimeState === "live" ? " sparkle-live" : ""}${localClockOnly ? " local-time-card" : ""}${ukGymClosed ? " uk-gym-closed" : ""}${europeGymClosed ? " europe-gym-closed" : ""}`;
+  button.className = `coordinate-item${typeof coordinate === "object" ? " has-label" : ""}${coordinateImage ? " has-image" : ""}${expired ? " expired" : ""}${visited ? " visited" : ""}${raid ? " raid-card" : ""}${raidTimeState === "peak" ? " raid-active" : ""}${raidTimeState === "open" ? " raid-open" : ""}${moonlight ? " moonlight-card" : ""}${moonlightTimeState === "soon" ? " moonlight-soon" : ""}${moonlightTimeState === "live" ? " moonlight-live" : ""}${sparkle ? " sparkle-card" : ""}${sparkleTimeState === "soon" ? " sparkle-soon" : ""}${sparkleTimeState === "live" ? " sparkle-live" : ""}${localClockOnly ? " local-time-card" : ""}${venueEvent ? " venue-event-card" : ""}${venueEventLive ? " venue-event-live" : venueEvent ? " venue-event-off" : ""}${ukGymClosed ? " uk-gym-closed" : ""}${europeGymClosed ? " europe-gym-closed" : ""}`;
   if (ukGymClosed) button.title = "英國道館目前關閉｜台灣時間每日 17:00 開放、隔日 01:00 關閉";
   if (europeGymClosed) button.title = "活動道館目前關閉｜當地時間每日 10:00 開放、17:00 關閉";
   if (raid) {
@@ -1221,6 +1255,11 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
     button.style.setProperty("--region-accent", coordinate.accent || "#ffb23e");
   }
   if (localClockOnly) button.dataset.timezone = coordinate.timezone;
+  if (venueEvent) {
+    button.dataset.activityStart = coordinate.activityStartDateTime;
+    button.dataset.activityEnd = coordinate.activityEndDateTime;
+    button.title = venueEventLive ? "Pokémon Night Out 活動進行中" : "Pokémon Night Out 目前尚未開始或已結束";
+  }
   const label = typeof coordinate === "object"
     ? `<span class="coordinate-label"><b>${coordinate.name}${raid ? ` <span class="raid-countdown">(${raidCountdown(coordinate.timezone)})</span>` : ""}</b><small>${coordinate.area}</small>${raid || moonlight || sparkle || localClockOnly ? `<small class="local-clock">◷ 當地 ${localTime(coordinate.timezone)}</small>` : ""}</span>`
     : "";
@@ -1229,10 +1268,11 @@ function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const raidStatus = raid ? `<em class="raid-live-label">${raidTimeState === "peak" ? "RAID TIME" : "ACTIVE HOURS"}</em>` : "";
   const moonlightStatusLabel = moonlight ? `<em class="moonlight-status">${moonlightTimeState === "live" ? "EVENT LIVE" : moonlightTimeState === "soon" ? "STARTING SOON" : "LOCAL TIME"}</em>` : "";
   const sparkleStatusLabel = sparkle ? `<em class="sparkle-status">${sparkleTimeState === "live" ? "EVENT LIVE" : sparkleTimeState === "soon" ? "STARTING SOON" : "LOCAL TIME"}</em>` : "";
+  const venueEventStatusLabel = venueEvent ? `<em class="venue-event-status">${venueEventLive ? "進行中" : "OFF"}</em>` : "";
   const coordinatePreview = coordinateImage
     ? `<img class="coordinate-thumb" src="${coordinateImage}" alt="${coordinate.name} 背景圖片" loading="lazy" title="點擊放大圖片">`
     : "";
-  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}${moonlightStatusLabel}${sparkleStatusLabel}<i>⧉</i>`;
+  button.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${label}<strong>${value}</strong>${coordinatePreview}${status}${copiedStatus}${raidStatus}${moonlightStatusLabel}${sparkleStatusLabel}${venueEventStatusLabel}<i>⧉</i>`;
   button.setAttribute("aria-label", `複製${typeof coordinate === "object" ? ` ${coordinate.name}` : ""}座標 ${value}`);
   button.addEventListener("click", async (event) => {
     if (coordinateImage && event.target.closest(".coordinate-thumb")) {
@@ -1442,18 +1482,22 @@ function render() {
     const groupShareId = group.shareId || group.name;
     section.dataset.shareId = groupShareId;
     const expiredUsGroup = activeCountry === "us" && group.event && eventNewsStatus(group.event) === "expired";
-    const collapsible = (activeCountry === "japan" && collapsibleJapanGroups.has(group.name)) || expiredUsGroup;
+    const legacyCollapsible = (activeCountry === "japan" && collapsibleJapanGroups.has(group.name)) || expiredUsGroup;
+    const eventCollapsible = Boolean(group.event);
+    const collapsible = legacyCollapsible || eventCollapsible;
     const groupStateKey = `${activeCountry}|${group.name}`;
     section.dataset.groupKey = groupStateKey;
-    const expanded = !collapsible || expandedGroups.has(groupStateKey) || pendingSharedGroup === groupShareId;
+    const expanded = pendingSharedGroup === groupShareId
+      || (eventCollapsible ? !collapsedEventGroups.has(groupStateKey) : !legacyCollapsible || expandedGroups.has(groupStateKey));
     section.classList.toggle("is-expired", Boolean(expiredUsGroup));
     section.classList.toggle("is-collapsed", collapsible && !expanded);
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
     const groupSource = group.sourceUrl
       ? `<a class="group-source" href="${group.sourceUrl}" target="_blank" rel="noopener noreferrer">${group.sourceLabel || "資料來源"} ↗</a>`
       : "";
+    const collapseTargetLabel = eventCollapsible ? `${group.name}活動區塊` : `${group.name}座標`;
     const collapseControl = collapsible
-      ? `<button class="group-collapse" type="button" aria-expanded="${expanded}" aria-label="${expanded ? "收合" : "展開"}${group.name}座標"><span aria-hidden="true">${expanded ? "−" : "＋"}</span></button>`
+      ? `<button class="group-collapse" type="button" aria-expanded="${expanded}" aria-label="${expanded ? "收合" : "展開"}${escapeHtml(collapseTargetLabel)}"><span aria-hidden="true">${expanded ? "−" : "＋"}</span></button>`
       : "";
     const groupStamp = stampedJapanGroups.has(group.name) ? `<span class="group-stamp" aria-hidden="true">蓋</span>` : "";
     const shareControl = activeCountry === "copied"
@@ -1462,6 +1506,16 @@ function render() {
     section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${shareControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
     section.querySelector(".group-share")?.addEventListener("click", () => shareLink(activeCountry, groupShareId));
     section.querySelector(".group-collapse")?.addEventListener("click", () => {
+      if (eventCollapsible) {
+        if (collapsedEventGroups.has(groupStateKey)) {
+          collapsedEventGroups.delete(groupStateKey);
+        } else {
+          collapsedEventGroups.add(groupStateKey);
+        }
+        saveCollapsedEventGroups();
+        render();
+        return;
+      }
       if (expandedGroups.has(groupStateKey)) {
         expandedGroups.delete(groupStateKey);
       } else {
@@ -1603,6 +1657,15 @@ function render() {
 }
 
 function updateRaidClocks() {
+  document.querySelectorAll(".venue-event-card").forEach((card) => {
+    const live = Date.now() >= Date.parse(card.dataset.activityStart)
+      && Date.now() <= Date.parse(card.dataset.activityEnd);
+    card.classList.toggle("venue-event-live", live);
+    card.classList.toggle("venue-event-off", !live);
+    card.title = live ? "Pokémon Night Out 活動進行中" : "Pokémon Night Out 目前尚未開始或已結束";
+    const status = card.querySelector(".venue-event-status");
+    if (status) status.textContent = live ? "進行中" : "OFF";
+  });
   document.querySelectorAll(".raid-card").forEach((card) => {
     const timeState = raidTimeStatus(card.dataset.timezone);
     card.classList.toggle("raid-active", timeState === "peak");
@@ -1730,6 +1793,53 @@ function updateBackToTopVisibility() {
   elements.backToTop.classList.toggle("visible", window.scrollY > 500);
 }
 
+function updateMobileToolsBadge() {
+  const activeTools = Number(sparkleAlertEnabled) + Number(gymCounterTotal() > 0);
+  elements.mobileToolsBadge.textContent = String(activeTools);
+  elements.mobileToolsBadge.hidden = activeTools === 0;
+}
+
+function openMobileTools() {
+  clearTimeout(mobileToolsCloseTimer);
+  elements.mobileTools.hidden = false;
+  elements.mobileToolsOpen.setAttribute("aria-expanded", "true");
+  document.body.classList.add("mobile-tools-open");
+  requestAnimationFrame(() => {
+    elements.mobileTools.classList.add("is-open");
+    elements.mobileTools.querySelector(".mobile-tools-close")?.focus();
+  });
+}
+
+function closeMobileTools({ restoreFocus = true, immediate = false } = {}) {
+  if (elements.mobileTools.hidden) return;
+  clearTimeout(mobileToolsCloseTimer);
+  elements.mobileTools.classList.remove("is-open");
+  elements.mobileToolsOpen.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("mobile-tools-open");
+  const finish = () => {
+    elements.mobileTools.hidden = true;
+    if (restoreFocus) elements.mobileToolsOpen.focus();
+  };
+  if (immediate) finish();
+  else mobileToolsCloseTimer = setTimeout(finish, 220);
+}
+
+function runMobileTool(tool) {
+  const actions = {
+    trash: elements.trashFilterOpen,
+    news: elements.newsOpen,
+    alert: elements.sparkleAlertOpen,
+    gym: elements.gymCounterOpen
+  };
+  closeMobileTools({ restoreFocus: false });
+  if (tool === "top") {
+    setTimeout(scrollBackToTop, 220);
+    return;
+  }
+  const target = actions[tool];
+  if (target) setTimeout(() => target.click(), 220);
+}
+
 function scrollBackToTop() {
   const start = window.scrollY;
   if (!start) return;
@@ -1852,6 +1962,42 @@ elements.nowEuropeCard.addEventListener("click", () => {
 elements.nowViewEvents.addEventListener("click", () => {
   switchCountry("events");
   requestAnimationFrame(() => elements.library.scrollIntoView({ behavior: "smooth", block: "start" }));
+});
+elements.mobileToolsOpen.addEventListener("click", () => {
+  if (elements.mobileTools.hidden) openMobileTools();
+  else closeMobileTools();
+});
+elements.mobileTools.querySelectorAll("[data-mobile-tools-close]").forEach((button) => {
+  button.addEventListener("click", () => closeMobileTools());
+});
+elements.mobileTools.querySelectorAll("[data-mobile-tool]").forEach((button) => {
+  button.addEventListener("click", () => runMobileTool(button.dataset.mobileTool));
+});
+elements.mobileTools.querySelector("a")?.addEventListener("click", () => {
+  closeMobileTools({ restoreFocus: false, immediate: true });
+});
+document.addEventListener("keydown", (event) => {
+  if (elements.mobileTools.hidden) return;
+  if (event.key === "Escape") {
+    closeMobileTools();
+    return;
+  }
+  if (event.key !== "Tab") return;
+  const focusable = [...elements.mobileTools.querySelectorAll(".mobile-tools-sheet button, .mobile-tools-sheet a")];
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 560 && !elements.mobileTools.hidden) {
+    closeMobileTools({ restoreFocus: false, immediate: true });
+  }
 });
 window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
 document.addEventListener("visibilitychange", () => {

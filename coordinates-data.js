@@ -150,6 +150,55 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "國際現場活動情報 · Pokémon Night Out",
+      "name": "Pokémon Night Out：洛杉磯／倫敦",
+      "shareId": "pokemon-night-out-los-angeles-london-2026",
+      "event": {
+        "scope": "regional-live",
+        "access": "venue",
+        "periodLabel": "EVENT PERIOD / 當地時間與台灣時間",
+        "period": "洛杉磯 2026 年 10 月 24 日 19:30～22:30；倫敦 2026 年 11 月 10 日 19:30～22:30",
+        "startDate": "2026-10-24",
+        "endDate": "2026-11-10",
+        "periods": [
+          { "startDateTime": "2026-10-24T19:30:00-07:00", "endDateTime": "2026-10-24T22:30:00-07:00" },
+          { "startDateTime": "2026-11-10T19:30:00+00:00", "endDateTime": "2026-11-10T22:30:00+00:00" }
+        ],
+        "description": "Pokémon Night Out 將於洛杉磯 Intuit Dome 與倫敦 The O2 Arena 舉行。活動會場提供限定團體戰、城市特殊位置背景、限時調查、野外遭遇與誘餌模組加碼。",
+        "detailLabel": "場次、台灣時間與活動內容",
+        "bullets": [
+          "洛杉磯場：2026 年 10 月 24 日 19:30～22:30（PDT）；台灣時間為 10 月 25 日 10:30～13:30。",
+          "倫敦場：2026 年 11 月 10 日 19:30～22:30（GMT）；台灣時間為 11 月 11 日 03:30～06:30。",
+          "一星團體戰：皮卡丘；三星團體戰：耿鬼。兩者皆有異色機會，捕捉後會帶有對應城市的特殊位置背景。",
+          "在活動會場開啟遊戲，最多可取得兩份限時調查；獎勵包含低調的樣子或高調的樣子的顫弦蠑螈等活動主題寶可夢，以及 Pokémon Night Out 棒球球衣。",
+          "已透過洛杉磯 Twitch 直播領取棒球球衣限時調查的訓練家，不會再次取得相同服飾調查。",
+          "活動期間啟動的誘餌模組（不含黃金誘餌模組）效果延長至 1 小時。",
+          "會場周邊較常出現：鬼斯、霹靂電球、阿羅拉嘎啦嘎啦、咕咕、黑暗鴉、戴魯比、落雷獸、利牙魚、小貓怪、索羅亞、電蜘蛛、呱呱泡蛙、咚咚鼠與稚山雀。",
+          "運氣好的話，還有機會遇見未知圖騰 P、N、O；公告列出的活動寶可夢皆有異色機會。"
+        ],
+        "notice": "遊戲內容僅於各場館活動範圍內生效；請依現場管制與官方最新公告參加。",
+        "sourceUrl": "https://pokemongo.com/news/pokemon-night-out-irl-details2026",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          {
+            "src": "assets/Events/pokemon-night-out-2026.png",
+            "alt": "Pokémon Night Out 活動主視覺，包含兩種形態的顫弦蠑螈",
+            "caption": "Pokémon Night Out · 洛杉磯與倫敦現場活動",
+            "wide": true
+          },
+          {
+            "src": "assets/Events/pokemon-night-out-location-backgrounds-2026.jpg",
+            "alt": "洛杉磯與倫敦特殊位置背景的皮卡丘與耿鬼",
+            "caption": "限定團體戰 · 洛杉磯／倫敦特殊位置背景"
+          }
+        ]
+      },
+      "coordinates": [
+        { "name": "Intuit Dome", "area": "美國 · 洛杉磯｜Pokémon Night Out", "timezone": "America/Los_Angeles", "clockType": "local", "accent": "#ff74ae", "activityStartDateTime": "2026-10-24T19:30:00-07:00", "activityEndDateTime": "2026-10-24T22:30:00-07:00", "value": "33.944400, -118.343300" },
+        { "name": "The O2 Arena", "area": "英國 · 倫敦｜Pokémon Night Out", "timezone": "Europe/London", "clockType": "local", "accent": "#a98cff", "activityStartDateTime": "2026-11-10T19:30:00+00:00", "activityEndDateTime": "2026-11-10T22:30:00+00:00", "value": "51.502900, 0.003000" }
+      ]
+    },
+    {
       "region": "全球活動情報 · 極巨對戰",
       "name": "超極巨化閃焰王牌極巨對戰日",
       "event": {
@@ -2269,7 +2318,7 @@ window.coordinateLibraries = {
       "region": "英格蘭西南部與威爾斯",
       "name": "South West and Wales · Seedot（橡實果）",
       "coordinates": [
-        { "name": "06.Chirk Castle and Garden", "area": "Wrexham", "value": "52.937700, -3.091700" },
+        { "name": "06.Chirk Castle and Garden", "area": "Wrexham", "value": "52.934621, -3.085549" },
         { "name": "07.Killerton", "area": "Devon", "value": "50.791300, -3.457500" },
         { "name": "08.Kingston Lacy", "area": "Dorset", "value": "50.811000, -2.031600" },
         { "name": "09.Lacock", "area": "Wiltshire", "value": "51.415600, -2.117000" },

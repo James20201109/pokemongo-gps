@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#05080b">
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
-  <link rel="stylesheet" href="style.css?v=20261016-1">
+  <link rel="stylesheet" href="style.css?v=20261020-3">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -209,6 +209,29 @@
     <span aria-hidden="true">↑</span><small>TOP</small>
   </button>
 
+  <button class="mobile-tools-toggle" id="mobile-tools-open" type="button" aria-label="開啟快速工具" aria-controls="mobile-tools" aria-expanded="false">
+    <span aria-hidden="true">＋</span><small>TOOLS</small>
+    <b id="mobile-tools-badge" hidden></b>
+  </button>
+
+  <div class="mobile-tools" id="mobile-tools" hidden>
+    <button class="mobile-tools-backdrop" type="button" data-mobile-tools-close aria-label="關閉快速工具"></button>
+    <section class="mobile-tools-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-tools-title">
+      <header>
+        <div><small>QUICK ACCESS</small><h2 id="mobile-tools-title">快速工具</h2></div>
+        <button class="mobile-tools-close" type="button" data-mobile-tools-close aria-label="關閉快速工具">×</button>
+      </header>
+      <div class="mobile-tools-grid">
+        <button type="button" data-mobile-tool="trash"><span aria-hidden="true">⌫</span><strong>清理篩選</strong><small>Storage Filter</small></button>
+        <button type="button" data-mobile-tool="news"><span aria-hidden="true">EV</span><strong>近期活動</strong><small>Event Navigator</small></button>
+        <button type="button" data-mobile-tool="alert"><span aria-hidden="true">◷</span><strong>活動提醒</strong><small>Sparkle Alert</small><b id="mobile-alert-count">0</b></button>
+        <button type="button" data-mobile-tool="gym"><span aria-hidden="true">GYM</span><strong>道館計數器</strong><small>Result Counter</small><b id="mobile-gym-count">0</b></button>
+        <button type="button" data-mobile-tool="top"><span aria-hidden="true">↑</span><strong>回到頂端</strong><small>Back to Top</small></button>
+        <a href="https://www.instagram.com/mr_j_play_game/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">IG</span><strong>Instagram</strong><small>聯絡我們</small></a>
+      </div>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span>✓</span>
     <div><strong id="toast-title">COPIED</strong><small id="toast-label"></small></div>
@@ -374,9 +397,9 @@
     </div>
   </dialog>
 
-  <script src="coordinates-data.js?v=20261015-5"></script>
+  <script src="coordinates-data.js?v=20261020-2"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
-  <script src="script.js?v=20261016-1"></script>
+  <script src="script.js?v=20261020-3"></script>
 </body>
 </html>
