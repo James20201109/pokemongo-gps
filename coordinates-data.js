@@ -2310,8 +2310,8 @@ window.coordinateLibraries = {
         { "name": "01.Dunham Massey", "area": "Greater Manchester", "value": "53.382800, -2.400100" },
         { "name": "02.Fountains Abbey", "area": "North Yorkshire", "value": "54.109500, -1.581800" },
         { "name": "03.Gibside", "area": "Tyne & Wear", "value": "54.922300, -1.723600" },
-        { "name": "04.Lyme", "area": "Cheshire", "value": "53.338200, -2.054400" },
-        { "name": "05.Mount Stewart", "area": "County Down", "value": "54.551600, -5.601800" }
+        { "name": "04.Lyme", "area": "Cheshire", "value": "53.337997, -2.057050" },
+        { "name": "05.Mount Stewart", "area": "County Down", "value": "54.552317, -5.603274" }
       ]
     },
     {
