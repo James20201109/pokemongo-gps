@@ -81,6 +81,48 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "墨西哥地區活動情報 · 亡靈節",
+      "name": "Pokémon GO 2026 亡靈節（Día de Muertos）",
+      "shareId": "dia-de-muertos-mexico-2026",
+      "event": {
+        "category": "regional-event",
+        "scope": "mexico",
+        "access": "free",
+        "periodLabel": "EVENT PERIOD / 墨西哥當地時間與台灣時間",
+        "period": "墨西哥 2026 年 10 月 27 日 10:00～11 月 5 日 20:00；台灣 10 月 28 日 00:00～11 月 6 日 10:00",
+        "startDate": "2026-10-27",
+        "endDate": "2026-11-05",
+        "startDateTime": "2026-10-27T10:00:00-06:00",
+        "endDateTime": "2026-11-05T20:00:00-06:00",
+        "description": "墨西哥限定亡靈節活動，可遇見戴著萬壽菊花冠的卡拉卡拉與夜巡靈；墨西哥城改革大道另有極巨化耿鬼、GO 集章與限定地點背卡內容。",
+        "detailLabel": "活動內容與改革大道限定項目",
+        "bullets": [
+          "全墨西哥活動期間，薰香效果時間延長為 2 倍，並可由寶可補給站與道館取得活動限定貼圖。",
+          "薰香與小隊挑戰有機會遇見戴著萬壽菊花冠的卡拉卡拉，並可能取得墨西哥限定地點背卡。",
+          "限時調查可獲得花冠卡拉卡拉、紅／藍／黃隊貼圖各 5 張、2,026 XP 與 2,026 星星沙子。",
+          "改革大道限定加碼包含交換所需星星沙子減半、誘餌模組延長為 3 小時，以及提高夥伴捕捉協助的發動機率。",
+          "改革大道將推出極巨化耿鬼極巨對戰；GO 集章與限時調查有機會獲得花冠夜巡靈、限定地點背卡及活動主題寶可夢。",
+          "改革大道限定內容結束時間為墨西哥當地 11 月 5 日 20:00；開始時間尚待官方或遊戲內資訊確認。"
+        ],
+        "notice": "活動僅限墨西哥。改革大道限定內容的開始時間在現有資料中仍有差異，請以遊戲內與現場最新公告為準。",
+        "sourceUrl": "https://pokemonhubs.com/pokemongo/55011/",
+        "sourceLabel": "Pokemon Hubs 活動整理",
+        "images": [
+          {
+            "src": "assets/Events/dia-de-muertos-mexico-2026.jpg",
+            "alt": "戴著萬壽菊花冠的卡拉卡拉與墨西哥亡靈節限定背景",
+            "caption": "Pokémon GO 2026 亡靈節 · 花冠卡拉卡拉",
+            "wide": false
+          }
+        ]
+      },
+      "coordinates": [
+        { "name": "改革大道 · 活動座標 01", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.435020, -99.143150" },
+        { "name": "改革大道 · 活動座標 02", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.429944, -99.150812" },
+        { "name": "改革大道 · 活動座標 03", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.434400, -99.151900" }
+      ]
+    },
+    {
       "region": "全球活動情報 · 季節活動",
       "name": "豐收節：收集啃果蟲",
       "event": {
