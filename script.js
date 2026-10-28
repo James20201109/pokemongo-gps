@@ -12,6 +12,7 @@ const countryNames = {
   spain: "SPAIN LIMITED EVENT",
   asiaLimited: "ASIA LIMITED EVENT",
   europe: "EUROPE MUSEUM EVENT",
+  favorites: "FAVORITE EVENTS",
   copied: "COPIED COORDINATES",
   japan: "JAPAN",
   korea: "KOREA",
@@ -65,6 +66,7 @@ const elements = {
   clearCopied: document.querySelector("#clear-copied"),
   copiedCount: document.querySelector("#copied-count"),
   copiedTabCount: document.querySelector("#copied-tab-count"),
+  favoritesTabCount: document.querySelector("#favorites-tab-count"),
   library: document.querySelector("#coordinate-library"),
   empty: document.querySelector("#empty-state"),
   emptyTitle: document.querySelector("#empty-title"),
@@ -147,10 +149,14 @@ let pendingUndoLabel = "";
 let pendingRemovalKey = null;
 let pendingRemovalButton = null;
 let pendingRemovalTimer = null;
+let pendingFavoriteRemovalKey = null;
+let pendingFavoriteRemovalButton = null;
+let pendingFavoriteRemovalTimer = null;
 let mobileToolsCloseTimer = null;
 const sparkleAlertStorageKey = "geo-pulse-sparkle-alert-v1";
 const sparkleAlertHistoryKey = "geo-pulse-sparkle-alert-history-v1";
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
+const favoriteEventsStorageKey = "geo-pulse-favorite-events-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
 const friendsUnlockedStorageKey = "geo-pulse-friends-unlocked-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
@@ -228,6 +234,17 @@ function loadCopiedKeys() {
 }
 
 const copiedKeys = loadCopiedKeys();
+
+function loadFavoriteEventKeys() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(favoriteEventsStorageKey) || "[]");
+    return new Set(Array.isArray(saved) ? saved : []);
+  } catch {
+    return new Set();
+  }
+}
+
+const favoriteEventKeys = loadFavoriteEventKeys();
 
 function loadGymCounter() {
   const empty = { normal: 0, shiny: 0, normalBackground: 0, shinyBackground: 0, perfectIv: 0, history: [] };
@@ -375,6 +392,18 @@ function updateCopiedCounter() {
   elements.clearCopied.disabled = copiedKeys.size === 0;
 }
 
+function saveFavoriteEventKeys() {
+  try {
+    localStorage.setItem(favoriteEventsStorageKey, JSON.stringify([...favoriteEventKeys]));
+  } catch {
+    // 瀏覽器禁止儲存時，收藏仍可在本次頁面開啟期間使用。
+  }
+}
+
+function updateFavoriteCounter() {
+  elements.favoritesTabCount.textContent = favoriteEventKeys.size;
+}
+
 const libraries = {
   adidas: librarySource.adidas,
   events: librarySource.events,
@@ -408,7 +437,7 @@ friendsUnlocked = loadFriendsUnlocked();
 function loadActiveCountry() {
   const params = new URLSearchParams(window.location.search);
   const sharedCountry = params.get("tab") || "";
-  const validSharedCountry = sharedCountry === "copied" || Object.hasOwn(libraries, sharedCountry);
+  const validSharedCountry = ["copied", "favorites"].includes(sharedCountry) || Object.hasOwn(libraries, sharedCountry);
   if (validSharedCountry && sharedCountry === "friends" && !friendsUnlocked) {
     const safeUrl = new URL(window.location.href);
     safeUrl.searchParams.set("tab", "copied");
@@ -423,7 +452,7 @@ function loadActiveCountry() {
   try {
     const saved = localStorage.getItem(activeTabStorageKey);
     if (saved === "friends" && !friendsUnlocked) return "copied";
-    return saved && (saved === "copied" || Object.hasOwn(libraries, saved)) ? saved : "copied";
+    return saved && (["copied", "favorites"].includes(saved) || Object.hasOwn(libraries, saved)) ? saved : "copied";
   } catch {
     return "copied";
   }
@@ -438,6 +467,10 @@ function coordinateValue(coordinate) {
 function coordinateKey(country, groupName, coordinate) {
   const name = typeof coordinate === "object" ? coordinate.name : "";
   return `${country}|${groupName}|${name}|${coordinateValue(coordinate)}`;
+}
+
+function favoriteEventKey(country, group) {
+  return `${country}|${group.shareId || group.name}`;
 }
 
 function normalizedTrainerCode(code = "") {
@@ -674,6 +707,36 @@ function copiedGroups() {
   return groups;
 }
 
+function favoriteGroups() {
+  const groups = [];
+  Object.entries(libraries).forEach(([country, countryGroups]) => {
+    countryGroups.forEach((group) => {
+      if (!group.event || !favoriteEventKeys.has(favoriteEventKey(country, group))) return;
+      const coordinates = (group.coordinates || []).map((coordinate) => {
+        const favoriteCoordinate = typeof coordinate === "string"
+          ? { name: group.name, area: group.region || countryNames[country], value: coordinate }
+          : { ...coordinate };
+        favoriteCoordinate._copiedKey = coordinateKey(country, group.name, coordinate);
+        return favoriteCoordinate;
+      });
+      groups.push({
+        ...group,
+        coordinates,
+        _sourceCountry: country,
+        _favoriteKey: favoriteEventKey(country, group)
+      });
+    });
+  });
+  return groups.sort((a, b) => {
+    const aExpired = eventNewsStatus(a.event) === "expired";
+    const bExpired = eventNewsStatus(b.event) === "expired";
+    if (aExpired !== bExpired) return aExpired ? 1 : -1;
+    const aTime = eventTimeValue(eventStartDate(a.event));
+    const bTime = eventTimeValue(eventStartDate(b.event));
+    return aExpired ? bTime - aTime : aTime - bTime;
+  });
+}
+
 async function copyText(text, label) {
   try {
     await navigator.clipboard.writeText(text);
@@ -846,6 +909,57 @@ function armRemovalConfirmation(key, button, label) {
     cancelRemovalConfirmation();
     elements.toast.classList.remove("show");
   }, 1500);
+}
+
+function cancelFavoriteRemovalConfirmation() {
+  clearTimeout(pendingFavoriteRemovalTimer);
+  pendingFavoriteRemovalButton?.classList.remove("confirm-remove");
+  pendingFavoriteRemovalKey = null;
+  pendingFavoriteRemovalButton = null;
+}
+
+function armFavoriteRemovalConfirmation(key, button, label) {
+  cancelFavoriteRemovalConfirmation();
+  pendingFavoriteRemovalKey = key;
+  pendingFavoriteRemovalButton = button;
+  button.classList.add("confirm-remove");
+  button.title = "再次點擊取消收藏";
+  button.setAttribute("aria-label", `再次點擊取消收藏${label}`);
+  pendingFavoriteRemovalTimer = setTimeout(() => {
+    cancelFavoriteRemovalConfirmation();
+    button.title = "取消收藏（需連續點擊兩次）";
+    button.setAttribute("aria-label", `取消收藏${label}，需連續點擊兩次`);
+  }, 1800);
+}
+
+function toggleFavoriteEvent(key, button, label) {
+  if (!favoriteEventKeys.has(key)) {
+    cancelFavoriteRemovalConfirmation();
+    favoriteEventKeys.add(key);
+    saveFavoriteEventKeys();
+    updateFavoriteCounter();
+    button.classList.add("is-favorite");
+    button.querySelector("span").textContent = "★";
+    button.title = "取消收藏（需連續點擊兩次）";
+    button.setAttribute("aria-label", `取消收藏${label}，需連續點擊兩次`);
+    return;
+  }
+  if (pendingFavoriteRemovalKey !== key) {
+    armFavoriteRemovalConfirmation(key, button, label);
+    return;
+  }
+  cancelFavoriteRemovalConfirmation();
+  favoriteEventKeys.delete(key);
+  saveFavoriteEventKeys();
+  updateFavoriteCounter();
+  if (activeCountry === "favorites") {
+    render();
+    return;
+  }
+  button.classList.remove("is-favorite");
+  button.querySelector("span").textContent = "☆";
+  button.title = "加入我的最愛";
+  button.setAttribute("aria-label", `將${label}加入我的最愛`);
 }
 
 function openImageModal(image, alt, caption) {
@@ -1094,7 +1208,7 @@ function renderNowMode(now = Date.now()) {
 }
 
 function libraryIsExpired(country) {
-  if (["copied", "hot2026", "hot2025", "raid"].includes(country)) return false;
+  if (["favorites", "copied", "hot2026", "hot2025", "raid"].includes(country)) return false;
   const countryEvent = eventSource[country];
   if (countryEvent?.endDate) return eventNewsStatus(countryEvent) === "expired";
   const groups = libraries[country] || [];
@@ -1409,6 +1523,7 @@ function renderFriends(query) {
   elements.shareView.hidden = true;
   elements.eventBanner.hidden = true;
   updateCopiedCounter();
+  updateFavoriteCounter();
 }
 
 function render() {
@@ -1422,7 +1537,11 @@ function render() {
   visibleCoordinateKeys = [];
   let visibleGroups = 0;
 
-  const activeGroups = activeCountry === "copied" ? copiedGroups() : [...libraries[activeCountry]];
+  const activeGroups = activeCountry === "favorites"
+    ? favoriteGroups()
+    : activeCountry === "copied"
+      ? copiedGroups()
+      : [...libraries[activeCountry]];
   if (activeCountry === "us") {
     activeGroups.sort((a, b) => {
       const aExpired = a.event && eventNewsStatus(a.event) === "expired";
@@ -1460,6 +1579,7 @@ function render() {
   completedEventContent.className = "completed-event-content";
   let completedEventCount = 0;
   activeGroups.forEach((group) => {
+    const sourceCountry = group._sourceCountry || activeCountry;
     const groupMatches = `${group.region} ${group.name}`.toLowerCase().includes(query);
     const matches = (group.coordinates || []).filter((coordinate) => {
       const searchable = typeof coordinate === "string"
@@ -1474,7 +1594,7 @@ function render() {
     const matchKeys = matches.map((coordinate) =>
       typeof coordinate === "object" && coordinate._copiedKey
         ? coordinate._copiedKey
-        : coordinateKey(activeCountry, group.name, coordinate)
+        : coordinateKey(sourceCountry, group.name, coordinate)
     );
     visibleCoordinateKeys.push(...matchKeys);
     const section = document.createElement("section");
@@ -1482,14 +1602,15 @@ function render() {
     const groupShareId = group.shareId || group.name;
     section.dataset.shareId = groupShareId;
     const expiredUsGroup = activeCountry === "us" && group.event && eventNewsStatus(group.event) === "expired";
+    const expiredFavoriteGroup = activeCountry === "favorites" && group.event && eventNewsStatus(group.event) === "expired";
     const legacyCollapsible = (activeCountry === "japan" && collapsibleJapanGroups.has(group.name)) || expiredUsGroup;
     const eventCollapsible = Boolean(group.event);
     const collapsible = legacyCollapsible || eventCollapsible;
-    const groupStateKey = `${activeCountry}|${group.name}`;
+    const groupStateKey = `${sourceCountry}|${group.name}`;
     section.dataset.groupKey = groupStateKey;
     const expanded = pendingSharedGroup === groupShareId
       || (eventCollapsible ? !collapsedEventGroups.has(groupStateKey) : !legacyCollapsible || expandedGroups.has(groupStateKey));
-    section.classList.toggle("is-expired", Boolean(expiredUsGroup));
+    section.classList.toggle("is-expired", Boolean(expiredUsGroup || expiredFavoriteGroup));
     section.classList.toggle("is-collapsed", collapsible && !expanded);
     const region = group.region && group.region !== group.name ? `<span>${group.region}</span>` : "";
     const groupSource = group.sourceUrl
@@ -1500,11 +1621,19 @@ function render() {
       ? `<button class="group-collapse" type="button" aria-expanded="${expanded}" aria-label="${expanded ? "收合" : "展開"}${escapeHtml(collapseTargetLabel)}"><span aria-hidden="true">${expanded ? "−" : "＋"}</span></button>`
       : "";
     const groupStamp = stampedJapanGroups.has(group.name) ? `<span class="group-stamp" aria-hidden="true">蓋</span>` : "";
+    const groupFavoriteKey = group._favoriteKey || favoriteEventKey(sourceCountry, group);
+    const isFavorite = group.event && favoriteEventKeys.has(groupFavoriteKey);
+    const favoriteControl = group.event
+      ? `<button class="group-favorite${isFavorite ? " is-favorite" : ""}" type="button" aria-label="${isFavorite ? `取消收藏${escapeHtml(group.name)}，需連續點擊兩次` : `將${escapeHtml(group.name)}加入我的最愛`}" title="${isFavorite ? "取消收藏（需連續點擊兩次）" : "加入我的最愛"}"><span aria-hidden="true">${isFavorite ? "★" : "☆"}</span></button>`
+      : "";
     const shareControl = activeCountry === "copied"
       ? ""
       : `<button class="group-share" type="button" aria-label="分享${escapeHtml(group.name)}區塊" title="分享此區塊"><span aria-hidden="true">↗</span></button>`;
-    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${shareControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
-    section.querySelector(".group-share")?.addEventListener("click", () => shareLink(activeCountry, groupShareId));
+    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${favoriteControl}${shareControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    section.querySelector(".group-favorite")?.addEventListener("click", (event) => {
+      toggleFavoriteEvent(groupFavoriteKey, event.currentTarget, group.name);
+    });
+    section.querySelector(".group-share")?.addEventListener("click", () => shareLink(sourceCountry, groupShareId));
     section.querySelector(".group-collapse")?.addEventListener("click", () => {
       if (eventCollapsible) {
         if (collapsedEventGroups.has(groupStateKey)) {
@@ -1589,7 +1718,7 @@ function render() {
     if (matches.length) {
       const grid = document.createElement("div");
       grid.className = "coordinate-grid";
-      const groupEndDate = group.event?.endDate || group.endDate || eventSource[activeCountry]?.endDate;
+      const groupEndDate = group.event?.endDate || group.endDate || eventSource[sourceCountry]?.endDate;
       grid.replaceChildren(...matches.map((coordinate, index) =>
         makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index])
       ));
@@ -1625,15 +1754,20 @@ function render() {
   elements.groupCount.textContent = visibleGroups;
   elements.countryLabel.textContent = countryNames[activeCountry];
   elements.empty.hidden = visibleGroups > 0;
-  elements.emptyTitle.textContent = activeCountry === "copied" && copiedKeys.size === 0
-    ? "尚未複製任何座標"
-    : "找不到符合的座標";
-  elements.emptyDescription.textContent = activeCountry === "copied" && copiedKeys.size === 0
-    ? "回到其他頁籤點擊座標，紀錄就會出現在這裡。"
-    : "請更換搜尋條件。";
+  elements.emptyTitle.textContent = activeCountry === "favorites" && favoriteEventKeys.size === 0
+    ? "尚未收藏任何活動"
+    : activeCountry === "copied" && copiedKeys.size === 0
+      ? "尚未複製任何座標"
+      : "找不到符合的座標";
+  elements.emptyDescription.textContent = activeCountry === "favorites" && favoriteEventKeys.size === 0
+    ? "到活動區塊點擊星星，完整活動就會收藏在這裡。"
+    : activeCountry === "copied" && copiedKeys.size === 0
+      ? "回到其他頁籤點擊座標，紀錄就會出現在這裡。"
+      : "請更換搜尋條件。";
   elements.copyAll.disabled = visibleCoordinates.length === 0;
-  elements.shareView.hidden = activeCountry === "copied" || activeCountry === "friends";
+  elements.shareView.hidden = ["favorites", "copied", "friends"].includes(activeCountry);
   updateCopiedCounter();
+  updateFavoriteCounter();
 
   const countryEvent = eventSource[activeCountry];
   elements.eventBanner.hidden = !countryEvent;
