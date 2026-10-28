@@ -101,10 +101,12 @@ window.coordinateLibraries = {
           "薰香與小隊挑戰有機會遇見戴著萬壽菊花冠的卡拉卡拉，並可能取得墨西哥限定地點背卡。",
           "限時調查可獲得花冠卡拉卡拉、紅／藍／黃隊貼圖各 5 張、2,026 XP 與 2,026 星星沙子。",
           "改革大道限定加碼包含交換所需星星沙子減半、誘餌模組延長為 3 小時，以及提高夥伴捕捉協助的發動機率。",
-          "改革大道將推出極巨化耿鬼極巨對戰；GO 集章與限時調查有機會獲得花冠夜巡靈、限定地點背卡及活動主題寶可夢。",
-          "改革大道限定內容結束時間為墨西哥當地 11 月 5 日 20:00；開始時間尚待官方或遊戲內資訊確認。"
+          "改革大道限定內容於台灣時間 10 月 31 日 24:00（即 11 月 1 日 00:00）開始，對應墨西哥城當地 10 月 31 日 10:00。",
+          "超極巨耿鬼將在極巨對戰登場，捕捉時有機會獲得限定地點背卡。",
+          "戴著萬壽菊花冠的夜巡靈可透過 GO 集章活動與限時調查取得，並有機會獲得限定地點背卡。",
+          "改革大道限定內容於墨西哥當地 11 月 5 日 20:00 結束，對應台灣時間 11 月 6 日 10:00。"
         ],
-        "notice": "活動僅限墨西哥。改革大道限定內容的開始時間在現有資料中仍有差異，請以遊戲內與現場最新公告為準。",
+        "notice": "活動僅限墨西哥；改革大道限定內容開始時間為台灣時間 2026 年 11 月 1 日 00:00。實際出現狀態仍請以遊戲內與現場公告為準。",
         "sourceUrl": "https://pokemonhubs.com/pokemongo/55011/",
         "sourceLabel": "Pokemon Hubs 活動整理",
         "images": [
@@ -113,13 +115,22 @@ window.coordinateLibraries = {
             "alt": "戴著萬壽菊花冠的卡拉卡拉與墨西哥亡靈節限定背景",
             "caption": "Pokémon GO 2026 亡靈節 · 花冠卡拉卡拉",
             "wide": false
+          },
+          {
+            "src": "assets/Events/dia-de-muertos-gigantamax-gengar-2026.png",
+            "alt": "墨西哥亡靈節活動的超極巨耿鬼與萬壽菊裝飾背景",
+            "caption": "改革大道限定 · 超極巨耿鬼極巨對戰",
+            "wide": false
           }
         ]
       },
       "coordinates": [
         { "name": "改革大道 · 活動座標 01", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.435020, -99.143150" },
         { "name": "改革大道 · 活動座標 02", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.429944, -99.150812" },
-        { "name": "改革大道 · 活動座標 03", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.434400, -99.151900" }
+        { "name": "改革大道 · 活動座標 03", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.434400, -99.151900" },
+        { "name": "革命紀念塔", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.436200, -99.154600" },
+        { "name": "改革大道獨立紀念柱", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.427000, -99.167700" },
+        { "name": "查普爾特佩克公園入口", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.421400, -99.181300" }
       ]
     },
     {
