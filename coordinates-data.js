@@ -81,6 +81,54 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
+      "region": "全球活動情報 · 巨大足跡",
+      "name": "挑戰再次襲來的「無極汰那」吧！",
+      "shareId": "dynamax-trails-eternamax-eternatus-2026",
+      "event": {
+        "category": "max-battle-event",
+        "scope": "global",
+        "access": "free-with-optional-upgrade",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 11 月 16 日 10:00～11 月 23 日 20:00",
+        "startDate": "2026-11-16",
+        "endDate": "2026-11-23",
+        "startDateTime": "2026-11-16T10:00:00+08:00",
+        "endDateTime": "2026-11-23T20:00:00+08:00",
+        "description": "「巨大足跡」帶來一週的極巨對戰；過去曾在極巨對戰登場的極巨化寶可夢將再次出現，無極巨化無極汰那也會於指定時段席捲全球能量點。",
+        "detailLabel": "極巨對戰、無極汰那再襲與活動加碼",
+        "bullets": [
+          "野外可能遇見活動主題寶可夢，包含所有曾在極巨對戰首度登場的寶可夢；不包含傳說的寶可夢與幻之寶可夢。",
+          "所有曾在 Pokémon GO 登場的極巨化寶可夢都有機會在極巨對戰出現；不包含傳說的寶可夢與幻之寶可夢。",
+          "活動期間參與極巨對戰並成功捕捉寶可夢後，有機會獲得紀念捕捉時間的特別背卡。",
+          "11 月 19 日 18:00～19:00 為敲音猴、炎兔兒與淚眼蜥聚焦時刻，捕捉寶可夢糖果加倍。",
+          "無極汰那再襲：11 月 21 日 11:00～14:00；無極巨化無極汰那將佔據大多數能量點。",
+          "擊敗無極巨化無極汰那後無法直接捕捉，但可獲得大量無極汰那的糖果與糖果 XL。",
+          "免費 GO Pass：巨大足跡可取得 1 隻無極汰那；已捕捉過無極汰那的訓練家無法再捕捉第 2 隻，將改為取得無極汰那糖果。",
+          "活動期間能量點更常刷新，每日蒐集極巨粒子的上限增加至 2,400，從能量點取得的極巨粒子增加為 8 倍。",
+          "台灣時間 11 月 21 日 05:00～11 月 22 日 10:00，遠距團體戰每日參與上限由 10 次提高至 30 次。",
+          "活動田野調查可獲得星星沙子、無極汰那糖果及活動主題寶可夢；活動貼圖可由寶可補給站、友情禮物、商店與 GO Pass 取得。"
+        ],
+        "notice": "無極巨化無極汰那的極巨對戰獎勵是糖果與糖果 XL，不能在對戰後直接捕捉；可捕捉的無極汰那由 GO Pass 提供，豪華版為選購升級。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/dynamax-trails-eternamax-eternatus-2026",
+        "sourceLabel": "Pokémon GO 活動官網",
+        "images": [
+          {
+            "src": "assets/Events/dynamax-trails-eternamax-eternatus-2026.png",
+            "alt": "無極汰那的特別背卡與寶可夢資訊畫面",
+            "caption": "巨大足跡 · 無極汰那再次襲來",
+            "wide": false
+          },
+          {
+            "src": "assets/Events/dynamax-trails-gigantamax-charizard-special-background.png",
+            "alt": "超極巨化噴火龍的特別背卡與寶可夢資訊畫面",
+            "caption": "巨大足跡 · 極巨對戰特別背卡範例",
+            "wide": false
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
       "region": "墨西哥地區活動情報 · 亡靈節",
       "name": "Pokémon GO 2026 亡靈節（Día de Muertos）",
       "shareId": "dia-de-muertos-mexico-2026",
