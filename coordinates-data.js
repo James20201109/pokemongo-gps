@@ -169,15 +169,17 @@ window.coordinateLibraries = {
             "alt": "墨西哥亡靈節活動的超極巨耿鬼與萬壽菊裝飾背景",
             "caption": "改革大道限定 · 超極巨耿鬼極巨對戰",
             "wide": false
+          },
+          {
+            "src": "assets/Events/dia-de-muertos-flower-crown-duskull-2026.png",
+            "alt": "戴著萬壽菊花冠的夜巡靈與墨西哥城限定地點背卡",
+            "caption": "改革大道限定 · 花冠夜巡靈",
+            "wide": false
           }
         ]
       },
       "coordinates": [
-        { "name": "改革大道 · 活動座標 01", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.435020, -99.143150" },
-        { "name": "改革大道 · 活動座標 02", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.429944, -99.150812" },
-        { "name": "改革大道 · 活動座標 03", "area": "墨西哥 · 墨西哥城｜亡靈節限定活動", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.434400, -99.151900" },
-        { "name": "革命紀念塔", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.436200, -99.154600" },
-        { "name": "改革大道獨立紀念柱", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.427000, -99.167700" },
+        { "name": "改革大道(蓋章)", "area": "墨西哥 · 墨西哥城｜蓋章-夜巡靈/ 超極巨化-耿鬼", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.427000, -99.167700" },
         { "name": "查普爾特佩克公園入口", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.421400, -99.181300" }
       ]
     },
