@@ -115,6 +115,9 @@ h2 { margin:0;font-size:34px;letter-spacing:-.04em; }
 .country-tab.india-tab { border-color:rgba(255,178,62,.36);color:#c89757; }
 .country-tab.india-tab b { color:#ffb23e; }
 .country-tab.india-tab:hover,.country-tab.india-tab.active { border-color:#ffb23e;background:linear-gradient(120deg,rgba(255,178,62,.14),rgba(255,81,126,.05));color:#fff0d8;box-shadow:inset 0 -2px #ffb23e,0 0 18px rgba(255,178,62,.11); }
+.country-tab.mexico-tab { border-color:rgba(76,201,145,.36);color:#79bc9d; }
+.country-tab.mexico-tab b { color:#4fd39a; }
+.country-tab.mexico-tab:hover,.country-tab.mexico-tab.active { border-color:#4fd39a;background:linear-gradient(120deg,rgba(79,211,154,.14),rgba(255,87,87,.05));color:#ddffef;box-shadow:inset 0 -2px #4fd39a,0 0 18px rgba(79,211,154,.11); }
 .country-tab.copied-tab { border-color:rgba(199,255,74,.3);color:#91a65e; }
 .country-tab.copied-tab b { color:var(--lime); }
 .country-tab.copied-tab:hover,.country-tab.copied-tab.active { border-color:var(--lime);background:rgba(199,255,74,.09);color:#ecffba;box-shadow:inset 0 -2px var(--lime),0 0 18px rgba(199,255,74,.07); }

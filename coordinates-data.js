@@ -1062,21 +1062,28 @@ window.coordinateLibraries = {
       "region": "印度限定活動",
       "name": "光之祭典回歸 · Festival of Lights",
       "event": {
-        "periodLabel": "EVENT PERIOD / 印度當地時間",
-        "period": "2026 年 11 月 6 日 10:00～11 月 8 日 20:00",
+        "periodLabel": "EVENT PERIOD / 印度與台灣時間",
+        "period": "印度 2026 年 11 月 6 日 10:00～11 月 8 日 20:00；台灣 11 月 6 日 12:30～11 月 8 日 22:30",
         "startDate": "2026-11-06",
         "endDate": "2026-11-08",
+        "startDateTime": "2026-11-06T10:00:00+05:30",
+        "endDateTime": "2026-11-08T20:00:00+05:30",
         "description": "印度限定光之祭典活動，穿著紗麗與庫爾塔的皮卡丘將在一星團體戰登場，並有機會獲得特殊背景卡。",
         "detailLabel": "活動內容",
         "bullets": [
           "一星團體戰：穿著紗麗的皮卡丘與穿著庫爾塔的皮卡丘，皆有異色機會及特殊背景卡機會。",
-          "Sparkle O’Clock：每日印度當地時間 18:00、18:30、19:00、19:30，各大量出現 5 分鐘。",
-          "大量出現：小火龍、紗麗皮卡丘、庫爾塔皮卡丘、燈籠魚、咩利羊、噴火駝、燭光靈、燈火幽靈、睡睡菇、光蚪仔。",
-          "分歧限時調查：可選擇遇見紗麗皮卡丘或庫爾塔皮卡丘，並帶有特殊背景卡。",
+          "Sparkle O’Clock：每日印度當地時間 18:00、18:30、19:00、19:30，各大量出現 5 分鐘；對應台灣時間 20:30、21:00、21:30、22:00。",
+          "Sparkle O’Clock 出現：小火龍、紗麗皮卡丘、庫爾塔皮卡丘、燈籠魚、咩利羊、噴火駝、燭光靈、燈火幽靈、睡睡菇與光蚪仔；兩種服飾皮卡丘有特殊背景卡機會。",
+          "誘餌模組出現：小火龍、燈籠魚、咩利羊、噴火駝、燭光靈、燈火幽靈、睡睡菇與光蚪仔。",
+          "分歧限時調查於印度當地時間 11 月 1 日 06:00 開放（台灣時間 08:30），可選擇遇見紗麗皮卡丘或庫爾塔皮卡丘，並帶有特殊背景卡。",
           "誘餌模組持續時間延長為 3 倍。",
           "旋轉寶可補給站可獲得活動貼圖。"
         ],
-        "notice": "團體戰及野外遇見的服裝皮卡丘，特殊背景卡並非必定出現。來源：TrainersGO。",
+        "notice": "團體戰及 Sparkle O’Clock 遇見的服飾皮卡丘，特殊背景卡並非必定出現；實際活動內容以遊戲內顯示為準。",
+        "sources": [
+          { "url": "https://pokemongo.com/en/news/festival-of-lights-2026", "label": "Pokémon GO 官方公告" },
+          { "url": "https://www.threads.com/share/BAWLtkptLM/", "label": "Threads 中文整理" }
+        ],
         "images": [
           {
             "src": "assets/India/diwali-kurta-pikachu.png",
@@ -1087,11 +1094,46 @@ window.coordinateLibraries = {
             "src": "assets/India/diwali-saree-pikachu.png",
             "alt": "穿著紗麗的皮卡丘特殊背景",
             "caption": "印度光之祭典 · 穿著紗麗的皮卡丘"
+          },
+          {
+            "src": "assets/India/festival-of-lights-2026-background-pikachu.png",
+            "alt": "穿著庫爾塔與紗麗的皮卡丘煙火特殊背景",
+            "caption": "印度光之祭典 · 服飾皮卡丘特殊背景"
           }
         ]
       },
       "coordinates": [
-        { "name": "洛迪花園", "area": "印度 · 新德里｜Sparkle O’Clock", "timezone": "Asia/Kolkata", "clockType": "sparkle", "accent": "#ffb23e", "value": "28.592900, 77.220600" }
+        { "name": "洛迪花園", "area": "印度 · 新德里｜Sparkle O’Clock", "timezone": "Asia/Kolkata", "clockType": "sparkle", "accent": "#ffb23e", "value": "28.593700, 77.220200" }
+      ]
+    }
+  ],
+  "mexico": [
+    {
+      "region": "墨西哥地區活動 · 墨西哥城蓋章",
+      "name": "墨西哥城・摔角鷹人蓋章活動",
+      "shareId": "mexico-city-hawlucha-stamp-rally",
+      "event": {
+        "category": "regional-event",
+        "scope": "mexico",
+        "access": "free",
+        "description": "墨西哥城的摔角鷹人集章與地點背景座標，共收錄 8 個位置。",
+        "detailLabel": "活動主角",
+        "detail": "摔角鷹人（Hawlucha）墨西哥城地點背景。",
+        "sourceUrl": "https://www.threads.com/share/HZd8Z06wU/",
+        "sourceLabel": "Threads 文獻來源",
+        "image": "assets/Events/mexico-city-hawlucha-stamp-rally.png",
+        "imageAlt": "摔角鷹人墨西哥城地點背景與寶可夢資訊畫面",
+        "imageCaption": "摔角鷹人 · 墨西哥城蓋章活動"
+      },
+      "coordinates": [
+        { "name": "摔角鷹人蓋章點 01", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.425154, -99.171610" },
+        { "name": "摔角鷹人蓋章點 02", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.435029, -99.141312" },
+        { "name": "摔角鷹人蓋章點 03", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.432535, -99.132069" },
+        { "name": "摔角鷹人蓋章點 04", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.425963, -99.186201" },
+        { "name": "摔角鷹人蓋章點 05", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.440694, -99.204741" },
+        { "name": "摔角鷹人蓋章點 06", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.415683, -99.196329" },
+        { "name": "摔角鷹人蓋章點 07", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.349129, -99.163542" },
+        { "name": "摔角鷹人蓋章點 08", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.377790, -99.179110" }
       ]
     }
   ],
@@ -2245,6 +2287,30 @@ window.coordinateLibraries = {
         { "name": "長崎集章點 06", "area": "電龍長崎背卡", "value": "32.752500, 129.879400" },
         { "name": "長崎集章點 07", "area": "電龍長崎背卡", "value": "32.741200, 129.868700" },
         { "name": "長崎集章點 08", "area": "電龍長崎背卡", "value": "32.759200, 129.864800" }
+      ]
+    },
+    {
+      "region": "日本限定活動 · 仙台蓋章",
+      "name": "仙台・乘龍蓋章活動",
+      "event": {
+        "description": "日本宮城縣仙台周邊的乘龍集章活動座標。",
+        "detailLabel": "活動主角",
+        "detail": "乘龍（Lapras）仙台背景，共收錄 8 個蓋章位置。",
+        "sourceUrl": "https://www.threads.com/share/F4AbjZqO-/",
+        "sourceLabel": "Threads 文獻來源",
+        "image": "assets/Japan/sendai-stamp-lapras.png",
+        "imageAlt": "乘龍仙台特殊背景與寶可夢資訊畫面",
+        "imageCaption": "乘龍 · 仙台蓋章活動"
+      },
+      "coordinates": [
+        { "name": "仙台乘龍蓋章點 01", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2529230, 140.8564870" },
+        { "name": "仙台乘龍蓋章點 02", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2652690, 140.8655830" },
+        { "name": "仙台乘龍蓋章點 03", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.3027830, 140.9883420" },
+        { "name": "仙台乘龍蓋章點 04", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2587230, 140.8790010" },
+        { "name": "仙台乘龍蓋章點 05", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.4213990, 141.3053310" },
+        { "name": "仙台乘龍蓋章點 06", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.0024740, 140.6171350" },
+        { "name": "仙台乘龍蓋章點 07", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.3696990, 141.0628730" },
+        { "name": "仙台乘龍蓋章點 08", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2254280, 140.7269710" }
       ]
     },
     {

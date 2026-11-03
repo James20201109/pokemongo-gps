@@ -9,6 +9,7 @@ const countryNames = {
   indonesia: "INDONESIA LIMITED EVENT",
   pokexciting: "POKÉXCITING ASIA TOUR",
   india: "INDIA LIMITED EVENT",
+  mexico: "MEXICO",
   spain: "SPAIN LIMITED EVENT",
   asiaLimited: "ASIA LIMITED EVENT",
   europe: "EUROPE MUSEUM EVENT",
@@ -412,6 +413,7 @@ const libraries = {
   indonesia: librarySource.indonesia,
   pokexciting: librarySource.pokexciting,
   india: librarySource.india,
+  mexico: librarySource.mexico,
   spain: librarySource.spain,
   asiaLimited: librarySource.asiaLimited,
   europe: librarySource.europe,
@@ -619,11 +621,11 @@ function zonedDateKey(timeZone, date = new Date()) {
 }
 
 function sparkleAlertOccurrence(date = new Date()) {
-  const timeZone = "Asia/Kolkata";
+  const timeZone = "Asia/Taipei";
   const dateKey = zonedDateKey(timeZone, date);
   if (dateKey < "2026-11-06" || dateKey > "2026-11-08") return null;
   const current = localMinutes(timeZone, date);
-  const starts = [18 * 60, 18 * 60 + 30, 19 * 60, 19 * 60 + 30];
+  const starts = [20 * 60 + 30, 21 * 60, 21 * 60 + 30, 22 * 60];
   const start = starts.find((value) => current >= value - 10 && current < value + 5);
   if (start === undefined) return null;
   const time = `${String(Math.floor(start / 60)).padStart(2, "0")}:${String(start % 60).padStart(2, "0")}`;
@@ -675,7 +677,7 @@ function checkSparkleAlert(date = new Date()) {
   } catch {
     // 儲存失敗時，仍避免在本次瀏覽期間重複提醒。
   }
-  window.alert(`Sparkle O’Clock 活動提醒\n\n印度｜${occurrence.time}｜${occurrence.state}\n洛迪花園：28.592900, 77.220600`);
+  window.alert(`Sparkle O’Clock 活動提醒\n\n台灣時間｜${occurrence.time}｜${occurrence.state}\n印度 · 洛迪花園：28.593700, 77.220200`);
 }
 
 function allCoordinates() {
