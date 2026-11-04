@@ -179,7 +179,7 @@ window.coordinateLibraries = {
         ]
       },
       "coordinates": [
-        { "name": "改革大道(蓋章)", "area": "墨西哥 · 墨西哥城｜蓋章-夜巡靈/ 超極巨化-耿鬼", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.427000, -99.167700" },
+        { "stamp": true, "name": "改革大道(蓋章)", "area": "墨西哥 · 墨西哥城｜蓋章-夜巡靈/ 超極巨化-耿鬼", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.427000, -99.167700" },
         { "name": "查普爾特佩克公園入口", "area": "墨西哥 · 墨西哥城｜亡靈節推薦座標", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.421400, -99.181300" }
       ]
     },
@@ -1126,14 +1126,14 @@ window.coordinateLibraries = {
         "imageCaption": "摔角鷹人 · 墨西哥城蓋章活動"
       },
       "coordinates": [
-        { "name": "摔角鷹人蓋章點 01", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.425154, -99.171610" },
-        { "name": "摔角鷹人蓋章點 02", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.435029, -99.141312" },
-        { "name": "摔角鷹人蓋章點 03", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.432535, -99.132069" },
-        { "name": "摔角鷹人蓋章點 04", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.425963, -99.186201" },
-        { "name": "摔角鷹人蓋章點 05", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.440694, -99.204741" },
-        { "name": "摔角鷹人蓋章點 06", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.415683, -99.196329" },
-        { "name": "摔角鷹人蓋章點 07", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.349129, -99.163542" },
-        { "name": "摔角鷹人蓋章點 08", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.377790, -99.179110" }
+        { "stamp": true, "name": "摔角鷹人蓋章點 01", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.425154, -99.171610" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 02", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.435029, -99.141312" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 03", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.432535, -99.132069" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 04", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.425963, -99.186201" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 05", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.440694, -99.204741" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 06", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.415683, -99.196329" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 07", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.349129, -99.163542" },
+        { "stamp": true, "name": "摔角鷹人蓋章點 08", "area": "墨西哥 · 墨西哥城｜摔角鷹人", "timezone": "America/Mexico_City", "clockType": "local", "value": "19.377790, -99.179110" }
       ]
     }
   ],
@@ -1270,12 +1270,12 @@ window.coordinateLibraries = {
         "imageCaption": "PokéXciting! in 吉隆坡 · 綠松石色皮卡丘背景版本"
       },
       "coordinates": [
-        { "name": "必蓋 · 背卡皮卡丘", "area": "KLCC Park · 馬來西亞", "value": "3.1567643, 101.71269" },
-        { "name": "吉隆坡蓋章點 02", "area": "KLCC Park · 馬來西亞", "value": "3.1553228, 101.71263" },
-        { "name": "吉隆坡蓋章點 03", "area": "KLCC Park · 馬來西亞", "value": "3.154421, 101.71312" },
-        { "name": "吉隆坡蓋章點 04", "area": "KLCC Park · 馬來西亞", "value": "3.1549568, 101.714195" },
-        { "name": "吉隆坡蓋章點 05", "area": "KLCC Park · 馬來西亞", "value": "3.1563628, 101.71499" },
-        { "name": "吉隆坡蓋章點 06", "area": "KLCC Park · 馬來西亞", "value": "3.155417, 101.716769" }
+        { "stamp": true, "name": "必蓋 · 背卡皮卡丘", "area": "KLCC Park · 馬來西亞", "value": "3.1567643, 101.71269" },
+        { "stamp": true, "name": "吉隆坡蓋章點 02", "area": "KLCC Park · 馬來西亞", "value": "3.1553228, 101.71263" },
+        { "stamp": true, "name": "吉隆坡蓋章點 03", "area": "KLCC Park · 馬來西亞", "value": "3.154421, 101.71312" },
+        { "stamp": true, "name": "吉隆坡蓋章點 04", "area": "KLCC Park · 馬來西亞", "value": "3.1549568, 101.714195" },
+        { "stamp": true, "name": "吉隆坡蓋章點 05", "area": "KLCC Park · 馬來西亞", "value": "3.1563628, 101.71499" },
+        { "stamp": true, "name": "吉隆坡蓋章點 06", "area": "KLCC Park · 馬來西亞", "value": "3.155417, 101.716769" }
       ]
     },
     {
@@ -1300,12 +1300,12 @@ window.coordinateLibraries = {
         "imageCaption": "PokéXciting! in 台北 · 台北 101 背景"
       },
       "coordinates": [
-        { "name": "台北 101 背景（右下 ↘️）", "area": "台灣 · 台北市信義區", "value": "25.037260, 121.566990" },
-        { "name": "台北蓋章點 02", "area": "台灣 · 台北市信義區", "value": "25.038400, 121.567200" },
-        { "name": "台北蓋章點 03", "area": "台灣 · 台北市信義區", "value": "25.035400, 121.567000" },
-        { "name": "台北蓋章點 04", "area": "台灣 · 台北市信義區", "value": "25.036600, 121.565100" },
-        { "name": "台北蓋章點 05", "area": "台灣 · 台北市信義區", "value": "25.033100, 121.564500" },
-        { "name": "台北蓋章點 06", "area": "台灣 · 台北市信義區", "value": "25.035800, 121.571500" }
+        { "stamp": true, "name": "台北 101 背景（右下 ↘️）", "area": "台灣 · 台北市信義區", "value": "25.037260, 121.566990" },
+        { "stamp": true, "name": "台北蓋章點 02", "area": "台灣 · 台北市信義區", "value": "25.038400, 121.567200" },
+        { "stamp": true, "name": "台北蓋章點 03", "area": "台灣 · 台北市信義區", "value": "25.035400, 121.567000" },
+        { "stamp": true, "name": "台北蓋章點 04", "area": "台灣 · 台北市信義區", "value": "25.036600, 121.565100" },
+        { "stamp": true, "name": "台北蓋章點 05", "area": "台灣 · 台北市信義區", "value": "25.033100, 121.564500" },
+        { "stamp": true, "name": "台北蓋章點 06", "area": "台灣 · 台北市信義區", "value": "25.035800, 121.571500" }
       ]
     },
     {
@@ -1330,7 +1330,7 @@ window.coordinateLibraries = {
         "imageCaption": "PokéXciting! in 新加坡 · 第 3 航廈出境大廳"
       },
       "coordinates": [
-        { "name": "第 3 航廈出境大廳（右上 ↗️）", "area": "新加坡", "value": "1.355891, 103.986797" }
+        { "stamp": true, "name": "第 3 航廈出境大廳（右上 ↗️）", "area": "新加坡", "value": "1.355891, 103.986797" }
       ]
     },
     {
@@ -1355,7 +1355,7 @@ window.coordinateLibraries = {
         "imageCaption": "PokéXciting! in 馬尼拉 · MOA Sky"
       },
       "coordinates": [
-        { "name": "SM Mall of Asia：MOA Sky", "area": "菲律賓 · 馬尼拉", "value": "14.534890, 120.979970" }
+        { "stamp": true, "name": "SM Mall of Asia：MOA Sky", "area": "菲律賓 · 馬尼拉", "value": "14.534890, 120.979970" }
       ]
     },
     {
@@ -1447,12 +1447,12 @@ window.coordinateLibraries = {
         "imageCaption": "Pokémon GO × LEGO 聯名活動特殊背景示意圖"
       },
       "coordinates": [
-        { "name": "LEGO Store · 紐約", "area": "美國紐約 · 當地 17:00 · 台灣隔日 05:00", "value": "40.758800, -73.977993" },
-        { "name": "LEGO Store · 倫敦", "area": "英國倫敦 · 當地 17:00 · 台灣隔日 00:00", "value": "51.510285, -0.131135" },
-        { "name": "LEGO Store · 柏林", "area": "德國柏林 · 當地 17:00 · 台灣當日 23:00", "value": "52.503632, 13.338763" },
-        { "name": "LEGO Store · 巴黎", "area": "法國巴黎 · 當地 17:00 · 台灣當日 23:00", "value": "48.861580, 2.347634" },
-        { "name": "LEGO Store · 華沙", "area": "波蘭華沙 · 當地 17:00 · 台灣當日 23:00", "value": "52.179484, 21.003730" },
-        { "name": "LEGO Store · 雪梨", "area": "澳洲雪梨 · 當地 17:00 · 台灣當日 15:00", "value": "-33.869096, 151.208320" }
+        { "stamp": true, "name": "LEGO Store · 紐約", "area": "美國紐約 · 當地 17:00 · 台灣隔日 05:00", "value": "40.758800, -73.977993" },
+        { "stamp": true, "name": "LEGO Store · 倫敦", "area": "英國倫敦 · 當地 17:00 · 台灣隔日 00:00", "value": "51.510285, -0.131135" },
+        { "stamp": true, "name": "LEGO Store · 柏林", "area": "德國柏林 · 當地 17:00 · 台灣當日 23:00", "value": "52.503632, 13.338763" },
+        { "stamp": true, "name": "LEGO Store · 巴黎", "area": "法國巴黎 · 當地 17:00 · 台灣當日 23:00", "value": "48.861580, 2.347634" },
+        { "stamp": true, "name": "LEGO Store · 華沙", "area": "波蘭華沙 · 當地 17:00 · 台灣當日 23:00", "value": "52.179484, 21.003730" },
+        { "stamp": true, "name": "LEGO Store · 雪梨", "area": "澳洲雪梨 · 當地 17:00 · 台灣當日 15:00", "value": "-33.869096, 151.208320" }
       ]
     }
   ],
@@ -1735,19 +1735,19 @@ window.coordinateLibraries = {
         "imageCaption": "東京 v2 集章活動 · 品川區、港區與江東區參考圖"
       },
       "coordinates": [
-        { "name": "品川區集章 01", "area": "呆呆獸、小火龍", "value": "35.6235780, 139.7482650" },
-        { "name": "品川區集章 02", "area": "呆呆獸、小火龍", "value": "35.6191620, 139.7441900" },
-        { "name": "品川區集章 03", "area": "呆呆獸、小火龍", "value": "35.6154840, 139.7441760" },
-        { "name": "品川區集章 04", "area": "呆呆獸、小火龍", "value": "35.6033010, 139.7439420" },
-        { "name": "港區集章 01", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6585980, 139.7454580" },
-        { "name": "港區集章 02", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6671110, 139.7573940" },
-        { "name": "港區集章 03", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6655750, 139.7462360" },
-        { "name": "港區集章 04", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6669630, 139.7455050" },
-        { "name": "港區集章 05", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6560180, 139.7491100" },
-        { "name": "江東區集章 01", "area": "長翅鷗、傑尼龜", "value": "35.6730490, 139.8164360" },
-        { "name": "江東區集章 02", "area": "長翅鷗、傑尼龜", "value": "35.6748000, 139.8152300" },
-        { "name": "江東區集章 03", "area": "長翅鷗、傑尼龜", "value": "35.6761800, 139.8127400" },
-        { "name": "江東區集章 04", "area": "長翅鷗、傑尼龜", "value": "35.6796400, 139.8074210" }
+        { "stamp": true, "name": "品川區集章 01", "area": "呆呆獸、小火龍", "value": "35.6235780, 139.7482650" },
+        { "stamp": true, "name": "品川區集章 02", "area": "呆呆獸、小火龍", "value": "35.6191620, 139.7441900" },
+        { "stamp": true, "name": "品川區集章 03", "area": "呆呆獸、小火龍", "value": "35.6154840, 139.7441760" },
+        { "stamp": true, "name": "品川區集章 04", "area": "呆呆獸、小火龍", "value": "35.6033010, 139.7439420" },
+        { "stamp": true, "name": "港區集章 01", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6585980, 139.7454580" },
+        { "stamp": true, "name": "港區集章 02", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6671110, 139.7573940" },
+        { "stamp": true, "name": "港區集章 03", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6655750, 139.7462360" },
+        { "stamp": true, "name": "港區集章 04", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6669630, 139.7455050" },
+        { "stamp": true, "name": "港區集章 05", "area": "瑪力露、拉普拉斯、妙蛙種子", "value": "35.6560180, 139.7491100" },
+        { "stamp": true, "name": "江東區集章 01", "area": "長翅鷗、傑尼龜", "value": "35.6730490, 139.8164360" },
+        { "stamp": true, "name": "江東區集章 02", "area": "長翅鷗、傑尼龜", "value": "35.6748000, 139.8152300" },
+        { "stamp": true, "name": "江東區集章 03", "area": "長翅鷗、傑尼龜", "value": "35.6761800, 139.8127400" },
+        { "stamp": true, "name": "江東區集章 04", "area": "長翅鷗、傑尼龜", "value": "35.6796400, 139.8074210" }
       ]
     },
     {
@@ -2279,14 +2279,14 @@ window.coordinateLibraries = {
         ]
       },
       "coordinates": [
-        { "name": "長崎集章點 01", "area": "電龍長崎背卡", "value": "32.752400, 129.870700" },
-        { "name": "長崎集章點 02", "area": "電龍長崎背卡", "value": "32.749300, 129.868400" },
-        { "name": "長崎集章點 03", "area": "電龍長崎背卡", "value": "32.744800, 129.873400" },
-        { "name": "長崎集章點 04", "area": "電龍長崎背卡", "value": "32.742200, 129.875700" },
-        { "name": "長崎集章點 05", "area": "電龍長崎背卡", "value": "32.748900, 129.880700" },
-        { "name": "長崎集章點 06", "area": "電龍長崎背卡", "value": "32.752500, 129.879400" },
-        { "name": "長崎集章點 07", "area": "電龍長崎背卡", "value": "32.741200, 129.868700" },
-        { "name": "長崎集章點 08", "area": "電龍長崎背卡", "value": "32.759200, 129.864800" }
+        { "stamp": true, "name": "長崎集章點 01", "area": "電龍長崎背卡", "value": "32.752400, 129.870700" },
+        { "stamp": true, "name": "長崎集章點 02", "area": "電龍長崎背卡", "value": "32.749300, 129.868400" },
+        { "stamp": true, "name": "長崎集章點 03", "area": "電龍長崎背卡", "value": "32.744800, 129.873400" },
+        { "stamp": true, "name": "長崎集章點 04", "area": "電龍長崎背卡", "value": "32.742200, 129.875700" },
+        { "stamp": true, "name": "長崎集章點 05", "area": "電龍長崎背卡", "value": "32.748900, 129.880700" },
+        { "stamp": true, "name": "長崎集章點 06", "area": "電龍長崎背卡", "value": "32.752500, 129.879400" },
+        { "stamp": true, "name": "長崎集章點 07", "area": "電龍長崎背卡", "value": "32.741200, 129.868700" },
+        { "stamp": true, "name": "長崎集章點 08", "area": "電龍長崎背卡", "value": "32.759200, 129.864800" }
       ]
     },
     {
@@ -2303,14 +2303,14 @@ window.coordinateLibraries = {
         "imageCaption": "乘龍 · 仙台蓋章活動"
       },
       "coordinates": [
-        { "name": "仙台乘龍蓋章點 01", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2529230, 140.8564870" },
-        { "name": "仙台乘龍蓋章點 02", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2652690, 140.8655830" },
-        { "name": "仙台乘龍蓋章點 03", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.3027830, 140.9883420" },
-        { "name": "仙台乘龍蓋章點 04", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2587230, 140.8790010" },
-        { "name": "仙台乘龍蓋章點 05", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.4213990, 141.3053310" },
-        { "name": "仙台乘龍蓋章點 06", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.0024740, 140.6171350" },
-        { "name": "仙台乘龍蓋章點 07", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.3696990, 141.0628730" },
-        { "name": "仙台乘龍蓋章點 08", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2254280, 140.7269710" }
+        { "stamp": true, "name": "仙台乘龍蓋章點 01", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2529230, 140.8564870" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 02", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2652690, 140.8655830" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 03", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.3027830, 140.9883420" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 04", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2587230, 140.8790010" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 05", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.4213990, 141.3053310" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 06", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.0024740, 140.6171350" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 07", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.3696990, 141.0628730" },
+        { "stamp": true, "name": "仙台乘龍蓋章點 08", "area": "日本 · 宮城縣仙台周邊｜乘龍", "value": "38.2254280, 140.7269710" }
       ]
     },
     {
@@ -2353,24 +2353,24 @@ window.coordinateLibraries = {
         "sourceLabel": "Threads 文獻來源"
       },
       "coordinates": [
-        { "name": "福岡", "area": "Pokémon Center Fukuoka", "value": "33.589010, 130.419250" },
-        { "name": "廣島", "area": "Pokémon Center Hiroshima", "value": "34.397697, 132.476116" },
-        { "name": "池袋 Lab", "area": "Pokémon Center Laboratory", "value": "35.729104, 139.718696" },
-        { "name": "池袋", "area": "Pokémon Center Mega Tokyo", "value": "35.728910, 139.719323" },
-        { "name": "名古屋", "area": "Pokémon Center Nagoya", "value": "35.163572, 136.908065" },
-        { "name": "沖繩", "area": "Pokémon Center Okinawa", "value": "26.313207, 127.796158" },
-        { "name": "澀谷", "area": "Pokémon Center Shibuya", "value": "35.661964, 139.698444" },
-        { "name": "晴空塔", "area": "Pokémon Center Skytree Town", "value": "35.710353, 139.812612" },
-        { "name": "仙台", "area": "Pokémon Center Tohoku", "value": "38.261946, 140.881666" },
-        { "name": "香川", "area": "Pokémon Center Kagawa", "value": "34.342283, 134.050063" },
-        { "name": "金澤", "area": "Pokémon Center Kanazawa", "value": "36.579155, 136.649757" },
-        { "name": "京都", "area": "Pokémon Center Kyoto", "value": "35.003423, 135.758385" },
-        { "name": "大阪", "area": "Pokémon Center Osaka", "value": "34.701864, 135.496467" },
-        { "name": "札幌", "area": "Pokémon Center Sapporo", "value": "43.067475, 141.349269" },
-        { "name": "東京灣", "area": "Pokémon Center Tokyo Bay", "value": "35.686609, 139.989037" },
-        { "name": "橫濱", "area": "Pokémon Center Yokohama", "value": "35.464579, 139.624490" },
-        { "name": "東京 DX", "area": "Pokémon Center Tokyo DX", "value": "35.680295, 139.774271" },
-        { "name": "大阪 DX", "area": "Pokémon Center Osaka DX", "value": "34.673180, 135.500757" }
+        { "stamp": true, "name": "福岡", "area": "Pokémon Center Fukuoka", "value": "33.589010, 130.419250" },
+        { "stamp": true, "name": "廣島", "area": "Pokémon Center Hiroshima", "value": "34.397697, 132.476116" },
+        { "stamp": true, "name": "池袋 Lab", "area": "Pokémon Center Laboratory", "value": "35.729104, 139.718696" },
+        { "stamp": true, "name": "池袋", "area": "Pokémon Center Mega Tokyo", "value": "35.728910, 139.719323" },
+        { "stamp": true, "name": "名古屋", "area": "Pokémon Center Nagoya", "value": "35.163572, 136.908065" },
+        { "stamp": true, "name": "沖繩", "area": "Pokémon Center Okinawa", "value": "26.313207, 127.796158" },
+        { "stamp": true, "name": "澀谷", "area": "Pokémon Center Shibuya", "value": "35.661964, 139.698444" },
+        { "stamp": true, "name": "晴空塔", "area": "Pokémon Center Skytree Town", "value": "35.710353, 139.812612" },
+        { "stamp": true, "name": "仙台", "area": "Pokémon Center Tohoku", "value": "38.261946, 140.881666" },
+        { "stamp": true, "name": "香川", "area": "Pokémon Center Kagawa", "value": "34.342283, 134.050063" },
+        { "stamp": true, "name": "金澤", "area": "Pokémon Center Kanazawa", "value": "36.579155, 136.649757" },
+        { "stamp": true, "name": "京都", "area": "Pokémon Center Kyoto", "value": "35.003423, 135.758385" },
+        { "stamp": true, "name": "大阪", "area": "Pokémon Center Osaka", "value": "34.701864, 135.496467" },
+        { "stamp": true, "name": "札幌", "area": "Pokémon Center Sapporo", "value": "43.067475, 141.349269" },
+        { "stamp": true, "name": "東京灣", "area": "Pokémon Center Tokyo Bay", "value": "35.686609, 139.989037" },
+        { "stamp": true, "name": "橫濱", "area": "Pokémon Center Yokohama", "value": "35.464579, 139.624490" },
+        { "stamp": true, "name": "東京 DX", "area": "Pokémon Center Tokyo DX", "value": "35.680295, 139.774271" },
+        { "stamp": true, "name": "大阪 DX", "area": "Pokémon Center Osaka DX", "value": "34.673180, 135.500757" }
       ]
     },
     {
@@ -2574,12 +2574,12 @@ window.coordinateLibraries = {
         ]
       },
       "coordinates": [
-        { "name": "Moscone Center 集章點 01", "area": "美國 · 舊金山", "value": "37.785600, -122.401200" },
-        { "name": "Moscone Center 集章點 02", "area": "美國 · 舊金山", "value": "37.783300, -122.402300" },
-        { "name": "Moscone Center 集章點 03", "area": "美國 · 舊金山", "value": "37.788700, -122.397300" },
-        { "name": "Moscone Center 集章點 04", "area": "美國 · 舊金山", "value": "37.795300, -122.393800" },
-        { "name": "Moscone Center 集章點 05", "area": "美國 · 舊金山", "value": "37.787700, -122.407900" },
-        { "name": "Moscone Center 集章點 06", "area": "美國 · 舊金山", "value": "37.790800, -122.405600" }
+        { "stamp": true, "name": "Moscone Center 集章點 01", "area": "美國 · 舊金山", "value": "37.785600, -122.401200" },
+        { "stamp": true, "name": "Moscone Center 集章點 02", "area": "美國 · 舊金山", "value": "37.783300, -122.402300" },
+        { "stamp": true, "name": "Moscone Center 集章點 03", "area": "美國 · 舊金山", "value": "37.788700, -122.397300" },
+        { "stamp": true, "name": "Moscone Center 集章點 04", "area": "美國 · 舊金山", "value": "37.795300, -122.393800" },
+        { "stamp": true, "name": "Moscone Center 集章點 05", "area": "美國 · 舊金山", "value": "37.787700, -122.407900" },
+        { "stamp": true, "name": "Moscone Center 集章點 06", "area": "美國 · 舊金山", "value": "37.790800, -122.405600" }
       ]
     },
     {

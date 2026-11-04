@@ -113,6 +113,13 @@ const elements = {
   newsModal: document.querySelector("#news-modal"),
   newsClose: document.querySelector("#news-close"),
   newsSections: document.querySelector("#news-sections"),
+  stampNavigatorOpen: document.querySelector("#stamp-navigator-open"),
+  stampNavigatorModal: document.querySelector("#stamp-navigator-modal"),
+  stampNavigatorClose: document.querySelector("#stamp-navigator-close"),
+  stampNavigatorSections: document.querySelector("#stamp-navigator-sections"),
+  stampNavigatorCount: document.querySelector("#stamp-navigator-count"),
+  stampGroupCount: document.querySelector("#stamp-group-count"),
+  stampCoordinateCount: document.querySelector("#stamp-coordinate-count"),
   sparkleAlertOpen: document.querySelector("#sparkle-alert-open"),
   sparkleAlertModal: document.querySelector("#sparkle-alert-modal"),
   sparkleAlertClose: document.querySelector("#sparkle-alert-close"),
@@ -136,6 +143,7 @@ const elements = {
   mobileToolsOpen: document.querySelector("#mobile-tools-open"),
   mobileTools: document.querySelector("#mobile-tools"),
   mobileToolsBadge: document.querySelector("#mobile-tools-badge"),
+  mobileStampCount: document.querySelector("#mobile-stamp-count"),
   mobileAlertCount: document.querySelector("#mobile-alert-count"),
   mobileGymCount: document.querySelector("#mobile-gym-count")
 };
@@ -183,10 +191,6 @@ const collapsibleJapanGroups = new Set([
   "岡山", "山口", "德島", "香川", "愛媛", "高知", "福岡", "佐賀",
   "長崎", "宮崎", "鹿兒島", "沖繩", "棒球相關活動"
 ]);
-const stampedJapanGroups = new Set(
-  [...collapsibleJapanGroups].filter((name) => name !== "棒球相關活動").concat("日本蓋章", "長崎蓋章")
-);
-
 function loadExpandedGroups() {
   try {
     const saved = JSON.parse(localStorage.getItem(expandedGroupsStorageKey) || "[]");
@@ -1331,6 +1335,123 @@ function closeNewsModal() {
   elements.newsModal.removeAttribute("open");
 }
 
+function stampItems() {
+  const items = [];
+  Object.entries(libraries).forEach(([country, groups]) => {
+    groups.forEach((group) => {
+      const coordinates = (group.coordinates || []).filter((coordinate) =>
+        coordinate && typeof coordinate === "object" && coordinate.stamp === true
+      );
+      if (!coordinates.length) return;
+      const event = group.event || (group.endDate ? { endDate: group.endDate } : null);
+      const hasSchedule = Boolean(event && (event.startDate || event.endDate || event.startDateTime || event.endDateTime || event.periods?.length));
+      const status = hasSchedule ? eventNewsStatus(event) : "permanent";
+      items.push({
+        country,
+        group,
+        coordinates,
+        status,
+        shareId: group.shareId || group.name,
+        region: group.region || countryNames[country] || country,
+        reward: group.stampReward || group.event?.stampReward || group.event?.detail || group.event?.description || coordinates[0].area || "蓋章活動獎勵"
+      });
+    });
+  });
+  return items;
+}
+
+function stampStatusMeta(status) {
+  return {
+    active: { label: "進行中", code: "LIVE" },
+    upcoming: { label: "即將開始", code: "UPCOMING" },
+    permanent: { label: "常駐", code: "PERMANENT" },
+    expired: { label: "已結束", code: "EXPIRED" }
+  }[status] || { label: "常駐", code: "PERMANENT" };
+}
+
+function closeStampNavigator() {
+  if (elements.stampNavigatorModal.open) elements.stampNavigatorModal.close?.();
+  elements.stampNavigatorModal.removeAttribute("open");
+}
+
+function navigateToStampItem(item) {
+  closeStampNavigator();
+  elements.search.value = "";
+  const groupKey = `${item.country}|${item.group.name}`;
+  collapsedEventGroups.delete(groupKey);
+  expandedGroups.add(groupKey);
+  saveCollapsedEventGroups();
+  saveExpandedGroups();
+  switchCountry(item.country);
+  updateShareUrl(item.country, item.shareId);
+  requestAnimationFrame(() => {
+    const target = [...elements.library.querySelectorAll(".region-block")]
+      .find((section) => section.dataset.groupKey === groupKey);
+    if (!target) return;
+    const archive = target.closest(".completed-events");
+    if (archive) archive.open = true;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    target.classList.add("share-target");
+    window.setTimeout(() => target.classList.remove("share-target"), 2400);
+  });
+}
+
+function renderStampNavigator() {
+  const items = stampItems();
+  const totalCoordinates = items.reduce((total, item) => total + item.coordinates.length, 0);
+  elements.stampNavigatorCount.textContent = String(totalCoordinates);
+  elements.mobileStampCount.textContent = String(totalCoordinates);
+  elements.stampGroupCount.textContent = String(items.length);
+  elements.stampCoordinateCount.textContent = String(totalCoordinates);
+
+  const categories = [
+    { key: "active", title: "進行中" },
+    { key: "upcoming", title: "即將開始" },
+    { key: "permanent", title: "常駐活動" },
+    { key: "expired", title: "已結束" }
+  ];
+  const fragment = document.createDocumentFragment();
+  categories.forEach((category) => {
+    const categoryItems = items.filter((item) => item.status === category.key);
+    if (!categoryItems.length) return;
+    const section = document.createElement("section");
+    section.className = "stamp-navigator-group";
+    section.innerHTML = `<header><h3>${category.title}</h3><span>${String(categoryItems.length).padStart(2, "0")}</span></header>`;
+    const list = document.createElement("div");
+    list.className = "stamp-navigator-list";
+    categoryItems.forEach((item) => {
+      const meta = stampStatusMeta(item.status);
+      const card = document.createElement("article");
+      card.className = `stamp-navigator-item ${item.status}`;
+      card.innerHTML = `
+        <div class="stamp-navigator-item-head">
+          <span>${escapeHtml(item.region)}</span>
+          <em>${meta.code}</em>
+        </div>
+        <h4>${escapeHtml(item.group.name)}</h4>
+        <p>${escapeHtml(item.reward)}</p>
+        <div class="stamp-navigator-item-meta"><span>${meta.label}</span><b>${item.coordinates.length} 處座標</b></div>
+        <div class="stamp-navigator-actions">
+          <button class="stamp-navigator-go" type="button">前往活動 ↗</button>
+          <button class="stamp-navigator-share" type="button" aria-label="分享${escapeHtml(item.group.name)}">分享</button>
+        </div>`;
+      card.querySelector(".stamp-navigator-go").addEventListener("click", () => navigateToStampItem(item));
+      card.querySelector(".stamp-navigator-share").addEventListener("click", () => shareLink(item.country, item.shareId));
+      list.appendChild(card);
+    });
+    section.appendChild(list);
+    fragment.appendChild(section);
+  });
+  elements.stampNavigatorSections.replaceChildren(fragment);
+}
+
+function openStampNavigator() {
+  renderStampNavigator();
+  if (typeof elements.stampNavigatorModal.showModal === "function") elements.stampNavigatorModal.showModal();
+  else elements.stampNavigatorModal.setAttribute("open", "");
+}
+
 function makeCoordinateButton(coordinate, index, groupEndDate, key) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
@@ -1622,7 +1743,9 @@ function render() {
     const collapseControl = collapsible
       ? `<button class="group-collapse" type="button" aria-expanded="${expanded}" aria-label="${expanded ? "收合" : "展開"}${escapeHtml(collapseTargetLabel)}"><span aria-hidden="true">${expanded ? "−" : "＋"}</span></button>`
       : "";
-    const groupStamp = stampedJapanGroups.has(group.name) ? `<span class="group-stamp" aria-hidden="true">蓋</span>` : "";
+    const groupStamp = (group.coordinates || []).some((coordinate) => coordinate && typeof coordinate === "object" && coordinate.stamp === true)
+      ? `<span class="group-stamp" aria-hidden="true">蓋</span>`
+      : "";
     const groupFavoriteKey = group._favoriteKey || favoriteEventKey(sourceCountry, group);
     const isFavorite = group.event && favoriteEventKeys.has(groupFavoriteKey);
     const favoriteControl = group.event
@@ -1964,6 +2087,7 @@ function runMobileTool(tool) {
   const actions = {
     trash: elements.trashFilterOpen,
     news: elements.newsOpen,
+    stamps: elements.stampNavigatorOpen,
     alert: elements.sparkleAlertOpen,
     gym: elements.gymCounterOpen
   };
@@ -2064,6 +2188,11 @@ elements.newsClose.addEventListener("click", closeNewsModal);
 elements.newsModal.addEventListener("click", (event) => {
   if (event.target === elements.newsModal) closeNewsModal();
 });
+elements.stampNavigatorOpen.addEventListener("click", openStampNavigator);
+elements.stampNavigatorClose.addEventListener("click", closeStampNavigator);
+elements.stampNavigatorModal.addEventListener("click", (event) => {
+  if (event.target === elements.stampNavigatorModal) closeStampNavigator();
+});
 elements.sparkleAlertOpen.addEventListener("click", openSparkleAlertModal);
 elements.sparkleAlertClose.addEventListener("click", closeSparkleAlertModal);
 elements.sparkleAlertSave.addEventListener("click", saveSparkleAlert);
@@ -2144,6 +2273,7 @@ elements.toast.addEventListener("click", () => {
 });
 
 elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0");
+renderStampNavigator();
 updateSparkleAlertButton();
 renderGymCounter();
 setNowModeCollapsed(loadNowModeCollapsed(), { save: false });

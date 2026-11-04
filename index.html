@@ -93,6 +93,7 @@
           </div>
         </section>
         <div class="country-tabs" id="active-country-tabs" role="tablist" aria-label="目前及一般座標">
+          <button class="stamp-navigator-open" id="stamp-navigator-open" type="button" aria-haspopup="dialog" aria-controls="stamp-navigator-modal"><b>ST</b> 蓋章導航 <span class="tab-count" id="stamp-navigator-count">0</span></button>
           <button class="country-tab favorites-tab" data-country="favorites" role="tab" aria-selected="false"><b>★</b> 我的最愛 <span class="tab-count" id="favorites-tab-count">0</span></button>
           <button class="country-tab copied-tab active" data-country="copied" role="tab" aria-selected="true"><b>✓</b> 複製座標 <span class="tab-count" id="copied-tab-count">0</span></button>
           <button class="country-tab spain-tab" data-country="spain" role="tab" aria-selected="false"><b>ES</b> 西班牙座標</button>
@@ -227,6 +228,7 @@
       <div class="mobile-tools-grid">
         <button type="button" data-mobile-tool="trash"><span aria-hidden="true">⌫</span><strong>清理篩選</strong><small>Storage Filter</small></button>
         <button type="button" data-mobile-tool="news"><span aria-hidden="true">EV</span><strong>近期活動</strong><small>Event Navigator</small></button>
+        <button type="button" data-mobile-tool="stamps"><span aria-hidden="true">ST</span><strong>蓋章座標</strong><small>Stamp Navigator</small><b id="mobile-stamp-count">0</b></button>
         <button type="button" data-mobile-tool="alert"><span aria-hidden="true">◷</span><strong>活動提醒</strong><small>Sparkle Alert</small><b id="mobile-alert-count">0</b></button>
         <button type="button" data-mobile-tool="gym"><span aria-hidden="true">GYM</span><strong>道館計數器</strong><small>Result Counter</small><b id="mobile-gym-count">0</b></button>
         <button type="button" data-mobile-tool="top"><span aria-hidden="true">↑</span><strong>回到頂端</strong><small>Back to Top</small></button>
@@ -322,10 +324,21 @@
     </div>
   </dialog>
 
+  <dialog class="filter-modal stamp-navigator-modal" id="stamp-navigator-modal" aria-labelledby="stamp-navigator-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="stamp-navigator-close" type="button" aria-label="關閉蓋章快速導航">×</button>
+      <p class="kicker"><span>06</span> STAMP NAVIGATOR</p>
+      <h2 id="stamp-navigator-title">蓋章快速導航</h2>
+      <p class="filter-modal-note">依現有座標資料自動整理；點擊前往活動可切換頁籤並定位到原始活動區塊。</p>
+      <div class="stamp-navigator-summary"><span>活動 <b id="stamp-group-count">0</b></span><span>座標 <b id="stamp-coordinate-count">0</b></span></div>
+      <div class="stamp-navigator-sections" id="stamp-navigator-sections"></div>
+    </div>
+  </dialog>
+
   <dialog class="filter-modal sparkle-alert-modal" id="sparkle-alert-modal" aria-labelledby="sparkle-alert-title">
     <div class="filter-modal-panel">
       <button class="filter-modal-close" id="sparkle-alert-close" type="button" aria-label="關閉印度活動提醒">×</button>
-      <p class="kicker"><span>06</span> EVENT ALERT</p>
+      <p class="kicker"><span>07</span> EVENT ALERT</p>
       <h2 id="sparkle-alert-title">Sparkle O’Clock 提醒</h2>
       <p class="filter-modal-note">依台灣時間追蹤每日 20:30、21:00、21:30、22:00 場次，開始前 10 分鐘提醒；同一場關閉後不會再次觸發。</p>
       <label class="sparkle-alert-option">
@@ -340,7 +353,7 @@
   <dialog class="filter-modal gym-counter-modal" id="gym-counter-modal" aria-labelledby="gym-counter-title">
     <div class="filter-modal-panel">
       <button class="filter-modal-close" id="gym-counter-close" type="button" aria-label="關閉道館戰果計數器">×</button>
-      <p class="kicker"><span>07</span> GYM RESULT COUNTER</p>
+      <p class="kicker"><span>08</span> GYM RESULT COUNTER</p>
       <h2 id="gym-counter-title">道館戰果計數器</h2>
       <p class="filter-modal-note">每次戰果請選擇下列四種結果之一；IV100 為附加紀錄，不會增加總次數。所有紀錄會保存在此瀏覽器。</p>
 
