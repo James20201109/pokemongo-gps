@@ -882,17 +882,179 @@ window.coordinateLibraries = {
         "period": "2026 年 11 月 6 日～11 月 8 日",
         "startDate": "2026-11-06",
         "endDate": "2026-11-08",
-        "description": "Pokémon GO 曠野地帶 2026 將在日本宮城縣／仙台與墨西哥城同步舉辦城市型現場活動。",
-        "detailLabel": "現場活動地點",
+        "description": "Pokémon GO 曠野地帶 2026 將在日本宮城縣／仙台與墨西哥城同步舉辦城市型現場活動。持票訓練家可提前體驗新功能，並蒐集兩種屬性主題獎牌。",
+        "detailLabel": "現場活動與持票權益",
         "bullets": [
           "日本：宮城縣各地與主要會場仙台市。",
           "墨西哥：首都墨西哥城。",
           "活動將包含現場限定遊戲內容，需購買現場活動入場券。",
-          "詳細遊戲內容、場地範圍與售票資訊以官方後續公告為準。"
+          "仙台與墨西哥城的紀念背卡將於當地時間 11 月 6 日 10:00 起開放顯示在訓練家個人檔案。",
+          "持票訓練家可蒐集「鋼屬性顧問」與「龍屬性領袖」兩種獎牌，對應加碼會持續至全球活動於台灣時間 11 月 15 日 18:00 結束。",
+          "現場活動可提前在團體戰或極巨對戰大廳使用蒼響「巨獸斬」與藏瑪然特「巨獸彈」的冒險效果。",
+          "仙台／東北與墨西哥城的官方活動地圖已開放查看，可先行規劃會場動線。",
+          "入場券加值包於 11 月 6 日～11 月 8 日生效，可追加遊玩日數、升級獎勵或預購官方周邊。"
         ],
         "notice": "付費現場活動；不是 11 月 9 日開始的曠野週，也不是 11 月 14 日～15 日的全球活動。",
-        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-go-wild-area-2026",
-        "sourceLabel": "Pokémon GO 官方日期公告"
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/get-ready-for-gowildarea-2026",
+        "sourceLabel": "Pokémon GO 官方活動更新"
+      },
+      "coordinates": []
+    },
+    {
+      "region": "日本限定活動 · 仙台曠野地帶",
+      "name": "仙台・GO 曠野地帶 2026 持票集章",
+      "shareId": "go-wild-area-sendai-ticketed-stamp-rally",
+      "stampReward": "完成 7 枚集章可獲得限定地點背卡怪力",
+      "event": {
+        "category": "ticketed-stamp-rally",
+        "scope": "japan-sendai",
+        "access": "ticket-required",
+        "periodLabel": "EVENT PERIOD / 日本時間",
+        "period": "2026 年 11 月 6 日～11 月 8 日 · 入場券指定日 10:00～20:00",
+        "stampPeriod": "僅限入場券指定日期 10:00～20:00（日本時間）",
+        "startDate": "2026-11-06",
+        "endDate": "2026-11-08",
+        "periods": [
+          { "startDateTime": "2026-11-06T10:00:00+09:00", "endDateTime": "2026-11-06T20:00:00+09:00" },
+          { "startDateTime": "2026-11-07T10:00:00+09:00", "endDateTime": "2026-11-07T20:00:00+09:00" },
+          { "startDateTime": "2026-11-08T10:00:00+09:00", "endDateTime": "2026-11-08T20:00:00+09:00" }
+        ],
+        "description": "僅限持有仙台／東北 GO 曠野地帶活動入場券的訓練家參加。依序造訪 7 個指定寶可補給站完成集章，可取得活動寶可夢與仙台限定地點背卡獎勵。",
+        "detailLabel": "七階段集章獎勵",
+        "bullets": [
+          "第 1 枚：路卡利歐。",
+          "第 2 枚：爆焰龜獸。",
+          "第 3 枚：拖拖蚓。",
+          "第 4 枚：啃果蟲。",
+          "第 5 枚：洗翠黏美兒（仙台／東北地點背卡）。",
+          "第 6 枚：乘龍／拉普拉斯（強大的寶可夢＋仙台／東北地點背卡）。",
+          "第 7 枚：怪力（強大的寶可夢＋仙台／東北地點背卡）。"
+        ],
+        "notice": "只能在入場券原指定日期完成；加購額外活動日期不會增加集章機會。座標與獎勵順序依 TrainersGO 整理，活動時段以官方說明為準。",
+        "sourceUrl": "https://pokemongo.com/news/go-wild-area-stamp-rally-details-2026",
+        "sourceLabel": "Pokémon GO 官方集章說明"
+      },
+      "coordinates": [
+        { "stamp": true, "name": "集章 01｜路卡利歐", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2589724, 140.8953251" },
+        { "stamp": true, "name": "集章 02｜爆焰龜獸", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2607255, 140.8836615" },
+        { "stamp": true, "name": "集章 03｜拖拖蚓", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2609376, 140.8803248" },
+        { "stamp": true, "name": "集章 04｜啃果蟲", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2564439, 140.8575357" },
+        { "stamp": true, "name": "集章 05｜洗翠黏美兒背卡", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2616810, 140.8619891" },
+        { "stamp": true, "name": "集章 06｜強大乘龍背卡", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2662926, 140.8751901" },
+        { "stamp": true, "name": "集章 07｜強大怪力背卡", "area": "仙台 GO 曠野地帶 · 持票限定", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.2755172, 140.8731369" }
+      ]
+    },
+    {
+      "region": "日本限定活動 · 仙台曠野地帶",
+      "name": "仙台・龍／鋼屬性限時調查補給站",
+      "shareId": "go-wild-area-sendai-steel-dragon-research-stops",
+      "event": {
+        "category": "ticketed-timed-research",
+        "scope": "japan-sendai",
+        "access": "ticket-required",
+        "periodLabel": "EVENT PERIOD / 日本時間",
+        "period": "2026 年 11 月 6 日～11 月 8 日 · 入場券指定日 10:00～20:00",
+        "startDate": "2026-11-06",
+        "endDate": "2026-11-08",
+        "periods": [
+          { "startDateTime": "2026-11-06T10:00:00+09:00", "endDateTime": "2026-11-06T20:00:00+09:00" },
+          { "startDateTime": "2026-11-07T10:00:00+09:00", "endDateTime": "2026-11-07T20:00:00+09:00" },
+          { "startDateTime": "2026-11-08T10:00:00+09:00", "endDateTime": "2026-11-08T20:00:00+09:00" }
+        ],
+        "description": "仙台／東北 GO 曠野地帶活動期間，用於龍屬性與鋼屬性限時調查的任務寶可補給站。兩份清單位置相同，因此合併為 9 個共用座標。",
+        "detailLabel": "座標整理方式",
+        "bullets": [
+          "龍屬性與鋼屬性調查共用相同的 9 個任務補給站。",
+          "旋轉指定寶可補給站可推進對應的活動限時調查。",
+          "此區是任務補給站，不屬於 7 枚集章活動，因此不會列入蓋章快速導航。",
+          "限時調查及獎勵須在入場券指定日期 20:00 前完成並領取。"
+        ],
+        "notice": "座標依 TrainersGO 提供內容彙整；龍、鋼兩份座標僅有小數位差異，網站保留一組較完整資料以避免重複。",
+        "sourceUrl": "https://pokemongo.com/gowildarea/sendai/gameplay",
+        "sourceLabel": "Pokémon GO 仙台活動頁"
+      },
+      "coordinates": [
+        { "name": "龍／鋼任務補給站 01", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.25977, 140.86747" },
+        { "name": "龍／鋼任務補給站 02", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.26013, 140.86981" },
+        { "name": "龍／鋼任務補給站 03", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.26118, 140.87180" },
+        { "name": "龍／鋼任務補給站 04", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.26484, 140.87300" },
+        { "name": "龍／鋼任務補給站 05", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.26530, 140.88380" },
+        { "name": "龍／鋼任務補給站 06", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.26242, 140.88340" },
+        { "name": "龍／鋼任務補給站 07", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.26650, 140.87260" },
+        { "name": "龍／鋼任務補給站 08", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.25774, 140.85782" },
+        { "name": "龍／鋼任務補給站 09", "area": "仙台曠野地帶 · 兩種限時調查共用", "timezone": "Asia/Tokyo", "clockType": "local", "value": "38.25838, 140.86117" }
+      ]
+    },
+    {
+      "region": "全球活動情報 · 曠野地帶",
+      "name": "曠野地帶 2026・功能與獎勵更新",
+      "shareId": "get-ready-for-gowildarea-2026",
+      "event": {
+        "category": "feature-update",
+        "scope": "global",
+        "access": "free-with-ticketed-features",
+        "periodLabel": "FEATURE UPDATE / 分階段開放",
+        "period": "2026 年 11 月 6 日起",
+        "startDate": "2026-11-06",
+        "description": "曠野地帶 2026 將帶來個人檔案背卡、私人極巨化對戰、冒險效果與 Pokémon HOME 傳送等功能更新；部分獎勵需持有現場或全球活動入場券。",
+        "detailLabel": "共通功能與開放時程",
+        "bullets": [
+          "個人檔案可顯示夥伴寶可夢的紀念背卡或特別背卡；仙台與墨西哥城紀念背卡於當地時間 11 月 6 日 10:00 起開放。",
+          "曠野地帶 2026 特別背卡與過往所有紀念背卡於台灣時間 11 月 9 日 10:00 起開放；朋友須等其所在時區到達 10:00 後才看得到。",
+          "活動開始後，極巨化對戰大廳可選擇系統配對或輸入小組代碼加入私人小組。",
+          "從曠野週開始，可在團體戰或極巨對戰大廳啟動蒼響「巨獸斬」與藏瑪然特「巨獸彈」的冒險效果。",
+          "透過 GO 狩獵球捕捉的寶可夢現可傳送至 Pokémon HOME，並會以「奇異球」外觀顯示。",
+          "免費 GO Pass：曠野週可解鎖 GO 曠野地帶 2026 T恤（紫），豪華版可解鎖鋁鋼龍長褲。",
+          "鋁鋼龍頭套、超極巨化鋁鋼龍背包與格鬥屬性夾克將在活動期間上架，活動結束後仍會持續販售。",
+          "持有現場活動或全球活動入場券的訓練家，完成活動特殊調查後可解鎖全新訓練家姿勢。"
+        ],
+        "notice": "背卡功能依活動與觀看者所在時區分階段開放；屬性獎牌加碼、姿勢及部分調查內容需要對應活動入場券。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/get-ready-for-gowildarea-2026",
+        "sourceLabel": "Pokémon GO 官方活動更新",
+        "images": [
+          {
+            "src": "assets/Events/go-wild-area-2026-profile-backgrounds.png",
+            "alt": "Pokémon GO 曠野地帶 2026 訓練家個人檔案展示夥伴寶可夢紀念背卡與特別背卡",
+            "caption": "曠野地帶 2026・個人檔案背卡展示功能",
+            "wide": true
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 免費限時調查",
+      "name": "GO 曠野地帶：超極巨化怪力強化！",
+      "shareId": "go-wild-area-gigantamax-machamp-power-up",
+      "event": {
+        "category": "timed-research",
+        "scope": "global",
+        "access": "free",
+        "periodLabel": "TIMED RESEARCH / 當地時間",
+        "period": "2026 年 11 月 6 日 10:00 起 · 結束時間依遊戲內倒數",
+        "startDate": "2026-11-06",
+        "endDate": "2026-11-16",
+        "description": "全球訓練家皆可免費參加「GO 曠野地帶：超極巨化強化！」限時調查，不需要持有 GO 曠野地帶活動入場券；完成調查可獲得超極巨化怪力遭遇機會。",
+        "detailLabel": "調查課題與主要獎勵",
+        "bullets": [
+          "探索 5 公里。",
+          "分別於 2、3、4、5 個不同日期捕捉寶可夢。",
+          "途中獎勵包含怪力糖果、極巨粒子與怪力糖果 XL。",
+          "完成全部課題可獲得 30,000 星星沙子、10 顆高級球，以及超極巨化怪力遭遇機會。",
+          "運氣好的話，有機會遇見異色超極巨化怪力。",
+          "本調查向全球所有訓練家免費開放，不需要購買曠野地帶活動入場券。"
+        ],
+        "notice": "目前資料來源為 TrainersGO 的遊戲內畫面；精確結束時間請以遊戲內「今天」頁面的倒數為準。",
+        "sourceUrl": "https://www.threads.com/share/IXSKKwz3o/",
+        "sourceLabel": "TrainersGO · Threads 資料來源",
+        "images": [
+          {
+            "src": "assets/Events/go-wild-area-gigantamax-machamp-power-up.png",
+            "alt": "GO 曠野地帶超極巨化怪力強化限時調查課題與超極巨化怪力遭遇畫面",
+            "caption": "免費限時調查 · 超極巨化怪力遭遇機會",
+            "wide": true
+          }
+        ]
       },
       "coordinates": []
     },
@@ -923,6 +1085,8 @@ window.coordinateLibraries = {
           "活動期間參加傳說團體戰與傳說極巨對戰，捕捉到的寶可夢有機會帶有顯示捕捉時間的全新特別背卡。",
           "野外可能遇見小磁怪、嗡蝠與托戈德瑪爾等活動寶可夢，另有曠野地帶主題田野調查。",
           "全球大挑戰完成後，可提高蒼響「巨獸斬」與藏瑪然特「巨獸彈」的冒險效果，並加快極巨對戰能量條累積速度。",
+          "從曠野週開始，可在團體戰或極巨對戰大廳啟動蒼響「巨獸斬」與藏瑪然特「巨獸彈」的冒險效果。",
+          "11 月 9 日 10:00 起，曠野地帶 2026 特別背卡與過往所有紀念背卡可顯示在訓練家個人檔案。",
           "免費 GO Pass：曠野週於 11 月 9 日 10:00 系統發放，可累積 GO 點數至 11 月 15 日 18:00；11 月 14 日～15 日沒有 GO 點數累積上限。",
           "免費 GO Pass 獎勵包含極巨化美錄坦遭遇、活動寶可夢、GO 曠野地帶 2026 T恤（紫）、星星沙子、XP、精靈球與糖果；25 級里程碑可讓活動期間放入孵化器的蛋所需距離減半。",
           "付費 GO Pass 豪華版可取得銀色王冠、額外的極巨化美錄坦遭遇、鋁鋼龍長褲及其他道具；豪華版售價 14.99 美元，豪華版＋10級售價 19.99 美元或等值當地貨幣。",
@@ -962,20 +1126,25 @@ window.coordinateLibraries = {
         "category": "ticketed-global-event",
         "scope": "global",
         "access": "ticket-required",
-        "periodLabel": "SAVE THE DATE / 全球活動",
-        "period": "2026 年 11 月 14 日～11 月 15 日",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 11 月 14 日 10:00～11 月 15 日 18:00",
         "startDate": "2026-11-14",
         "endDate": "2026-11-15",
-        "description": "Pokémon GO 曠野地帶 2026 的全球壓軸活動，世界各地的訓練家皆可參加。",
-        "detailLabel": "目前已公布資訊",
+        "startDateTime": "2026-11-14T10:00:00+08:00",
+        "endDateTime": "2026-11-15T18:00:00+08:00",
+        "description": "Pokémon GO 曠野地帶 2026 的全球壓軸活動。持票訓練家可參加鋼屬性或龍屬性的分歧式特殊調查，取得對應獎牌、捕捉加碼與全新訓練家姿勢。",
+        "detailLabel": "全球活動持票內容",
         "bullets": [
-          "全球活動日期為 2026 年 11 月 14 日與 11 月 15 日。",
-          "官方將推出全球活動遊戲內入場券。",
-          "完整遊戲內容、每日活動時間與票券權益仍待官方後續公布。"
+          "全球活動期間為台灣時間 11 月 14 日 10:00～11 月 15 日 18:00，需持有全球活動入場券。",
+          "分歧式特殊調查於 11 月 14 日 10:00 開放，可選擇研究鋼屬性或龍屬性寶可夢。",
+          "選擇鋼屬性可取得「鋼屬性顧問」獎牌：捕捉鋼屬性強大寶可夢時，等級 31 以上額外獲得 1 顆糖果 XL，並額外獲得 1,000 星星沙子。",
+          "選擇龍屬性可取得「龍屬性領袖」獎牌：捕捉龍屬性強大寶可夢時，等級 31 以上額外獲得 1 顆糖果 XL，並額外獲得 1,000 星星沙子。",
+          "屬性獎牌加碼會在全球活動於 11 月 15 日 18:00 結束時失效。",
+          "完成全球活動特殊調查可解鎖全新訓練家姿勢。"
         ],
-        "notice": "SAVE THE DATE：目前僅公布日期與售票安排，並非 11 月 9 日～13 日的曠野週。",
-        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-go-wild-area-2026",
-        "sourceLabel": "Pokémon GO 官方日期公告"
+        "notice": "付費全球活動；與 11 月 9 日～13 日可免費參加的曠野週不同。現場活動持票者若已取得兩種獎牌，對應加碼同樣持續至本活動結束。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/get-ready-for-gowildarea-2026",
+        "sourceLabel": "Pokémon GO 官方活動更新"
       },
       "coordinates": []
     },
@@ -1116,11 +1285,21 @@ window.coordinateLibraries = {
         "category": "regional-event",
         "scope": "mexico",
         "access": "free",
-        "description": "墨西哥城的摔角鷹人集章與地點背景座標，共收錄 8 個位置。",
-        "detailLabel": "活動主角",
-        "detail": "摔角鷹人（Hawlucha）墨西哥城地點背景。",
-        "sourceUrl": "https://www.threads.com/share/HZd8Z06wU/",
-        "sourceLabel": "Threads 文獻來源",
+        "periodLabel": "ONGOING STAMP RALLY / 常駐活動",
+        "period": "2026 年 11 月 2 日起 · 目前無預定結束日期",
+        "startDate": "2026-11-02",
+        "description": "所有造訪墨西哥城的訓練家都能參加摔角鷹人 GO 集章活動；8 個蓋章點可依任意順序完成。",
+        "detailLabel": "活動方式與獎勵",
+        "bullets": [
+          "進入墨西哥城市區活動範圍後，靠近任一活動寶可補給站即可取得集章卡。",
+          "活動寶可補給站會顯示橘色印章圖示；旋轉轉盤即可把印章加入集章卡。",
+          "印章會記錄寶可補給站名稱與日期，按壓時間會影響墨色深淺，完成後不能重新蓋章。",
+          "收集全部 8 枚印章後，可遇見帶有墨西哥城紀念背卡的摔角鷹人。",
+          "運氣好的話，有機會遇見異色摔角鷹人。"
+        ],
+        "notice": "本活動為免費常駐城市集章，與 11 月 6 日～8 日僅限持票日 10:00～20:00 的曠野地帶現場集章不同。",
+        "sourceUrl": "https://pokemongo.com/news/forever-stamp-rally-go-wild-area-2026",
+        "sourceLabel": "Pokémon GO 官方集章公告",
         "image": "assets/Events/mexico-city-hawlucha-stamp-rally.png",
         "imageAlt": "摔角鷹人墨西哥城地點背景與寶可夢資訊畫面",
         "imageCaption": "摔角鷹人 · 墨西哥城蓋章活動"
@@ -2291,13 +2470,26 @@ window.coordinateLibraries = {
     },
     {
       "region": "日本限定活動 · 仙台蓋章",
-      "name": "仙台・乘龍蓋章活動",
+      "name": "仙台・乘龍（拉普拉斯）蓋章活動",
       "event": {
-        "description": "日本宮城縣仙台周邊的乘龍集章活動座標。",
-        "detailLabel": "活動主角",
-        "detail": "乘龍（Lapras）仙台背景，共收錄 8 個蓋章位置。",
-        "sourceUrl": "https://www.threads.com/share/F4AbjZqO-/",
-        "sourceLabel": "Threads 文獻來源",
+        "category": "regional-event",
+        "scope": "japan",
+        "access": "free",
+        "periodLabel": "ONGOING STAMP RALLY / 常駐活動",
+        "period": "2026 年 11 月 2 日起 · 目前無預定結束日期",
+        "startDate": "2026-11-02",
+        "description": "所有造訪仙台／東北地區的訓練家都能參加乘龍（Lapras）GO 集章活動；8 個蓋章點可依任意順序完成。",
+        "detailLabel": "活動方式與獎勵",
+        "bullets": [
+          "進入仙台／東北市區活動範圍後，靠近任一活動寶可補給站即可取得集章卡。",
+          "活動寶可補給站會顯示橘色印章圖示；旋轉轉盤即可把印章加入集章卡。",
+          "印章會記錄寶可補給站名稱與日期，按壓時間會影響墨色深淺，完成後不能重新蓋章。",
+          "收集全部 8 枚印章後，可遇見帶有仙台／東北紀念背卡的乘龍（拉普拉斯）。",
+          "運氣好的話，有機會遇見異色乘龍。"
+        ],
+        "notice": "本活動為免費常駐城市集章，與 11 月 6 日～8 日僅限持票日 10:00～20:00 的曠野地帶現場集章不同。",
+        "sourceUrl": "https://pokemongo.com/news/forever-stamp-rally-go-wild-area-2026",
+        "sourceLabel": "Pokémon GO 官方集章公告",
         "image": "assets/Japan/sendai-stamp-lapras.png",
         "imageAlt": "乘龍仙台特殊背景與寶可夢資訊畫面",
         "imageCaption": "乘龍 · 仙台蓋章活動"
