@@ -144,6 +144,7 @@ const elements = {
   mobileTools: document.querySelector("#mobile-tools"),
   mobileToolsBadge: document.querySelector("#mobile-tools-badge"),
   mobileStampCount: document.querySelector("#mobile-stamp-count"),
+  mobileAlertTool: document.querySelector('[data-mobile-tool="alert"]'),
   mobileAlertCount: document.querySelector("#mobile-alert-count"),
   mobileGymCount: document.querySelector("#mobile-gym-count")
 };
@@ -164,6 +165,8 @@ let pendingFavoriteRemovalTimer = null;
 let mobileToolsCloseTimer = null;
 const sparkleAlertStorageKey = "geo-pulse-sparkle-alert-v1";
 const sparkleAlertHistoryKey = "geo-pulse-sparkle-alert-history-v1";
+const sparkleAlertStartsAt = Date.parse("2026-11-06T12:30:00+08:00");
+const sparkleAlertEndsAt = Date.parse("2026-11-08T22:30:00+08:00");
 const copiedStorageKey = "geo-pulse-copied-coordinates-v1";
 const favoriteEventsStorageKey = "geo-pulse-favorite-events-v1";
 const activeTabStorageKey = "geo-pulse-active-tab-v1";
@@ -613,6 +616,11 @@ function loadSparkleAlertHistory() {
 let sparkleAlertEnabled = loadSparkleAlertEnabled();
 let sparkleAlertHistory = loadSparkleAlertHistory();
 
+function sparkleAlertIsAvailable(date = new Date()) {
+  const current = date.getTime();
+  return current >= sparkleAlertStartsAt && current <= sparkleAlertEndsAt;
+}
+
 function zonedDateKey(timeZone, date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone,
@@ -640,14 +648,22 @@ function sparkleAlertOccurrence(date = new Date()) {
   };
 }
 
-function updateSparkleAlertButton() {
-  elements.sparkleAlertCount.textContent = sparkleAlertEnabled ? "1" : "0";
-  elements.mobileAlertCount.textContent = sparkleAlertEnabled ? "1" : "0";
-  elements.sparkleAlertOpen.classList.toggle("enabled", sparkleAlertEnabled);
-  updateMobileToolsBadge();
+function updateSparkleAlertButton(date = new Date()) {
+  const available = sparkleAlertIsAvailable(date);
+  const enabled = available && sparkleAlertEnabled;
+  document.body.classList.toggle("sparkle-alert-unavailable", !available);
+  elements.sparkleAlertOpen.hidden = !available;
+  elements.sparkleAlertOpen.disabled = !available;
+  elements.mobileAlertTool.hidden = !available;
+  elements.sparkleAlertCount.textContent = enabled ? "1" : "0";
+  elements.mobileAlertCount.textContent = enabled ? "1" : "0";
+  elements.sparkleAlertOpen.classList.toggle("enabled", enabled);
+  if (!available && elements.sparkleAlertModal.open) closeSparkleAlertModal();
+  updateMobileToolsBadge(date);
 }
 
 function openSparkleAlertModal() {
+  if (!sparkleAlertIsAvailable()) return;
   elements.sparkleAlertEnabled.checked = sparkleAlertEnabled;
   if (typeof elements.sparkleAlertModal.showModal === "function") elements.sparkleAlertModal.showModal();
   else elements.sparkleAlertModal.setAttribute("open", "");
@@ -671,7 +687,7 @@ function saveSparkleAlert() {
 }
 
 function checkSparkleAlert(date = new Date()) {
-  if (!sparkleAlertEnabled) return;
+  if (!sparkleAlertEnabled || !sparkleAlertIsAvailable(date)) return;
   const occurrence = sparkleAlertOccurrence(date);
   if (!occurrence || sparkleAlertHistory.has(occurrence.key)) return;
   sparkleAlertHistory.add(occurrence.key);
@@ -1080,16 +1096,22 @@ function formatNowPeriod(start, end) {
 }
 
 function nowEventItems() {
-  return (libraries.events || []).flatMap((group) => {
-    if (!group.event) return [];
-    return eventWindows(group.event).map((window) => ({
-      country: "events",
-      groupName: group.name,
-      region: group.region,
-      title: group.name,
-      event: group.event,
-      window
-    }));
+  const excludedCountries = new Set(["copied", "favorites", "friends"]);
+  return Object.entries(libraries).flatMap(([country, groups]) => {
+    if (excludedCountries.has(country) || !Array.isArray(groups)) return [];
+    return groups.flatMap((group) => {
+      if (!group.event) return [];
+      const windows = eventWindows(group.event);
+      if (!windows.length) return [];
+      return windows.map((window) => ({
+        country,
+        groupName: group.name,
+        region: group.region || countryNames[country] || country,
+        title: group.name,
+        event: group.event,
+        window
+      }));
+    });
   });
 }
 
@@ -2052,8 +2074,8 @@ function updateBackToTopVisibility() {
   elements.backToTop.classList.toggle("visible", window.scrollY > 500);
 }
 
-function updateMobileToolsBadge() {
-  const activeTools = Number(sparkleAlertEnabled) + Number(gymCounterTotal() > 0);
+function updateMobileToolsBadge(date = new Date()) {
+  const activeTools = Number(sparkleAlertIsAvailable(date) && sparkleAlertEnabled) + Number(gymCounterTotal() > 0);
   elements.mobileToolsBadge.textContent = String(activeTools);
   elements.mobileToolsBadge.hidden = activeTools === 0;
 }
@@ -2285,5 +2307,6 @@ checkSparkleAlert();
 setInterval(() => {
   updateRaidClocks();
   renderNowMode();
+  updateSparkleAlertButton();
   checkSparkleAlert();
 }, 30000);
