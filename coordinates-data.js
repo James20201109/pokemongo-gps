@@ -1113,6 +1113,12 @@ window.coordinateLibraries = {
             "alt": "Into the Wild 英文活動資訊圖，整理團體戰、極巨對戰、特殊招式與 GO Pass",
             "caption": "Into the Wild · English event overview",
             "wide": true
+          },
+          {
+            "src": "assets/Events/into-the-wild-2026-zacian-zamazenta.jpg",
+            "alt": "蒼響劍之王與藏瑪然特盾之王的曠野週特別背卡畫面",
+            "caption": "曠野週 · 蒼響與藏瑪然特特別背卡",
+            "wide": true
           }
         ]
       },
