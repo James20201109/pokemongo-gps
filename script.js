@@ -130,15 +130,26 @@ const elements = {
   gymCounterModal: document.querySelector("#gym-counter-modal"),
   gymCounterClose: document.querySelector("#gym-counter-close"),
   gymCounterBadge: document.querySelector("#gym-counter-badge"),
+  gymCounterModeButtons: document.querySelectorAll("[data-gym-counter-mode]"),
+  gymCounterModeTotals: document.querySelectorAll("[data-gym-mode-total]"),
+  gymCounterTotalLabel: document.querySelector("#gym-counter-total-label"),
   gymCounterTotal: document.querySelector("#gym-counter-total"),
   gymCounterNormal: document.querySelector("#gym-counter-normal"),
+  gymCounterNormalPercentage: document.querySelector("#gym-counter-normal-percentage"),
   gymCounterShiny: document.querySelector("#gym-counter-shiny"),
+  gymCounterShinyPercentage: document.querySelector("#gym-counter-shiny-percentage"),
   gymCounterNormalBackground: document.querySelector("#gym-counter-normal-background"),
+  gymCounterNormalBackgroundPercentage: document.querySelector("#gym-counter-normal-background-percentage"),
   gymCounterShinyBackground: document.querySelector("#gym-counter-shiny-background"),
+  gymCounterShinyBackgroundPercentage: document.querySelector("#gym-counter-shiny-background-percentage"),
   gymCounterPerfectIv: document.querySelector("#gym-counter-perfect-iv"),
+  gymCounterPerfectIvPercentage: document.querySelector("#gym-counter-perfect-iv-percentage"),
   gymCounterFeedback: document.querySelector("#gym-counter-feedback"),
+  gymCounterCopyCurrent: document.querySelector("#gym-counter-copy-current"),
+  gymCounterCopyAll: document.querySelector("#gym-counter-copy-all"),
   gymCounterUndo: document.querySelector("#gym-counter-undo"),
   gymCounterReset: document.querySelector("#gym-counter-reset"),
+  gymCounterResetAll: document.querySelector("#gym-counter-reset-all"),
   backToTop: document.querySelector("#back-to-top"),
   mobileToolsOpen: document.querySelector("#mobile-tools-open"),
   mobileTools: document.querySelector("#mobile-tools"),
@@ -173,17 +184,24 @@ const activeTabStorageKey = "geo-pulse-active-tab-v1";
 const friendsUnlockedStorageKey = "geo-pulse-friends-unlocked-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
 const collapsedEventGroupsStorageKey = "geo-pulse-collapsed-event-groups-v1";
-const gymCounterStorageKey = "geo-pulse-gym-counter-v1";
+const gymCounterLegacyStorageKey = "geo-pulse-gym-counter-v1";
+const gymCounterStorageKey = "geo-pulse-gym-counter-v2";
+const gymCounterModalOpenStorageKey = "geo-pulse-gym-counter-modal-open-v1";
 const nowModeCollapsedStorageKey = "geo-pulse-now-mode-collapsed-v1";
 let friendsUnlocked = false;
 let friendUnlockClicks = 0;
 let friendUnlockTimer;
 const gymCounterLabels = {
-  normal: "普色",
-  shiny: "純異色",
-  normalBackground: "普色背卡",
-  shinyBackground: "異色背卡",
+  normal: "普色無背",
+  shiny: "異色無背",
+  normalBackground: "普色有背",
+  shinyBackground: "異色有背",
   perfectIv: "IV100"
+};
+const gymCounterModes = {
+  raid: { label: "團體戰", code: "RAID" },
+  maxBattle: { label: "極巨化", code: "MAX" },
+  timedResearch: { label: "限時任務", code: "TASK" }
 };
 const gymCounterTotalKeys = ["normal", "shiny", "normalBackground", "shinyBackground"];
 const collapsibleJapanGroups = new Set([
@@ -254,18 +272,48 @@ function loadFavoriteEventKeys() {
 
 const favoriteEventKeys = loadFavoriteEventKeys();
 
+function createEmptyGymCounterMode() {
+  return { normal: 0, shiny: 0, normalBackground: 0, shinyBackground: 0, perfectIv: 0, history: [] };
+}
+
+function normalizeGymCounterMode(saved) {
+  const normalized = createEmptyGymCounterMode();
+  if (!saved || typeof saved !== "object") return normalized;
+  Object.keys(gymCounterLabels).forEach((key) => {
+    const value = Number(saved[key]);
+    normalized[key] = Number.isInteger(value) && value >= 0 ? value : 0;
+  });
+  normalized.history = Array.isArray(saved.history)
+    ? saved.history.filter((item) => gymCounterLabels[item?.key] && [1, -1].includes(item.delta)).slice(-100)
+    : [];
+  return normalized;
+}
+
+function createEmptyGymCounter() {
+  return {
+    version: 2,
+    activeMode: "raid",
+    modes: Object.fromEntries(Object.keys(gymCounterModes).map((key) => [key, createEmptyGymCounterMode()]))
+  };
+}
+
 function loadGymCounter() {
-  const empty = { normal: 0, shiny: 0, normalBackground: 0, shinyBackground: 0, perfectIv: 0, history: [] };
+  const empty = createEmptyGymCounter();
   try {
     const saved = JSON.parse(localStorage.getItem(gymCounterStorageKey) || "null");
-    if (!saved || typeof saved !== "object") return empty;
-    Object.keys(gymCounterLabels).forEach((key) => {
-      const value = Number(saved[key]);
-      empty[key] = Number.isInteger(value) && value >= 0 ? value : 0;
-    });
-    empty.history = Array.isArray(saved.history)
-      ? saved.history.filter((item) => gymCounterLabels[item?.key] && [1, -1].includes(item.delta)).slice(-100)
-      : [];
+    if (saved?.version === 2 && saved.modes && typeof saved.modes === "object") {
+      empty.activeMode = gymCounterModes[saved.activeMode] ? saved.activeMode : "raid";
+      Object.keys(gymCounterModes).forEach((key) => {
+        empty.modes[key] = normalizeGymCounterMode(saved.modes[key]);
+      });
+      return empty;
+    }
+
+    const legacy = JSON.parse(localStorage.getItem(gymCounterLegacyStorageKey) || "null");
+    if (legacy && typeof legacy === "object") {
+      empty.modes.raid = normalizeGymCounterMode(legacy);
+      localStorage.setItem(gymCounterStorageKey, JSON.stringify(empty));
+    }
     return empty;
   } catch {
     return empty;
@@ -275,6 +323,8 @@ function loadGymCounter() {
 const gymCounter = loadGymCounter();
 let gymCounterResetArmed = false;
 let gymCounterResetTimer;
+let gymCounterResetAllArmed = false;
+let gymCounterResetAllTimer;
 
 function loadNowModeCollapsed() {
   try {
@@ -299,8 +349,91 @@ function setNowModeCollapsed(collapsed, { save = true } = {}) {
   }
 }
 
-function gymCounterTotal() {
-  return gymCounterTotalKeys.reduce((total, key) => total + gymCounter[key], 0);
+function activeGymCounter() {
+  return gymCounter.modes[gymCounter.activeMode];
+}
+
+function gymCounterTotal(mode = gymCounter.activeMode) {
+  const counter = gymCounter.modes[mode];
+  if (!counter) return 0;
+  return gymCounterTotalKeys.reduce((total, key) => total + counter[key], 0);
+}
+
+function gymCounterGrandTotal() {
+  return Object.keys(gymCounterModes).reduce((total, mode) => total + gymCounterTotal(mode), 0);
+}
+
+function formatGymCounterPercentage(value, total) {
+  if (total <= 0) return "0%";
+  return `${Number(((value / total) * 100).toFixed(2))}%`;
+}
+
+function gymCounterModeIsEmpty(mode) {
+  const counter = gymCounter.modes[mode];
+  return Object.keys(gymCounterLabels).every((key) => counter[key] === 0);
+}
+
+function buildGymCounterShareSection(mode) {
+  const counter = gymCounter.modes[mode];
+  const total = gymCounterTotal(mode);
+  const rows = [
+    ["⚪", "普色無背", "normal"],
+    ["✨", "異色無背", "shiny"],
+    ["🖼️", "普色有背", "normalBackground"],
+    ["🌟", "異色有背", "shinyBackground"],
+    ["💯", "IV100", "perfectIv"]
+  ];
+  const individualResults = rows.map(([icon, label, key]) => {
+    const note = key === "perfectIv" ? "\n　※ IV100 不計入總紀錄" : "";
+    const probability = total > 0
+      ? formatGymCounterPercentage(counter[key], total)
+      : counter[key] > 0 ? "無法計算" : "0%";
+    return `${icon} ${label}：${counter[key]}\n　機率 ${probability}${note}`;
+  }).join("\n\n");
+  const shinyTotal = counter.shiny + counter.shinyBackground;
+  const backgroundTotal = counter.normalBackground + counter.shinyBackground;
+  const combinedResults = total > 0
+    ? [
+        `✨ 異色機率：${formatGymCounterPercentage(shinyTotal, total)}`,
+        `🖼️ 背卡機率：${formatGymCounterPercentage(backgroundTotal, total)}`,
+        `🌟 異色背卡機率：${formatGymCounterPercentage(counter.shinyBackground, total)}`,
+        `💯 IV100機率：${formatGymCounterPercentage(counter.perfectIv, total)}`
+      ].join("\n")
+    : "尚無總紀錄可計算";
+  return [
+    `🎯 ${gymCounterModes[mode].label}`,
+    `🔢 總紀錄：${total}`,
+    "",
+    "【個別結果】",
+    individualResults,
+    "",
+    "【綜合機率】",
+    combinedResults
+  ].join("\n");
+}
+
+function buildGymCounterShareText(modes) {
+  return modes.map(buildGymCounterShareSection).join("\n\n━━━━━━━━━━━━\n\n");
+}
+
+async function copyGymCounterCurrentMode() {
+  const mode = gymCounter.activeMode;
+  if (gymCounterModeIsEmpty(mode)) {
+    renderGymCounter(`「${gymCounterModes[mode].label}」目前沒有可複製的戰果紀錄`);
+    return;
+  }
+  await copyText(buildGymCounterShareText([mode]), `${gymCounterModes[mode].label}戰果與實測機率`);
+  renderGymCounter(`已複製「${gymCounterModes[mode].label}」戰果與實測機率`);
+}
+
+async function copyAllGymCounterModes() {
+  const modes = Object.keys(gymCounterModes).filter((mode) => !gymCounterModeIsEmpty(mode));
+  if (modes.length === 0) {
+    renderGymCounter("目前沒有可複製的戰果紀錄");
+    return;
+  }
+  await copyText(buildGymCounterShareText(modes), `${modes.length} 個分類的戰果與實測機率`);
+  renderGymCounter(`已複製 ${modes.length} 個分類的戰果與實測機率`);
 }
 
 function saveGymCounter() {
@@ -312,32 +445,75 @@ function saveGymCounter() {
 }
 
 function renderGymCounter(message = "") {
+  const counter = activeGymCounter();
   const total = gymCounterTotal();
+  const grandTotal = gymCounterGrandTotal();
+  const activeMode = gymCounterModes[gymCounter.activeMode];
+  elements.gymCounterTotalLabel.textContent = `${activeMode.label} / TOTAL RUNS`;
   elements.gymCounterTotal.textContent = total.toLocaleString("zh-TW");
-  elements.gymCounterBadge.textContent = total > 999 ? "999+" : String(total);
-  elements.mobileGymCount.textContent = total > 999 ? "999+" : String(total);
-  elements.gymCounterNormal.textContent = gymCounter.normal.toLocaleString("zh-TW");
-  elements.gymCounterShiny.textContent = gymCounter.shiny.toLocaleString("zh-TW");
-  elements.gymCounterNormalBackground.textContent = gymCounter.normalBackground.toLocaleString("zh-TW");
-  elements.gymCounterShinyBackground.textContent = gymCounter.shinyBackground.toLocaleString("zh-TW");
-  elements.gymCounterPerfectIv.textContent = gymCounter.perfectIv.toLocaleString("zh-TW");
-  elements.gymCounterUndo.disabled = gymCounter.history.length === 0;
+  elements.gymCounterBadge.textContent = grandTotal > 999 ? "999+" : String(grandTotal);
+  elements.mobileGymCount.textContent = grandTotal > 999 ? "999+" : String(grandTotal);
+  elements.gymCounterOpen.title = `Pokémon GO 戰果計數器｜總紀錄 ${grandTotal}｜團體戰 ${gymCounterTotal("raid")}／極巨化 ${gymCounterTotal("maxBattle")}／限時任務 ${gymCounterTotal("timedResearch")}`;
+  elements.gymCounterNormal.textContent = counter.normal.toLocaleString("zh-TW");
+  elements.gymCounterNormalPercentage.textContent = formatGymCounterPercentage(counter.normal, total);
+  elements.gymCounterShiny.textContent = counter.shiny.toLocaleString("zh-TW");
+  elements.gymCounterShinyPercentage.textContent = formatGymCounterPercentage(counter.shiny, total);
+  elements.gymCounterNormalBackground.textContent = counter.normalBackground.toLocaleString("zh-TW");
+  elements.gymCounterNormalBackgroundPercentage.textContent = formatGymCounterPercentage(counter.normalBackground, total);
+  elements.gymCounterShinyBackground.textContent = counter.shinyBackground.toLocaleString("zh-TW");
+  elements.gymCounterShinyBackgroundPercentage.textContent = formatGymCounterPercentage(counter.shinyBackground, total);
+  elements.gymCounterPerfectIv.textContent = counter.perfectIv.toLocaleString("zh-TW");
+  elements.gymCounterPerfectIvPercentage.textContent = formatGymCounterPercentage(counter.perfectIv, total);
+  elements.gymCounterUndo.disabled = counter.history.length === 0;
+  elements.gymCounterModeButtons.forEach((button) => {
+    const selected = button.dataset.gymCounterMode === gymCounter.activeMode;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-checked", String(selected));
+    button.tabIndex = selected ? 0 : -1;
+  });
+  elements.gymCounterModeTotals.forEach((output) => {
+    output.textContent = gymCounterTotal(output.dataset.gymModeTotal).toLocaleString("zh-TW");
+  });
   elements.gymCounterModal.querySelectorAll("[data-counter-key]").forEach((row) => {
-    row.querySelector('[data-counter-change="-1"]').disabled = gymCounter[row.dataset.counterKey] === 0;
+    row.querySelector('[data-counter-change="-1"]').disabled = counter[row.dataset.counterKey] === 0;
   });
   if (message) elements.gymCounterFeedback.textContent = message;
   updateMobileToolsBadge();
 }
 
+function disarmGymCounterReset() {
+  clearTimeout(gymCounterResetTimer);
+  gymCounterResetArmed = false;
+  elements.gymCounterReset.textContent = "重置目前類型";
+  elements.gymCounterReset.classList.remove("confirming");
+}
+
+function disarmGymCounterResetAll() {
+  clearTimeout(gymCounterResetAllTimer);
+  gymCounterResetAllArmed = false;
+  elements.gymCounterResetAll.textContent = "全部清除";
+  elements.gymCounterResetAll.classList.remove("confirming");
+}
+
+function switchGymCounterMode(mode) {
+  if (!gymCounterModes[mode] || mode === gymCounter.activeMode) return;
+  gymCounter.activeMode = mode;
+  disarmGymCounterReset();
+  disarmGymCounterResetAll();
+  saveGymCounter();
+  renderGymCounter(`CURRENT MODE / ${gymCounterModes[mode].label}`);
+}
+
 function changeGymCounter(key, delta, recordHistory = true) {
+  const counter = activeGymCounter();
   if (!gymCounterLabels[key] || ![1, -1].includes(delta)) return;
-  if (delta < 0 && gymCounter[key] === 0) return;
-  gymCounter[key] += delta;
-  if (recordHistory) gymCounter.history.push({ key, delta });
-  gymCounter.history = gymCounter.history.slice(-100);
+  if (delta < 0 && counter[key] === 0) return;
+  counter[key] += delta;
+  if (recordHistory) counter.history.push({ key, delta });
+  counter.history = counter.history.slice(-100);
   saveGymCounter();
   const verb = delta > 0 ? "新增" : "減少";
-  renderGymCounter(`${verb}：${gymCounterLabels[key]} · ${gymCounter[key]}`);
+  renderGymCounter(`${gymCounterModes[gymCounter.activeMode].label}｜${verb}：${gymCounterLabels[key]} · ${counter[key]}`);
 }
 
 function openGymCounterModal() {
@@ -347,43 +523,80 @@ function openGymCounterModal() {
   } else {
     elements.gymCounterModal.setAttribute("open", "");
   }
+  try {
+    localStorage.setItem(gymCounterModalOpenStorageKey, "1");
+  } catch {
+    // 無法使用儲存空間時，仍可在本次頁面中正常開啟計數器。
+  }
 }
 
 function closeGymCounterModal() {
   elements.gymCounterModal.close?.();
   elements.gymCounterModal.removeAttribute("open");
+  try {
+    localStorage.removeItem(gymCounterModalOpenStorageKey);
+  } catch {
+    // 無法使用儲存空間時，仍可在本次頁面中正常關閉計數器。
+  }
+}
+
+function shouldRestoreGymCounterModal() {
+  try {
+    return localStorage.getItem(gymCounterModalOpenStorageKey) === "1";
+  } catch {
+    return false;
+  }
 }
 
 function undoGymCounter() {
-  const last = gymCounter.history.pop();
+  const counter = activeGymCounter();
+  const last = counter.history.pop();
   if (!last) return;
-  gymCounter[last.key] = Math.max(0, gymCounter[last.key] - last.delta);
+  counter[last.key] = Math.max(0, counter[last.key] - last.delta);
   saveGymCounter();
-  renderGymCounter(`已復原：${gymCounterLabels[last.key]}`);
+  renderGymCounter(`${gymCounterModes[gymCounter.activeMode].label}｜已復原：${gymCounterLabels[last.key]}`);
 }
 
 function resetGymCounter() {
+  const mode = gymCounterModes[gymCounter.activeMode];
   if (!gymCounterResetArmed) {
+    disarmGymCounterResetAll();
     gymCounterResetArmed = true;
     elements.gymCounterReset.textContent = "再次點擊確認重置";
     elements.gymCounterReset.classList.add("confirming");
-    elements.gymCounterFeedback.textContent = "請再次點擊重置按鈕確認清除全部紀錄";
+    elements.gymCounterFeedback.textContent = `請再次點擊確認清除「${mode.label}」紀錄`;
     clearTimeout(gymCounterResetTimer);
     gymCounterResetTimer = setTimeout(() => {
-      gymCounterResetArmed = false;
-      elements.gymCounterReset.textContent = "重置全部";
-      elements.gymCounterReset.classList.remove("confirming");
+      disarmGymCounterReset();
     }, 4000);
     return;
   }
-  clearTimeout(gymCounterResetTimer);
-  Object.keys(gymCounterLabels).forEach((key) => { gymCounter[key] = 0; });
-  gymCounter.history = [];
-  gymCounterResetArmed = false;
-  elements.gymCounterReset.textContent = "重置全部";
-  elements.gymCounterReset.classList.remove("confirming");
+  gymCounter.modes[gymCounter.activeMode] = createEmptyGymCounterMode();
+  disarmGymCounterReset();
   saveGymCounter();
-  renderGymCounter("全部紀錄已重置");
+  renderGymCounter(`「${mode.label}」紀錄已重置`);
+}
+
+function resetAllGymCounters() {
+  if (!gymCounterResetAllArmed) {
+    disarmGymCounterReset();
+    gymCounterResetAllArmed = true;
+    elements.gymCounterResetAll.textContent = "再次點擊確認全部清除";
+    elements.gymCounterResetAll.classList.add("confirming");
+    elements.gymCounterFeedback.textContent = "請再次點擊確認清除三種類型的全部紀錄";
+    clearTimeout(gymCounterResetAllTimer);
+    gymCounterResetAllTimer = setTimeout(() => {
+      disarmGymCounterResetAll();
+    }, 4000);
+    return;
+  }
+  Object.keys(gymCounterModes).forEach((mode) => {
+    gymCounter.modes[mode] = createEmptyGymCounterMode();
+  });
+  disarmGymCounterReset();
+  disarmGymCounterResetAll();
+  saveGymCounter();
+  renderGymCounter("三種類型的紀錄已全部清除");
 }
 
 function saveCopiedKeys() {
@@ -2075,7 +2288,7 @@ function updateBackToTopVisibility() {
 }
 
 function updateMobileToolsBadge(date = new Date()) {
-  const activeTools = Number(sparkleAlertIsAvailable(date) && sparkleAlertEnabled) + Number(gymCounterTotal() > 0);
+  const activeTools = Number(sparkleAlertIsAvailable(date) && sparkleAlertEnabled) + Number(gymCounterGrandTotal() > 0);
   elements.mobileToolsBadge.textContent = String(activeTools);
   elements.mobileToolsBadge.hidden = activeTools === 0;
 }
@@ -2223,8 +2436,23 @@ elements.sparkleAlertModal.addEventListener("click", (event) => {
 });
 elements.gymCounterOpen.addEventListener("click", openGymCounterModal);
 elements.gymCounterClose.addEventListener("click", closeGymCounterModal);
-elements.gymCounterModal.addEventListener("click", (event) => {
-  if (event.target === elements.gymCounterModal) closeGymCounterModal();
+elements.gymCounterModal.addEventListener("cancel", (event) => {
+  event.preventDefault();
+});
+elements.gymCounterModeButtons.forEach((button, index, buttons) => {
+  button.addEventListener("click", () => switchGymCounterMode(button.dataset.gymCounterMode));
+  button.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    let nextIndex = index;
+    if (event.key === "ArrowLeft") nextIndex = (index - 1 + buttons.length) % buttons.length;
+    if (event.key === "ArrowRight") nextIndex = (index + 1) % buttons.length;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = buttons.length - 1;
+    const nextButton = buttons[nextIndex];
+    switchGymCounterMode(nextButton.dataset.gymCounterMode);
+    nextButton.focus();
+  });
 });
 elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -2233,7 +2461,10 @@ elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((butt
   });
 });
 elements.gymCounterUndo.addEventListener("click", undoGymCounter);
+elements.gymCounterCopyCurrent.addEventListener("click", copyGymCounterCurrentMode);
+elements.gymCounterCopyAll.addEventListener("click", copyAllGymCounterModes);
 elements.gymCounterReset.addEventListener("click", resetGymCounter);
+elements.gymCounterResetAll.addEventListener("click", resetAllGymCounters);
 elements.backToTop.addEventListener("click", scrollBackToTop);
 elements.nowModeToggle.addEventListener("click", () => {
   setNowModeCollapsed(elements.nowModeToggle.getAttribute("aria-expanded") === "true");
@@ -2298,6 +2529,7 @@ elements.totalCount.textContent = String(allCoordinates().length).padStart(3, "0
 renderStampNavigator();
 updateSparkleAlertButton();
 renderGymCounter();
+if (shouldRestoreGymCounterModal()) openGymCounterModal();
 setNowModeCollapsed(loadNowModeCollapsed(), { save: false });
 updateBackToTopVisibility();
 organizeCountryTabs();

@@ -205,8 +205,8 @@
     <span aria-hidden="true">◷</span><small id="sparkle-alert-count">0</small>
   </button>
 
-  <button class="floating-gym-counter" id="gym-counter-open" type="button" aria-label="開啟道館戰果計數器" title="道館戰果計數器">
-    <span aria-hidden="true">GYM</span><small id="gym-counter-badge">0</small>
+  <button class="floating-gym-counter" id="gym-counter-open" type="button" aria-label="開啟 Pokémon GO 戰果計數器" title="Pokémon GO 戰果計數器">
+    <span aria-hidden="true">GO</span><small id="gym-counter-badge">0</small>
   </button>
 
   <button class="floating-back-top" id="back-to-top" type="button" aria-label="平滑回到頁面頂端" title="回到頂端">
@@ -230,7 +230,7 @@
         <button type="button" data-mobile-tool="news"><span aria-hidden="true">EV</span><strong>近期活動</strong><small>Event Navigator</small></button>
         <button type="button" data-mobile-tool="stamps"><span aria-hidden="true">ST</span><strong>蓋章座標</strong><small>Stamp Navigator</small><b id="mobile-stamp-count">0</b></button>
         <button type="button" data-mobile-tool="alert"><span aria-hidden="true">◷</span><strong>活動提醒</strong><small>Sparkle Alert</small><b id="mobile-alert-count">0</b></button>
-        <button type="button" data-mobile-tool="gym"><span aria-hidden="true">GYM</span><strong>道館計數器</strong><small>Result Counter</small><b id="mobile-gym-count">0</b></button>
+        <button type="button" data-mobile-tool="gym"><span aria-hidden="true">GO</span><strong>戰果計數器</strong><small>Pokémon GO</small><b id="mobile-gym-count">0</b></button>
         <button type="button" data-mobile-tool="top"><span aria-hidden="true">↑</span><strong>回到頂端</strong><small>Back to Top</small></button>
         <a href="https://www.instagram.com/mr_j_play_game/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">IG</span><strong>Instagram</strong><small>聯絡我們</small></a>
       </div>
@@ -352,51 +352,63 @@
 
   <dialog class="filter-modal gym-counter-modal" id="gym-counter-modal" aria-labelledby="gym-counter-title">
     <div class="filter-modal-panel">
-      <button class="filter-modal-close" id="gym-counter-close" type="button" aria-label="關閉道館戰果計數器">×</button>
-      <p class="kicker"><span>08</span> GYM RESULT COUNTER</p>
-      <h2 id="gym-counter-title">道館戰果計數器</h2>
+      <button class="filter-modal-close" id="gym-counter-close" type="button" aria-label="關閉 Pokémon GO 戰果計數器">×</button>
+      <p class="kicker"><span>08</span> POKÉMON GO RESULT COUNTER</p>
+      <h2 id="gym-counter-title">Pokémon GO 戰果計數器</h2>
       <p class="filter-modal-note">每次戰果請選擇下列四種結果之一；IV100 為附加紀錄，不會增加總次數。所有紀錄會保存在此瀏覽器。</p>
 
+      <div class="gym-counter-modes" role="radiogroup" aria-label="統計類型">
+        <button class="is-active" type="button" role="radio" aria-checked="true" data-gym-counter-mode="raid">
+          <span>RAID</span><strong>團體戰</strong><b data-gym-mode-total="raid">0</b>
+        </button>
+        <button type="button" role="radio" aria-checked="false" data-gym-counter-mode="maxBattle">
+          <span>MAX</span><strong>極巨化</strong><b data-gym-mode-total="maxBattle">0</b>
+        </button>
+        <button type="button" role="radio" aria-checked="false" data-gym-counter-mode="timedResearch">
+          <span>TASK</span><strong>限時任務</strong><b data-gym-mode-total="timedResearch">0</b>
+        </button>
+      </div>
+
       <section class="gym-counter-total" aria-label="總次數">
-        <span>TOTAL RUNS / 總次數</span>
+        <span id="gym-counter-total-label">團體戰 / TOTAL RUNS</span>
         <strong id="gym-counter-total">0</strong>
       </section>
 
       <div class="gym-counter-list">
         <article class="gym-counter-row normal" data-counter-key="normal">
-          <div><span>01</span><strong>普色</strong></div>
+          <div><span>01</span><strong>普色無背</strong><em id="gym-counter-normal-percentage">0%</em></div>
           <div class="gym-counter-controls">
-            <button type="button" data-counter-change="-1" aria-label="普色減一">−</button>
+            <button type="button" data-counter-change="-1" aria-label="普色無背減一">−</button>
             <output id="gym-counter-normal">0</output>
-            <button type="button" data-counter-change="1" aria-label="普色加一">＋</button>
+            <button type="button" data-counter-change="1" aria-label="普色無背加一">＋</button>
           </div>
         </article>
         <article class="gym-counter-row shiny" data-counter-key="shiny">
-          <div><span>02</span><strong>純異色</strong></div>
+          <div><span>02</span><strong>異色無背</strong><em id="gym-counter-shiny-percentage">0%</em></div>
           <div class="gym-counter-controls">
-            <button type="button" data-counter-change="-1" aria-label="純異色減一">−</button>
+            <button type="button" data-counter-change="-1" aria-label="異色無背減一">−</button>
             <output id="gym-counter-shiny">0</output>
-            <button type="button" data-counter-change="1" aria-label="純異色加一">＋</button>
+            <button type="button" data-counter-change="1" aria-label="異色無背加一">＋</button>
           </div>
         </article>
         <article class="gym-counter-row background" data-counter-key="normalBackground">
-          <div><span>03</span><strong>普色背卡</strong></div>
+          <div><span>03</span><strong>普色有背</strong><em id="gym-counter-normal-background-percentage">0%</em></div>
           <div class="gym-counter-controls">
-            <button type="button" data-counter-change="-1" aria-label="普色背卡減一">−</button>
+            <button type="button" data-counter-change="-1" aria-label="普色有背減一">−</button>
             <output id="gym-counter-normal-background">0</output>
-            <button type="button" data-counter-change="1" aria-label="普色背卡加一">＋</button>
+            <button type="button" data-counter-change="1" aria-label="普色有背加一">＋</button>
           </div>
         </article>
         <article class="gym-counter-row shiny-background" data-counter-key="shinyBackground">
-          <div><span>04</span><strong>異色背卡</strong></div>
+          <div><span>04</span><strong>異色有背</strong><em id="gym-counter-shiny-background-percentage">0%</em></div>
           <div class="gym-counter-controls">
-            <button type="button" data-counter-change="-1" aria-label="異色背卡減一">−</button>
+            <button type="button" data-counter-change="-1" aria-label="異色有背減一">−</button>
             <output id="gym-counter-shiny-background">0</output>
-            <button type="button" data-counter-change="1" aria-label="異色背卡加一">＋</button>
+            <button type="button" data-counter-change="1" aria-label="異色有背加一">＋</button>
           </div>
         </article>
         <article class="gym-counter-row perfect" data-counter-key="perfectIv">
-          <div><span>IV</span><strong>IV100</strong><small>不計入總次數</small></div>
+          <div><span>IV</span><strong>IV100</strong><em id="gym-counter-perfect-iv-percentage">0%</em><small>不計入總次數</small></div>
           <div class="gym-counter-controls">
             <button type="button" data-counter-change="-1" aria-label="IV100減一">−</button>
             <output id="gym-counter-perfect-iv">0</output>
@@ -406,9 +418,14 @@
       </div>
 
       <p class="gym-counter-feedback" id="gym-counter-feedback" role="status" aria-live="polite">READY_</p>
+      <div class="gym-counter-share-actions" aria-label="複製戰果統計">
+        <button id="gym-counter-copy-current" type="button">複製目前分類</button>
+        <button id="gym-counter-copy-all" type="button">複製全部分類</button>
+      </div>
       <div class="gym-counter-actions">
         <button id="gym-counter-undo" type="button">復原上一步</button>
-        <button id="gym-counter-reset" type="button">重置全部</button>
+        <button id="gym-counter-reset" type="button">重置目前類型</button>
+        <button id="gym-counter-reset-all" type="button">全部清除</button>
       </div>
     </div>
   </dialog>
