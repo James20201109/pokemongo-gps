@@ -377,35 +377,34 @@ function buildGymCounterShareSection(mode) {
   const counter = gymCounter.modes[mode];
   const total = gymCounterTotal(mode);
   const rows = [
-    ["⚪", "普色無背", "normal"],
-    ["✨", "異色無背", "shiny"],
-    ["🖼️", "普色有背", "normalBackground"],
-    ["🌟", "異色有背", "shinyBackground"],
-    ["💯", "IV100", "perfectIv"]
+    ["普色無背", "normal"],
+    ["異色無背", "shiny"],
+    ["普色有背", "normalBackground"],
+    ["異色有背", "shinyBackground"],
+    ["IV100", "perfectIv"]
   ];
-  const individualResults = rows.map(([icon, label, key]) => {
-    const note = key === "perfectIv" ? "\n　※ IV100 不計入總紀錄" : "";
+  const individualResults = rows.map(([label, key]) => {
     const probability = total > 0
       ? formatGymCounterPercentage(counter[key], total)
       : counter[key] > 0 ? "無法計算" : "0%";
-    return `${icon} ${label}：${counter[key]}\n　機率 ${probability}${note}`;
-  }).join("\n\n");
+    return `- ${label}：${counter[key]} | 機率 ${probability}`;
+  }).join("\n");
   const shinyTotal = counter.shiny + counter.shinyBackground;
   const backgroundTotal = counter.normalBackground + counter.shinyBackground;
   const combinedResults = total > 0
     ? [
-        `✨ 異色機率：${formatGymCounterPercentage(shinyTotal, total)}`,
-        `🖼️ 背卡機率：${formatGymCounterPercentage(backgroundTotal, total)}`,
-        `🌟 異色背卡機率：${formatGymCounterPercentage(counter.shinyBackground, total)}`,
-        `💯 IV100機率：${formatGymCounterPercentage(counter.perfectIv, total)}`
+        `- 異色機率：${formatGymCounterPercentage(shinyTotal, total)}`,
+        `- 普背機率：${formatGymCounterPercentage(backgroundTotal, total)}`,
+        `- 異背機率：${formatGymCounterPercentage(counter.shinyBackground, total)}`,
+        `- IV100機率：${formatGymCounterPercentage(counter.perfectIv, total)}`
       ].join("\n")
     : "尚無總紀錄可計算";
   return [
-    `🎯 ${gymCounterModes[mode].label}`,
-    `🔢 總紀錄：${total}`,
+    `【 ${gymCounterModes[mode].label} | 總紀錄：${total} 】`,
     "",
     "【個別結果】",
     individualResults,
+    "※ IV100 不計入總紀錄",
     "",
     "【綜合機率】",
     combinedResults
@@ -413,7 +412,7 @@ function buildGymCounterShareSection(mode) {
 }
 
 function buildGymCounterShareText(modes) {
-  return modes.map(buildGymCounterShareSection).join("\n\n━━━━━━━━━━━━\n\n");
+  return modes.map(buildGymCounterShareSection).join("\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
 }
 
 async function copyGymCounterCurrentMode() {
