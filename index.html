@@ -7,7 +7,7 @@
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="stylesheet" href="style.css?v=20261028-1">
+  <link rel="stylesheet" href="style.css?v=20261123-1">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -379,7 +379,7 @@
           <div><span>01</span><strong>普色無背</strong><em id="gym-counter-normal-percentage">0%</em></div>
           <div class="gym-counter-controls">
             <button type="button" data-counter-change="-1" aria-label="普色無背減一">−</button>
-            <output id="gym-counter-normal">0</output>
+            <button class="gym-counter-value" type="button" data-counter-edit="normal" aria-label="快速調整普色無背"><output id="gym-counter-normal">0</output></button>
             <button type="button" data-counter-change="1" aria-label="普色無背加一">＋</button>
           </div>
         </article>
@@ -387,7 +387,7 @@
           <div><span>02</span><strong>異色無背</strong><em id="gym-counter-shiny-percentage">0%</em></div>
           <div class="gym-counter-controls">
             <button type="button" data-counter-change="-1" aria-label="異色無背減一">−</button>
-            <output id="gym-counter-shiny">0</output>
+            <button class="gym-counter-value" type="button" data-counter-edit="shiny" aria-label="快速調整異色無背"><output id="gym-counter-shiny">0</output></button>
             <button type="button" data-counter-change="1" aria-label="異色無背加一">＋</button>
           </div>
         </article>
@@ -395,7 +395,7 @@
           <div><span>03</span><strong>普色有背</strong><em id="gym-counter-normal-background-percentage">0%</em></div>
           <div class="gym-counter-controls">
             <button type="button" data-counter-change="-1" aria-label="普色有背減一">−</button>
-            <output id="gym-counter-normal-background">0</output>
+            <button class="gym-counter-value" type="button" data-counter-edit="normalBackground" aria-label="快速調整普色有背"><output id="gym-counter-normal-background">0</output></button>
             <button type="button" data-counter-change="1" aria-label="普色有背加一">＋</button>
           </div>
         </article>
@@ -403,7 +403,7 @@
           <div><span>04</span><strong>異色有背</strong><em id="gym-counter-shiny-background-percentage">0%</em></div>
           <div class="gym-counter-controls">
             <button type="button" data-counter-change="-1" aria-label="異色有背減一">−</button>
-            <output id="gym-counter-shiny-background">0</output>
+            <button class="gym-counter-value" type="button" data-counter-edit="shinyBackground" aria-label="快速調整異色有背"><output id="gym-counter-shiny-background">0</output></button>
             <button type="button" data-counter-change="1" aria-label="異色有背加一">＋</button>
           </div>
         </article>
@@ -411,7 +411,7 @@
           <div><span>IV</span><strong>IV100</strong><em id="gym-counter-perfect-iv-percentage">0%</em><small>不計入總次數</small></div>
           <div class="gym-counter-controls">
             <button type="button" data-counter-change="-1" aria-label="IV100減一">−</button>
-            <output id="gym-counter-perfect-iv">0</output>
+            <button class="gym-counter-value" type="button" data-counter-edit="perfectIv" aria-label="快速調整 IV100"><output id="gym-counter-perfect-iv">0</output></button>
             <button type="button" data-counter-change="1" aria-label="IV100加一">＋</button>
           </div>
         </article>
@@ -430,9 +430,31 @@
     </div>
   </dialog>
 
+  <dialog class="filter-modal gym-counter-adjust-modal" id="gym-counter-adjust-modal" aria-labelledby="gym-counter-adjust-title">
+    <div class="filter-modal-panel">
+      <button class="filter-modal-close" id="gym-counter-adjust-close" type="button" aria-label="關閉快速調整">×</button>
+      <p class="kicker"><span>09</span> QUICK ADJUST</p>
+      <h2 id="gym-counter-adjust-title">調整「普色無背」</h2>
+      <p class="gym-counter-adjust-current">目前：<strong id="gym-counter-adjust-current">0</strong></p>
+
+      <div class="gym-counter-adjust-direction" role="radiogroup" aria-label="調整方式">
+        <button class="is-active" type="button" role="radio" aria-checked="true" data-counter-direction="1">＋ 增加</button>
+        <button type="button" role="radio" aria-checked="false" data-counter-direction="-1">－ 減少</button>
+      </div>
+
+      <label class="gym-counter-adjust-input">
+        <span>數量</span>
+        <input id="gym-counter-adjust-amount" type="number" min="1" step="1" inputmode="numeric" value="1" autocomplete="off">
+      </label>
+      <p class="gym-counter-adjust-preview" id="gym-counter-adjust-preview" aria-live="polite">0 → 1</p>
+      <p class="gym-counter-adjust-feedback" id="gym-counter-adjust-feedback" role="status" aria-live="polite"></p>
+      <button class="gym-counter-adjust-confirm" id="gym-counter-adjust-confirm" type="button">確認調整</button>
+    </div>
+  </dialog>
+
   <script src="coordinates-data.js?v=20261029-2"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
-  <script src="script.js?v=20261028-1"></script>
+  <script src="script.js?v=20261123-1"></script>
 </body>
 </html>

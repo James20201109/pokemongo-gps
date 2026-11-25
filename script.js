@@ -150,6 +150,15 @@ const elements = {
   gymCounterUndo: document.querySelector("#gym-counter-undo"),
   gymCounterReset: document.querySelector("#gym-counter-reset"),
   gymCounterResetAll: document.querySelector("#gym-counter-reset-all"),
+  gymCounterAdjustModal: document.querySelector("#gym-counter-adjust-modal"),
+  gymCounterAdjustClose: document.querySelector("#gym-counter-adjust-close"),
+  gymCounterAdjustTitle: document.querySelector("#gym-counter-adjust-title"),
+  gymCounterAdjustCurrent: document.querySelector("#gym-counter-adjust-current"),
+  gymCounterAdjustDirectionButtons: document.querySelectorAll("[data-counter-direction]"),
+  gymCounterAdjustAmount: document.querySelector("#gym-counter-adjust-amount"),
+  gymCounterAdjustPreview: document.querySelector("#gym-counter-adjust-preview"),
+  gymCounterAdjustFeedback: document.querySelector("#gym-counter-adjust-feedback"),
+  gymCounterAdjustConfirm: document.querySelector("#gym-counter-adjust-confirm"),
   backToTop: document.querySelector("#back-to-top"),
   mobileToolsOpen: document.querySelector("#mobile-tools-open"),
   mobileTools: document.querySelector("#mobile-tools"),
@@ -284,7 +293,7 @@ function normalizeGymCounterMode(saved) {
     normalized[key] = Number.isInteger(value) && value >= 0 ? value : 0;
   });
   normalized.history = Array.isArray(saved.history)
-    ? saved.history.filter((item) => gymCounterLabels[item?.key] && [1, -1].includes(item.delta)).slice(-100)
+    ? saved.history.filter((item) => gymCounterLabels[item?.key] && Number.isInteger(item.delta) && item.delta !== 0).slice(-100)
     : [];
   return normalized;
 }
@@ -325,6 +334,8 @@ let gymCounterResetArmed = false;
 let gymCounterResetTimer;
 let gymCounterResetAllArmed = false;
 let gymCounterResetAllTimer;
+let gymCounterAdjustKey = null;
+let gymCounterAdjustDirection = 1;
 
 function loadNowModeCollapsed() {
   try {
@@ -505,14 +516,84 @@ function switchGymCounterMode(mode) {
 
 function changeGymCounter(key, delta, recordHistory = true) {
   const counter = activeGymCounter();
-  if (!gymCounterLabels[key] || ![1, -1].includes(delta)) return;
-  if (delta < 0 && counter[key] === 0) return;
+  if (!gymCounterLabels[key] || !Number.isInteger(delta) || delta === 0) return false;
+  if (counter[key] + delta < 0) return false;
   counter[key] += delta;
   if (recordHistory) counter.history.push({ key, delta });
   counter.history = counter.history.slice(-100);
   saveGymCounter();
   const verb = delta > 0 ? "新增" : "減少";
   renderGymCounter(`${gymCounterModes[gymCounter.activeMode].label}｜${verb}：${gymCounterLabels[key]} · ${counter[key]}`);
+  return true;
+}
+
+function updateGymCounterAdjustPreview() {
+  if (!gymCounterAdjustKey) return;
+  const current = activeGymCounter()[gymCounterAdjustKey];
+  const amount = Number(elements.gymCounterAdjustAmount.value);
+  const validAmount = Number.isInteger(amount) && amount > 0;
+  const next = validAmount ? current + (gymCounterAdjustDirection * amount) : null;
+  const validResult = validAmount && next >= 0;
+  elements.gymCounterAdjustPreview.textContent = `${current.toLocaleString("zh-TW")} → ${validResult ? next.toLocaleString("zh-TW") : "—"}`;
+  elements.gymCounterAdjustConfirm.disabled = !validResult;
+  if (!validAmount) {
+    elements.gymCounterAdjustFeedback.textContent = "請輸入大於 0 的整數";
+  } else if (next < 0) {
+    elements.gymCounterAdjustFeedback.textContent = `最多只能減少 ${current.toLocaleString("zh-TW")}`;
+  } else {
+    elements.gymCounterAdjustFeedback.textContent = "";
+  }
+}
+
+function setGymCounterAdjustDirection(direction) {
+  if (![1, -1].includes(direction)) return;
+  gymCounterAdjustDirection = direction;
+  elements.gymCounterAdjustDirectionButtons.forEach((button) => {
+    const selected = Number(button.dataset.counterDirection) === direction;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-checked", String(selected));
+  });
+  updateGymCounterAdjustPreview();
+}
+
+function openGymCounterAdjust(key) {
+  if (!gymCounterLabels[key]) return;
+  gymCounterAdjustKey = key;
+  gymCounterAdjustDirection = 1;
+  elements.gymCounterAdjustTitle.textContent = `調整「${gymCounterLabels[key]}」`;
+  elements.gymCounterAdjustCurrent.textContent = activeGymCounter()[key].toLocaleString("zh-TW");
+  elements.gymCounterAdjustAmount.value = "1";
+  elements.gymCounterAdjustFeedback.textContent = "";
+  setGymCounterAdjustDirection(1);
+  if (typeof elements.gymCounterAdjustModal.showModal === "function") {
+    elements.gymCounterAdjustModal.showModal();
+  } else {
+    elements.gymCounterAdjustModal.setAttribute("open", "");
+  }
+  requestAnimationFrame(() => elements.gymCounterAdjustAmount.select());
+}
+
+function closeGymCounterAdjust() {
+  elements.gymCounterAdjustModal.close?.();
+  elements.gymCounterAdjustModal.removeAttribute("open");
+  const trigger = elements.gymCounterModal.querySelector(`[data-counter-edit="${gymCounterAdjustKey}"]`);
+  gymCounterAdjustKey = null;
+  trigger?.focus();
+}
+
+function confirmGymCounterAdjust() {
+  if (!gymCounterAdjustKey) return;
+  const amount = Number(elements.gymCounterAdjustAmount.value);
+  if (!Number.isInteger(amount) || amount <= 0) {
+    updateGymCounterAdjustPreview();
+    return;
+  }
+  const delta = gymCounterAdjustDirection * amount;
+  if (!changeGymCounter(gymCounterAdjustKey, delta)) {
+    updateGymCounterAdjustPreview();
+    return;
+  }
+  closeGymCounterAdjust();
 }
 
 function openGymCounterModal() {
@@ -2458,6 +2539,21 @@ elements.gymCounterModal.querySelectorAll("[data-counter-change]").forEach((butt
     const row = button.closest("[data-counter-key]");
     changeGymCounter(row.dataset.counterKey, Number(button.dataset.counterChange));
   });
+});
+elements.gymCounterModal.querySelectorAll("[data-counter-edit]").forEach((button) => {
+  button.addEventListener("click", () => openGymCounterAdjust(button.dataset.counterEdit));
+});
+elements.gymCounterAdjustDirectionButtons.forEach((button) => {
+  button.addEventListener("click", () => setGymCounterAdjustDirection(Number(button.dataset.counterDirection)));
+});
+elements.gymCounterAdjustAmount.addEventListener("input", updateGymCounterAdjustPreview);
+elements.gymCounterAdjustAmount.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !elements.gymCounterAdjustConfirm.disabled) confirmGymCounterAdjust();
+});
+elements.gymCounterAdjustConfirm.addEventListener("click", confirmGymCounterAdjust);
+elements.gymCounterAdjustClose.addEventListener("click", closeGymCounterAdjust);
+elements.gymCounterAdjustModal.addEventListener("cancel", (event) => {
+  event.preventDefault();
 });
 elements.gymCounterUndo.addEventListener("click", undoGymCounter);
 elements.gymCounterCopyCurrent.addEventListener("click", copyGymCounterCurrentMode);
