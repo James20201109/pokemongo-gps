@@ -7,7 +7,7 @@
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="stylesheet" href="style.css?v=20261123-1">
+  <link rel="stylesheet" href="style.css?v=20261125-4">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -369,6 +369,19 @@
         </button>
       </div>
 
+      <div class="gym-counter-target">
+        <label for="gym-counter-target">統計對象</label>
+        <select id="gym-counter-target"></select>
+        <button id="gym-counter-target-add" type="button" aria-expanded="false" aria-controls="gym-counter-target-form">＋新增對象</button>
+        <button id="gym-counter-target-rename" type="button" aria-expanded="false" aria-controls="gym-counter-target-form">變更名稱</button>
+        <button id="gym-counter-target-delete" type="button">刪除對象</button>
+      </div>
+      <form id="gym-counter-target-form" class="gym-counter-target-form" hidden>
+        <label for="gym-counter-target-name">對象名稱</label>
+        <input id="gym-counter-target-name" required maxlength="40" placeholder="例如：伊布">
+        <button id="gym-counter-target-submit" type="submit">確認新增</button>
+        <button id="gym-counter-target-cancel" type="button">取消</button>
+      </form>
       <section class="gym-counter-total" aria-label="總次數">
         <span id="gym-counter-total-label">團體戰 / TOTAL RUNS</span>
         <strong id="gym-counter-total">0</strong>
@@ -419,12 +432,12 @@
 
       <p class="gym-counter-feedback" id="gym-counter-feedback" role="status" aria-live="polite">READY_</p>
       <div class="gym-counter-share-actions" aria-label="複製戰果統計">
-        <button id="gym-counter-copy-current" type="button">複製目前分類</button>
+        <button id="gym-counter-copy-current" type="button">複製目前對象</button>
         <button id="gym-counter-copy-all" type="button">複製全部分類</button>
       </div>
       <div class="gym-counter-actions">
         <button id="gym-counter-undo" type="button">復原上一步</button>
-        <button id="gym-counter-reset" type="button">重置目前類型</button>
+        <button id="gym-counter-reset" type="button">重置目前對象</button>
         <button id="gym-counter-reset-all" type="button">全部清除</button>
       </div>
     </div>
@@ -452,9 +465,37 @@
     </div>
   </dialog>
 
+  <dialog class="filter-modal gym-counter-adjust-modal" id="gym-counter-copy-dialog" aria-labelledby="gym-counter-copy-title">
+    <div class="filter-modal-panel">
+      <form method="dialog">
+        <button class="filter-modal-close" aria-label="取消複製">×</button>
+      </form>
+      <h2 id="gym-counter-copy-title">選擇複製範圍</h2>
+      <div class="gym-counter-copy-options">
+        <button type="button" data-copy-target-scope="selected"></button>
+        <button type="button" data-copy-target-scope="all"></button>
+      </div>
+      <p id="gym-counter-copy-note" role="status">沒有戰果的對象會略過。</p>
+    </div>
+  </dialog>
+
+  <dialog class="filter-modal gym-counter-adjust-modal" id="gym-counter-delete-dialog" aria-labelledby="gym-counter-delete-title" aria-describedby="gym-counter-delete-note">
+    <div class="filter-modal-panel">
+      <form method="dialog">
+        <button class="filter-modal-close" aria-label="關閉刪除確認">×</button>
+        <h2 id="gym-counter-delete-title">刪除統計對象</h2>
+        <p class="gym-counter-delete-target" id="gym-counter-delete-target"></p>
+        <p class="filter-modal-note" id="gym-counter-delete-note">對象名稱、戰果與復原紀錄都會永久移除。其他對象不受影響。</p>
+        <div class="gym-counter-delete-actions">
+          <button value="cancel" autofocus>取消</button>
+          <button id="gym-counter-delete-confirm" type="button">確認刪除</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
   <script src="coordinates-data.js?v=20261029-2"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
-  <script src="script.js?v=20261123-1"></script>
+  <script src="script.js?v=20261125-4"></script>
 </body>
 </html>

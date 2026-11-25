@@ -532,6 +532,24 @@ footer { display:flex;align-items:center;justify-content:space-between;gap:30px;
 .sparkle-alert-option em { color:#ffb23e;font:700 8px "JetBrains Mono",monospace;font-style:normal; }
 .sparkle-alert-save { background:#ffb23e; }
 .gym-counter-modal { width:min(620px,calc(100% - 28px)); }
+.gym-counter-copy-options { display:grid;gap:8px;margin-top:16px; }
+.gym-counter-copy-options button { min-height:44px;padding:8px 12px;border:1px solid #31565c;background:#0b1519;color:var(--cyan);font:inherit;cursor:pointer;overflow-wrap:anywhere; }
+.gym-counter-copy-options button:focus-visible { outline:2px solid var(--cyan);outline-offset:2px; }
+.gym-counter-copy-options button:disabled { opacity:.45;cursor:not-allowed; }
+#gym-counter-copy-note { font-size:.875rem; }
+.gym-counter-delete-target { padding:12px 14px;border-left:3px solid #ff5265;background:rgba(255,82,101,.08);color:#ffd6dc;font-weight:700;overflow-wrap:anywhere; }
+.gym-counter-delete-actions { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px; }
+.gym-counter-delete-actions button { min-height:44px;border:1px solid #31565c;background:#0b1519;color:var(--cyan);font:inherit;cursor:pointer; }
+.gym-counter-delete-actions #gym-counter-delete-confirm { border-color:#ff5265;background:rgba(255,82,101,.13);color:#ff9aa7; }
+.gym-counter-delete-actions button:hover { background:#1a2a30; }
+.gym-counter-delete-actions #gym-counter-delete-confirm:hover { background:rgba(255,82,101,.24); }
+.gym-counter-delete-actions button:focus-visible { outline:2px solid currentColor;outline-offset:2px; }
+.gym-counter-target,.gym-counter-target-form { display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 10px;font-size:.875rem; }
+.gym-counter-target-form[hidden] { display:none; }
+.gym-counter-target select,.gym-counter-target-form input { flex:1 1 8rem;min-width:0;width:0; }
+.gym-counter-target select,.gym-counter-target button,.gym-counter-target-form :is(input,button) { min-height:44px;padding:6px 10px;border:1px solid #31565c;background:#0b1519;color:#e4f5f3;font:inherit; }
+.gym-counter-target button,.gym-counter-target-form button { cursor:pointer;color:var(--cyan); }
+.gym-counter-target :focus-visible,.gym-counter-target-form :focus-visible { outline:2px solid var(--cyan);outline-offset:2px; }
 .gym-counter-modes { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 10px; }
 .gym-counter-modes button { --mode-accent:#35f4e6;position:relative;min-width:0;min-height:64px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;gap:2px 8px;padding:10px 12px;border:1px solid #294249;background:rgba(8,17,21,.9);color:#789094;text-align:left;cursor:pointer;transition:border-color .18s,background .18s,color .18s,box-shadow .18s; }
 .gym-counter-modes button[data-gym-counter-mode="maxBattle"] { --mode-accent:#ffb23e; }

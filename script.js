@@ -147,9 +147,20 @@ const elements = {
   gymCounterFeedback: document.querySelector("#gym-counter-feedback"),
   gymCounterCopyCurrent: document.querySelector("#gym-counter-copy-current"),
   gymCounterCopyAll: document.querySelector("#gym-counter-copy-all"),
+  gymCounterCopyDialog: document.querySelector("#gym-counter-copy-dialog"),
+  gymCounterCopyTitle: document.querySelector("#gym-counter-copy-title"),
+  gymCounterCopyNote: document.querySelector("#gym-counter-copy-note"),
   gymCounterUndo: document.querySelector("#gym-counter-undo"),
   gymCounterReset: document.querySelector("#gym-counter-reset"),
   gymCounterResetAll: document.querySelector("#gym-counter-reset-all"),
+  gymCounterTarget: document.querySelector("#gym-counter-target"),
+  gymCounterTargetAdd: document.querySelector("#gym-counter-target-add"),
+  gymCounterTargetRename: document.querySelector("#gym-counter-target-rename"),
+  gymCounterTargetDelete: document.querySelector("#gym-counter-target-delete"),
+  gymCounterTargetSubmit: document.querySelector("#gym-counter-target-submit"),
+  gymCounterTargetForm: document.querySelector("#gym-counter-target-form"),
+  gymCounterTargetName: document.querySelector("#gym-counter-target-name"),
+  gymCounterTargetCancel: document.querySelector("#gym-counter-target-cancel"),
   gymCounterAdjustModal: document.querySelector("#gym-counter-adjust-modal"),
   gymCounterAdjustClose: document.querySelector("#gym-counter-adjust-close"),
   gymCounterAdjustTitle: document.querySelector("#gym-counter-adjust-title"),
@@ -194,7 +205,9 @@ const friendsUnlockedStorageKey = "geo-pulse-friends-unlocked-v1";
 const expandedGroupsStorageKey = "geo-pulse-expanded-groups-v1";
 const collapsedEventGroupsStorageKey = "geo-pulse-collapsed-event-groups-v1";
 const gymCounterLegacyStorageKey = "geo-pulse-gym-counter-v1";
-const gymCounterStorageKey = "geo-pulse-gym-counter-v2";
+const gymCounterV2StorageKey = "geo-pulse-gym-counter-v2";
+const gymCounterStorageKey = "geo-pulse-gym-counter-v3";
+const gymCounterUnnamed = "未命名紀錄";
 const gymCounterModalOpenStorageKey = "geo-pulse-gym-counter-modal-open-v1";
 const nowModeCollapsedStorageKey = "geo-pulse-now-mode-collapsed-v1";
 let friendsUnlocked = false;
@@ -300,28 +313,44 @@ function normalizeGymCounterMode(saved) {
 
 function createEmptyGymCounter() {
   return {
-    version: 2,
+    version: 3,
     activeMode: "raid",
-    modes: Object.fromEntries(Object.keys(gymCounterModes).map((key) => [key, createEmptyGymCounterMode()]))
+    modes: Object.fromEntries(Object.keys(gymCounterModes).map((key) => [
+      key, { selected: gymCounterUnnamed, targets: [{ name: gymCounterUnnamed, counter: createEmptyGymCounterMode() }] }
+    ]))
   };
 }
 
 function loadGymCounter() {
   const empty = createEmptyGymCounter();
   try {
-    const saved = JSON.parse(localStorage.getItem(gymCounterStorageKey) || "null");
+    const current = JSON.parse(localStorage.getItem(gymCounterStorageKey) || "null");
+    if (current?.version === 3) {
+      empty.activeMode = Object.keys(gymCounterModes).includes(current.activeMode) ? current.activeMode : "raid";
+      for (const [mode, group] of Object.entries(empty.modes)) {
+        const savedGroup = current.modes?.[mode];
+        if (!Array.isArray(savedGroup?.targets)) continue;
+        const targets = savedGroup.targets
+          .filter((target) => typeof target?.name === "string" && target.name.trim())
+          .map(({name, counter}) => ({name, counter: normalizeGymCounterMode(counter)}));
+        if (!targets.length) continue;
+        group.targets = targets;
+        group.selected = targets.some(({name}) => name === savedGroup.selected) ? savedGroup.selected : targets[0].name;
+      }
+      return empty;
+    }
+    const saved = JSON.parse(localStorage.getItem(gymCounterV2StorageKey) || "null");
     if (saved?.version === 2 && saved.modes && typeof saved.modes === "object") {
       empty.activeMode = gymCounterModes[saved.activeMode] ? saved.activeMode : "raid";
       Object.keys(gymCounterModes).forEach((key) => {
-        empty.modes[key] = normalizeGymCounterMode(saved.modes[key]);
+        empty.modes[key].targets[0].counter = normalizeGymCounterMode(saved.modes[key]);
       });
       return empty;
     }
 
     const legacy = JSON.parse(localStorage.getItem(gymCounterLegacyStorageKey) || "null");
     if (legacy && typeof legacy === "object") {
-      empty.modes.raid = normalizeGymCounterMode(legacy);
-      localStorage.setItem(gymCounterStorageKey, JSON.stringify(empty));
+      empty.modes.raid.targets[0].counter = normalizeGymCounterMode(legacy);
     }
     return empty;
   } catch {
@@ -360,13 +389,17 @@ function setNowModeCollapsed(collapsed, { save = true } = {}) {
   }
 }
 
+function selectedGymCounterTarget(mode = gymCounter.activeMode) {
+  const group = gymCounter.modes[mode];
+  return group.targets.find(({name}) => name === group.selected);
+}
+
 function activeGymCounter() {
-  return gymCounter.modes[gymCounter.activeMode];
+  return selectedGymCounterTarget().counter;
 }
 
 function gymCounterTotal(mode = gymCounter.activeMode) {
-  const counter = gymCounter.modes[mode];
-  if (!counter) return 0;
+  const counter = selectedGymCounterTarget(mode).counter;
   return gymCounterTotalKeys.reduce((total, key) => total + counter[key], 0);
 }
 
@@ -379,14 +412,8 @@ function formatGymCounterPercentage(value, total) {
   return `${Number(((value / total) * 100).toFixed(2))}%`;
 }
 
-function gymCounterModeIsEmpty(mode) {
-  const counter = gymCounter.modes[mode];
-  return Object.keys(gymCounterLabels).every((key) => counter[key] === 0);
-}
-
-function buildGymCounterShareSection(mode) {
-  const counter = gymCounter.modes[mode];
-  const total = gymCounterTotal(mode);
+function buildGymCounterShareSection(mode, { name, counter }) {
+  const total = gymCounterTotalKeys.reduce((sum, key) => sum + counter[key], 0);
   const rows = [
     ["普色無背", "normal"],
     ["異色無背", "shiny"],
@@ -411,7 +438,7 @@ function buildGymCounterShareSection(mode) {
       ].join("\n")
     : "尚無總紀錄可計算";
   return [
-    `【 ${gymCounterModes[mode].label} | 總紀錄：${total} 】`,
+    `【 ${gymCounterModes[mode].label}・${name} | 總紀錄：${total} 】`,
     "",
     "【個別結果】",
     individualResults,
@@ -422,28 +449,43 @@ function buildGymCounterShareSection(mode) {
   ].join("\n");
 }
 
-function buildGymCounterShareText(modes) {
-  return modes.map(buildGymCounterShareSection).join("\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
+function getGymCounterCopyEntries(modes, allTargets) {
+  return modes.flatMap((mode) => {
+    const targets = allTargets ? gymCounter.modes[mode].targets : [selectedGymCounterTarget(mode)];
+    return targets.filter(({counter}) => Object.keys(gymCounterLabels).some((key) => counter[key] > 0))
+      .map((target) => ({mode, target}));
+  });
 }
 
-async function copyGymCounterCurrentMode() {
-  const mode = gymCounter.activeMode;
-  if (gymCounterModeIsEmpty(mode)) {
-    renderGymCounter(`「${gymCounterModes[mode].label}」目前沒有可複製的戰果紀錄`);
-    return;
-  }
-  await copyText(buildGymCounterShareText([mode]), `${gymCounterModes[mode].label}戰果與實測機率`);
-  renderGymCounter(`已複製「${gymCounterModes[mode].label}」戰果與實測機率`);
+function openGymCounterCopyDialog(allModes) {
+  const dialog = elements.gymCounterCopyDialog;
+  const modes = allModes ? Object.keys(gymCounterModes) : [gymCounter.activeMode];
+  elements.gymCounterCopyTitle.textContent = allModes ? "複製全部分類" : `複製「${gymCounterModes[modes[0]].label}」戰果`;
+  elements.gymCounterCopyNote.textContent = "沒有戰果的對象會略過。";
+  dialog.querySelectorAll("[data-copy-target-scope]").forEach((button) => {
+    const allTargets = button.dataset.copyTargetScope === "all";
+    const entries = getGymCounterCopyEntries(modes, allTargets);
+    const label = allTargets ? (allModes ? "所有分類的全部對象" : "目前分類的全部對象")
+      : (allModes ? "各分類目前選中的對象" : `目前對象：${selectedGymCounterTarget().name}`);
+    button.textContent = `${label}（${entries.length}）`;
+    button.disabled = entries.length === 0;
+    button.onclick = () => copyGymCounterEntries(entries);
+  });
+  dialog.showModal();
 }
 
-async function copyAllGymCounterModes() {
-  const modes = Object.keys(gymCounterModes).filter((mode) => !gymCounterModeIsEmpty(mode));
-  if (modes.length === 0) {
-    renderGymCounter("目前沒有可複製的戰果紀錄");
-    return;
+async function copyGymCounterEntries(entries) {
+  const dialog = elements.gymCounterCopyDialog;
+  const text = entries.map(({mode, target}) => buildGymCounterShareSection(mode, target))
+    .join("\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
+  const label = `${entries.length} 個對象的戰果與實測機率`;
+  try {
+    await copyText(text, label, dialog);
+    dialog.close();
+    renderGymCounter(`已複製 ${label}`);
+  } catch {
+    elements.gymCounterCopyNote.textContent = "無法複製，請確認瀏覽器的剪貼簿權限後再試。";
   }
-  await copyText(buildGymCounterShareText(modes), `${modes.length} 個分類的戰果與實測機率`);
-  renderGymCounter(`已複製 ${modes.length} 個分類的戰果與實測機率`);
 }
 
 function saveGymCounter() {
@@ -456,6 +498,13 @@ function saveGymCounter() {
 
 function renderGymCounter(message = "") {
   const counter = activeGymCounter();
+  const group = gymCounter.modes[gymCounter.activeMode];
+  const select = elements.gymCounterTarget;
+  if (select.options.length !== group.targets.length ||
+      group.targets.some(({name}, index) => select.options[index]?.value !== name)) {
+    select.replaceChildren(...group.targets.map(({name}) => new Option(name, name)));
+  }
+  select.value = group.selected;
   const total = gymCounterTotal();
   const grandTotal = gymCounterGrandTotal();
   const activeMode = gymCounterModes[gymCounter.activeMode];
@@ -494,7 +543,7 @@ function renderGymCounter(message = "") {
 function disarmGymCounterReset() {
   clearTimeout(gymCounterResetTimer);
   gymCounterResetArmed = false;
-  elements.gymCounterReset.textContent = "重置目前類型";
+  elements.gymCounterReset.textContent = "重置目前對象";
   elements.gymCounterReset.classList.remove("confirming");
 }
 
@@ -507,11 +556,83 @@ function disarmGymCounterResetAll() {
 
 function switchGymCounterMode(mode) {
   if (!gymCounterModes[mode] || mode === gymCounter.activeMode) return;
+  closeGymCounterTargetForm();
   gymCounter.activeMode = mode;
   disarmGymCounterReset();
   disarmGymCounterResetAll();
   saveGymCounter();
   renderGymCounter(`CURRENT MODE / ${gymCounterModes[mode].label}`);
+}
+
+function closeGymCounterTargetForm() {
+  elements.gymCounterTargetForm.hidden = true;
+  elements.gymCounterTargetAdd.setAttribute("aria-expanded", "false");
+  elements.gymCounterTargetRename.setAttribute("aria-expanded", "false");
+  elements.gymCounterTargetForm.reset();
+  elements.gymCounterTargetName.setCustomValidity("");
+}
+
+function selectGymCounterTarget(name) {
+  const group = gymCounter.modes[gymCounter.activeMode];
+  if (!group.targets.some((target) => target.name === name)) return;
+  group.selected = name;
+  closeGymCounterTargetForm();
+  disarmGymCounterReset();
+  disarmGymCounterResetAll();
+  saveGymCounter();
+  renderGymCounter(`目前對象：${name}`);
+}
+
+function openGymCounterTargetForm(rename) {
+  closeGymCounterTargetForm();
+  const {gymCounterTargetForm: form, gymCounterTargetName: input} = elements;
+  form.dataset.action = rename ? "rename" : "add";
+  form.hidden = false;
+  (rename ? elements.gymCounterTargetRename : elements.gymCounterTargetAdd).setAttribute("aria-expanded", "true");
+  elements.gymCounterTargetSubmit.textContent = rename ? "儲存名稱" : "確認新增";
+  input.value = rename ? selectedGymCounterTarget().name : "";
+  input.focus();
+  if (rename) input.select();
+}
+
+function saveGymCounterTargetName(event) {
+  event.preventDefault();
+  const input = elements.gymCounterTargetName;
+  const name = input.value.trim().normalize("NFC");
+  const group = gymCounter.modes[gymCounter.activeMode];
+  const edited = elements.gymCounterTargetForm.dataset.action === "rename" ? selectedGymCounterTarget() : null;
+  if (!name || group.targets.some((target) => target !== edited && target.name === name)) {
+    input.setCustomValidity(name ? "此對象已存在，請直接從下拉選單切換。" : "請輸入對象名稱。");
+    input.reportValidity();
+    return;
+  }
+  if (edited) edited.name = name;
+  else group.targets.push({name, counter: createEmptyGymCounterMode()});
+  selectGymCounterTarget(name);
+  elements.gymCounterTarget.focus();
+}
+
+const gymCounterDeleteDialog = document.querySelector("#gym-counter-delete-dialog");
+
+function openGymCounterDeleteDialog() {
+  const mode = gymCounterModes[gymCounter.activeMode].label;
+  document.querySelector("#gym-counter-delete-target").textContent = `${mode}・${selectedGymCounterTarget().name}`;
+  gymCounterDeleteDialog.showModal();
+}
+
+function deleteGymCounterTarget() {
+  const group = gymCounter.modes[gymCounter.activeMode];
+  const target = selectedGymCounterTarget();
+  if (!gymCounterDeleteDialog.open) return;
+  gymCounterDeleteDialog.close();
+  const index = group.targets.indexOf(target);
+  group.targets.splice(index, 1);
+  if (!group.targets.length) {
+    const name = target.name === gymCounterUnnamed ? "新紀錄" : gymCounterUnnamed;
+    group.targets.push({name, counter: createEmptyGymCounterMode()});
+  }
+  selectGymCounterTarget(group.targets[Math.min(index, group.targets.length - 1)].name);
+  elements.gymCounterTarget.focus();
 }
 
 function changeGymCounter(key, delta, recordHistory = true) {
@@ -611,6 +732,7 @@ function openGymCounterModal() {
 }
 
 function closeGymCounterModal() {
+  closeGymCounterTargetForm();
   elements.gymCounterModal.close?.();
   elements.gymCounterModal.removeAttribute("open");
   try {
@@ -638,23 +760,23 @@ function undoGymCounter() {
 }
 
 function resetGymCounter() {
-  const mode = gymCounterModes[gymCounter.activeMode];
+  const target = selectedGymCounterTarget();
   if (!gymCounterResetArmed) {
     disarmGymCounterResetAll();
     gymCounterResetArmed = true;
     elements.gymCounterReset.textContent = "再次點擊確認重置";
     elements.gymCounterReset.classList.add("confirming");
-    elements.gymCounterFeedback.textContent = `請再次點擊確認清除「${mode.label}」紀錄`;
+    elements.gymCounterFeedback.textContent = `請再次點擊確認清除「${target.name}」紀錄`;
     clearTimeout(gymCounterResetTimer);
     gymCounterResetTimer = setTimeout(() => {
       disarmGymCounterReset();
     }, 4000);
     return;
   }
-  gymCounter.modes[gymCounter.activeMode] = createEmptyGymCounterMode();
+  target.counter = createEmptyGymCounterMode();
   disarmGymCounterReset();
   saveGymCounter();
-  renderGymCounter(`「${mode.label}」紀錄已重置`);
+  renderGymCounter(`「${target.name}」紀錄已重置`);
 }
 
 function resetAllGymCounters() {
@@ -670,9 +792,9 @@ function resetAllGymCounters() {
     }, 4000);
     return;
   }
-  Object.keys(gymCounterModes).forEach((mode) => {
-    gymCounter.modes[mode] = createEmptyGymCounterMode();
-  });
+  for (const group of Object.values(gymCounter.modes)) {
+    for (const target of group.targets) target.counter = createEmptyGymCounterMode();
+  }
   disarmGymCounterReset();
   disarmGymCounterResetAll();
   saveGymCounter();
@@ -1052,17 +1174,20 @@ function favoriteGroups() {
   });
 }
 
-async function copyText(text, label) {
+async function copyText(text, label, container = document.body) {
   try {
     await navigator.clipboard.writeText(text);
   } catch {
     const textarea = document.createElement("textarea");
     textarea.value = text;
     textarea.style.cssText = "position:fixed;opacity:0";
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand("copy");
-    textarea.remove();
+    container.appendChild(textarea);
+    try {
+      textarea.select();
+      if (!document.execCommand("copy") && container !== document.body) throw new Error("Clipboard unavailable");
+    } finally {
+      textarea.remove();
+    }
   }
   pendingUndoKey = null;
   elements.toast.classList.remove("undoable");
@@ -2556,8 +2681,20 @@ elements.gymCounterAdjustModal.addEventListener("cancel", (event) => {
   event.preventDefault();
 });
 elements.gymCounterUndo.addEventListener("click", undoGymCounter);
-elements.gymCounterCopyCurrent.addEventListener("click", copyGymCounterCurrentMode);
-elements.gymCounterCopyAll.addEventListener("click", copyAllGymCounterModes);
+elements.gymCounterTarget.addEventListener("change", (event) => selectGymCounterTarget(event.target.value));
+elements.gymCounterTargetAdd.addEventListener("click", () => openGymCounterTargetForm(false));
+elements.gymCounterTargetRename.addEventListener("click", () => openGymCounterTargetForm(true));
+elements.gymCounterTargetDelete.addEventListener("click", openGymCounterDeleteDialog);
+document.querySelector("#gym-counter-delete-confirm").addEventListener("click", deleteGymCounterTarget);
+elements.gymCounterTargetCancel.addEventListener("click", () => {
+  const trigger = elements.gymCounterTargetForm.dataset.action === "rename" ? elements.gymCounterTargetRename : elements.gymCounterTargetAdd;
+  closeGymCounterTargetForm();
+  trigger.focus();
+});
+elements.gymCounterTargetName.addEventListener("input", (event) => event.target.setCustomValidity(""));
+elements.gymCounterTargetForm.addEventListener("submit", saveGymCounterTargetName);
+elements.gymCounterCopyCurrent.addEventListener("click", () => openGymCounterCopyDialog(false));
+elements.gymCounterCopyAll.addEventListener("click", () => openGymCounterCopyDialog(true));
 elements.gymCounterReset.addEventListener("click", resetGymCounter);
 elements.gymCounterResetAll.addEventListener("click", resetAllGymCounters);
 elements.backToTop.addEventListener("click", scrollBackToTop);
