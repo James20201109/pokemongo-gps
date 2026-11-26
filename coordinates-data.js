@@ -44,6 +44,75 @@ window.coordinateLibraries = {
   ],
   "events": [
     {
+      "region": "全球活動情報 · 聯名活動",
+      "name": "《Pokémon Champions》聯名活動",
+      "shareId": "pokemon-champions-celebration-event-2026",
+      "event": {
+        "scope": "global",
+        "access": "free-with-optional-upgrade",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 12 月 8 日 10:00～12 月 14 日 20:00",
+        "startDate": "2026-12-08",
+        "endDate": "2026-12-14",
+        "startDateTime": "2026-12-08T10:00:00+08:00",
+        "endDateTime": "2026-12-14T20:00:00+08:00",
+        "description": "野外可遇見小火龍、姆克兒、敲音猴等寶可夢；也有機會遇見阿勃梭魯與圓陸鯊。這些寶可夢皆有機會以異色登場。",
+        "detailLabel": "團體戰與活動加碼",
+        "bullets": [
+          "一星團體戰：寶貝龍、火斑喵、涼脊龍。",
+          "三星團體戰：雷丘、烈咬陸鯊、轟擂金剛猩。",
+          "傳說團體戰首波輪替（12 月 9 日～15 日）：拉帝亞斯、拉帝歐斯、席多藍恩、勾帕路翁、代拉基翁、畢力吉翁、雷吉艾勒奇、雷吉鐸拉戈。",
+          "團體戰有機會遇見異色或帶有活動特別背卡的寶可夢。",
+          "補給站遇見變隱龍的機率提升，活動田野調查可獲得神奇糖果。",
+          "免費 GO Pass 里程碑：1 級提升 GO 傳送裝置能量恢復速率至 7 倍；10 級捕捉糖果加倍（不與社群日加碼疊加）；20 級完成團體戰額外獲得 3,000 XP。"
+        ],
+        "notice": "傳說團體戰首波輪替至 12 月 15 日，但活動特別背卡只在聯名期間有機會取得，台灣時間 12 月 14 日 20:00 截止。",
+        "sources": [
+          { "url": "https://pokemongo.com/zh-Hant/news/pokemon-champions-celebration-event-2026", "label": "Pokémon GO 官方公告" },
+          { "url": "https://www.threads.com/share/BAXnhD3NUl", "label": "Threads 補充文獻" }
+        ],
+        "images": [
+          { "src": "assets/Events/pokemon-champions-raid-backgrounds-2026.png", "alt": "聯名團體戰寶可夢與特別背卡範例", "caption": "聯名團體戰與特別背卡 · TrainersGO", "wide": false },
+          { "src": "assets/Events/pokemon-champions-event-guide-2026.png", "alt": "聯名活動的出沒寶可夢、團體戰、加碼與 GO Pass 圖解", "caption": "聯名活動重點圖解", "wide": false }
+        ]
+      },
+      "coordinates": []
+    },
+    {
+      "region": "全球活動情報 · 極巨對戰日",
+      "name": "超極巨化千面避役極巨對戰日",
+      "shareId": "gigantamax-inteleon-max-battle-day-2026",
+      "event": {
+        "category": "max-battle-event",
+        "scope": "global",
+        "access": "free-with-optional-upgrade",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 12 月 5 日 14:00～17:00",
+        "startDate": "2026-12-05",
+        "endDate": "2026-12-05",
+        "startDateTime": "2026-12-05T14:00:00+08:00",
+        "endDateTime": "2026-12-05T17:00:00+08:00",
+        "description": "超極巨化千面避役將用指尖的噴射水流，在六星極巨對戰大顯身手。異色超極巨化千面避役也將首次登場。",
+        "detailLabel": "極巨對戰與活動加碼",
+        "bullets": [
+          "活動期間，所有能量點都會出現超極巨化對戰；能量點刷新更頻繁，地圖也會出現額外能量點。",
+          "每日極巨粒子蒐集上限為 1,600，從能量點取得的極巨粒子為 8 倍。",
+          "遠距團體戰參與上限提高至 20 次：台灣時間 12 月 5 日 08:00～12 月 6 日 12:00。"
+        ],
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/gigantamax-inteleon-max-battle-day-2026",
+        "sourceLabel": "Pokémon GO 活動官網",
+        "images": [
+          {
+            "src": "assets/Events/gigantamax-inteleon-max-battle-day-2026.png",
+            "alt": "超極巨化千面避役極巨對戰日活動海報",
+            "caption": "超極巨化千面避役 · 極巨對戰日",
+            "wide": false
+          }
+        ]
+      },
+      "coordinates": []
+    },
+    {
       "region": "全球活動情報 · 每月常駐",
       "name": "GO Pass：10月",
       "shareId": "go-pass-october-2026",

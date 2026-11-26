@@ -7,7 +7,7 @@
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="stylesheet" href="style.css?v=20261125-5">
+  <link rel="stylesheet" href="style.css?v=20261126-7">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -109,8 +109,6 @@
           <button class="country-tab" data-country="uk" role="tab" aria-selected="false"><b>UK</b> 英國座標</button>
           <button class="country-tab" data-country="us" role="tab" aria-selected="false"><b>US</b> 美國座標</button>
           <button class="country-tab asia-limited-tab" data-country="asiaLimited" role="tab" aria-selected="false"><b>AS</b> 亞洲限定</button>
-          <button class="country-tab" data-country="hot2026" role="tab" aria-selected="false"><b>26</b> 2026 年熱門</button>
-          <button class="country-tab" data-country="hot2025" role="tab" aria-selected="false"><b>25</b> 2025 年熱門</button>
           <button class="country-tab raid-tab" data-country="raid" role="tab" aria-selected="false"><b>⚔</b> 團戰座標</button>
           <button class="country-tab friends-tab" data-country="friends" role="tab" aria-selected="false"><b>FR</b> 好友區</button>
         </div>
@@ -154,6 +152,7 @@
         <a class="country-event-source" id="country-event-source" href="#" target="_blank" rel="noopener noreferrer" hidden>官網來源 <span>↗</span></a>
       </section>
 
+      <button class="monthly-highlights-open" id="monthly-highlights-open" type="button" aria-haspopup="dialog" hidden>📅 本月重點</button>
       <div id="coordinate-library"></div>
       <section class="empty" id="empty-state" hidden>
         <span>NO SIGNAL</span>
@@ -278,6 +277,28 @@
     </div>
   </dialog>
 
+  <dialog class="filter-modal monthly-highlights-modal" id="monthly-highlights-modal" aria-labelledby="monthly-highlights-title">
+    <div class="filter-modal-panel">
+      <form method="dialog"><button class="filter-modal-close" aria-label="關閉本月重點">×</button></form>
+      <h2 id="monthly-highlights-title">2026 年 12 月｜活動重點</h2>
+      <p class="filter-modal-note">以下為台灣時間。參考圖包含預計行程，未確認的項目以官方公告為準。</p>
+      <ul class="monthly-highlights-list">
+        <li><strong>12/5 14:00–17:00</strong><span>超極巨化千面避役極巨對戰日</span></li>
+        <li><strong>12/8 10:00～12/14 20:00</strong><span>《Pokémon Champions》聯名活動</span></li>
+        <li><strong>12/12、12/13 各 14:00–17:00</strong><span>12 月社群日</span></li>
+      </ul>
+      <div class="event-image-gallery monthly-highlights-images">
+        <button class="event-image-trigger" type="button" aria-label="放大整月行程">
+          <img src="assets/Events/december-2026-calendar.png" alt="2026 年 12 月 Pokémon GO 整月行程表" loading="lazy">
+          <span>整月行程</span>
+        </button>
+        <button class="event-image-trigger" type="button" aria-label="放大團體戰與輪替總表">
+          <img src="assets/Events/december-2026-rotations.png" alt="2026 年 12 月團體戰與輪替總表" loading="lazy">
+          <span>團體戰與輪替總表</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
   <dialog class="image-modal" id="image-modal" aria-labelledby="image-modal-caption">
     <div class="image-modal-panel">
       <button class="image-modal-close" id="image-modal-close" type="button" aria-label="關閉圖片">×</button>
@@ -493,9 +514,43 @@
       </form>
     </div>
   </dialog>
-  <script src="coordinates-data.js?v=20261029-2"></script>
+  <script src="coordinates-data.js?v=20261126-2"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
-  <script src="script.js?v=20261125-4"></script>
+  <dialog class="filter-modal monthly-highlights-modal" id="raid-light-modal" aria-labelledby="raid-light-title">
+    <div class="filter-modal-panel">
+      <form method="dialog"><button class="filter-modal-close" aria-label="關閉燈號時段設定">×</button></form>
+      <h2 id="raid-light-title">燈號時段設定</h2>
+      <p class="filter-modal-note">以各座標當地時間為準，包含結束分鐘。結束早於開始代表跨午夜。黃燈優先，21:30 倒數不受影響。</p>
+      <form id="raid-light-form" class="raid-light-form">
+        <fieldset class="raid-light-peak">
+          <legend>黃色 RAID TIME</legend>
+          <div class="raid-light-inputs">
+            <label>開始 <input name="peakStart" type="time" required></label>
+            <label>結束 <input name="peakEnd" type="time" required></label>
+          </div>
+          <p>實際時段：<output data-raid-light-preview="peak"></output></p>
+        </fieldset>
+        <fieldset class="raid-light-active">
+          <legend>綠色 ACTIVE HOURS</legend>
+          <div class="raid-light-inputs">
+            <label>開始 <input name="openStart" type="time" required></label>
+            <label>結束 <input name="openEnd" type="time" required></label>
+          </div>
+          <p>實際時段：<output data-raid-light-preview="open"></output></p>
+        </fieldset>
+        <fieldset>
+          <legend>一般暗色 · 自動計算</legend>
+          <p>實際時段：<output data-raid-light-preview="closed"></output></p>
+        </fieldset>
+        <div class="raid-light-actions">
+          <button type="button" id="raid-light-cancel">取消</button>
+          <button type="button" id="raid-light-defaults">恢復預設</button>
+          <button type="submit">儲存設定</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  <script src="script.js?v=20261126-8"></script>
 </body>
 </html>

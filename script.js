@@ -870,18 +870,25 @@ function loadActiveCountry() {
     return "copied";
   }
   if (validSharedCountry && (sharedCountry !== "friends" || friendsUnlocked)) {
-    pendingSharedGroup = params.get("group") || "";
-    return sharedCountry;
+    pendingSharedGroup = params.get("group") || (raidHotspotYears[sharedCountry] ? sharedCountry : "");
+    return raidHotspotYears[sharedCountry] ? "raid" : sharedCountry;
   }
   try {
     const saved = localStorage.getItem(activeTabStorageKey);
     if (saved === "friends" && !friendsUnlocked) return "copied";
-    return saved && (["copied", "favorites"].includes(saved) || Object.hasOwn(libraries, saved)) ? saved : "copied";
+    return raidHotspotYears[saved] ? "raid" : saved && (["copied", "favorites"].includes(saved) || Object.hasOwn(libraries, saved)) ? saved : "copied";
   } catch {
     return "copied";
   }
 }
 
+const raidHotspotYears = Object.assign(Object.create(null), {hot2026:"2026 年熱門", hot2025:"2025 年熱門"});
+const raidHotspotOpenKey = "geo-pulse-raid-hotspot-open-v1";
+const raidHotspotOpen = new Set();
+try {
+  const saved = JSON.parse(localStorage.getItem(raidHotspotOpenKey));
+  if (Array.isArray(saved)) saved.filter((year) => raidHotspotYears[year]).forEach((year) => raidHotspotOpen.add(year));
+} catch {}
 activeCountry = loadActiveCountry();
 
 function coordinateValue(coordinate) {
@@ -976,11 +983,76 @@ function localMinutes(timeZone, date = new Date()) {
   }
 }
 
-function raidTimeStatus(timeZone, date = new Date()) {
-  const current = localMinutes(timeZone, date);
-  if (current >= 14 * 60 && current < 17 * 60) return "peak";
-  if (current >= 9 * 60 && current < 21 * 60) return "open";
+const raidLightKey = "geo-pulse-raid-light-hours-v1";
+const raidLightDefaults = { peakStart:"14:00", peakEnd:"16:59", openStart:"09:00", openEnd:"20:59" };
+const raidLightFields = Object.keys(raidLightDefaults);
+const validRaidLightTimes = (times) => raidLightFields.every((key) => /^([01]\d|2[0-3]):[0-5]\d$/.test(times?.[key] || ""));
+let raidLightTimes = { ...raidLightDefaults };
+try {
+  const saved = JSON.parse(localStorage.getItem(raidLightKey));
+  if (validRaidLightTimes(saved)) raidLightTimes = saved;
+} catch {}
+
+function raidLightMinute(value) {
+  return Number(value.slice(0, 2)) * 60 + Number(value.slice(3));
+}
+
+function raidLightSchedule(times) {
+  return ["peak", "open"].map((key) => [raidLightMinute(times[key + "Start"]), raidLightMinute(times[key + "End"])]);
+}
+
+function raidLightState(minute, schedule) {
+  if (!Number.isFinite(minute) || minute < 0 || minute >= 1440) return "closed";
+  const includes = ([start, end]) => start <= end
+    ? minute >= start && minute <= end : minute >= start || minute <= end;
+  if (includes(schedule[0])) return "peak";
+  if (includes(schedule[1])) return "open";
   return "closed";
+}
+
+function raidTimeStatus(timeZone, date = new Date()) {
+  return raidLightState(localMinutes(timeZone, date), raidLightSchedule(raidLightTimes));
+}
+
+function describeRaidLightTimes(times) {
+  const schedule = raidLightSchedule(times);
+  const ranges = {peak:[], open:[], closed:[]};
+  const format = (minute) => `${String(Math.floor(minute / 60)).padStart(2,"0")}:${String(minute % 60).padStart(2,"0")}`;
+  let start = 0;
+  let state = raidLightState(0, schedule);
+  for (let minute = 1; minute <= 1440; minute++) {
+    const next = minute === 1440 ? null : raidLightState(minute, schedule);
+    if (next === state) continue;
+    ranges[state].push(start === minute - 1 ? format(start) : `${format(start)}～${format(minute - 1)}`);
+    start = minute;
+    state = next;
+  }
+  return Object.fromEntries(Object.entries(ranges).map(([key, list]) => [key, list.join("、") || "無"]));
+}
+
+function openRaidLightSettings() {
+  const modal = document.querySelector("#raid-light-modal");
+  writeRaidLightDraft(raidLightTimes);
+  modal.showModal();
+}
+
+function readRaidLightDraft() {
+  const form = document.querySelector("#raid-light-form");
+  return Object.fromEntries(raidLightFields.map((key) => [key, form.elements.namedItem(key).value]));
+}
+
+function writeRaidLightDraft(times) {
+  const form = document.querySelector("#raid-light-form");
+  raidLightFields.forEach((key) => { form.elements.namedItem(key).value = times[key]; });
+  previewRaidLightDraft();
+}
+
+function previewRaidLightDraft() {
+  const draft = readRaidLightDraft();
+  const ranges = validRaidLightTimes(draft) ? describeRaidLightTimes(draft) : {};
+  document.querySelectorAll("[data-raid-light-preview]").forEach((output) => {
+    output.textContent = ranges[output.dataset.raidLightPreview] || "請填寫完整時段";
+  });
 }
 
 function raidCountdown(timeZone, date = new Date()) {
@@ -1287,10 +1359,10 @@ async function shareLink(country, group = "") {
 function focusSharedGroup(groupName) {
   if (!groupName) return;
   requestAnimationFrame(() => {
-    const target = [...elements.library.querySelectorAll(".region-block")]
+    const target = [...elements.library.querySelectorAll("[data-share-id]")]
       .find((section) => section.dataset.shareId === groupName);
     if (!target) return;
-    const archive = target.closest(".completed-events");
+    const archive = target.closest(".completed-events, .raid-hotspot-section");
     if (archive) archive.open = true;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
@@ -1513,12 +1585,29 @@ function formatNowPeriod(start, end) {
   return `${formatter.format(new Date(start))}～${formatter.format(new Date(end))}`;
 }
 
+const otherEventStorageKey = "geo-pulse-other-events-v1";
+const otherEventDefaults = [
+  "get-ready-for-gowildarea-2026", "Pokémon RUN 30", "apac-mall-exploration-2026",
+  "skm-postcards-2026", "legend-research-nihonbashi-yaesu-2026"
+];
+const otherEventIds = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(otherEventStorageKey));
+    if (Array.isArray(saved)) return new Set(saved);
+  } catch {}
+  return new Set(otherEventDefaults);
+})();
+
+function isOtherEvent(group) {
+  return otherEventIds.has(group.shareId || group.name);
+}
+
 function nowEventItems() {
   const excludedCountries = new Set(["copied", "favorites", "friends"]);
   return Object.entries(libraries).flatMap(([country, groups]) => {
     if (excludedCountries.has(country) || !Array.isArray(groups)) return [];
     return groups.flatMap((group) => {
-      if (!group.event) return [];
+      if (!group.event || (country === "events" && isOtherEvent(group))) return [];
       const windows = eventWindows(group.event);
       if (!windows.length) return [];
       return windows.map((window) => ({
@@ -1718,6 +1807,8 @@ function navigateToNewsItem(item) {
       ? [...document.querySelectorAll(".region-block")].find((section) => section.dataset.groupKey === groupKey)
       : elements.eventBanner;
     if (!target) return;
+    const archive = target.closest(".completed-events");
+    if (archive) archive.open = true;
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     target.classList.add("news-target");
     setTimeout(() => target.classList.remove("news-target"), 1900);
@@ -1892,11 +1983,11 @@ function openStampNavigator() {
   else elements.stampNavigatorModal.setAttribute("open", "");
 }
 
-function makeCoordinateButton(coordinate, index, groupEndDate, key) {
+function makeCoordinateButton(coordinate, index, groupEndDate, key, sourceCountry = activeCountry) {
   const value = coordinateValue(coordinate);
   const expired = isExpired(typeof coordinate === "object" ? coordinate.endDate || groupEndDate : groupEndDate);
   const visited = copiedKeys.has(key);
-  const raid = typeof coordinate === "object" && coordinate.timezone && activeCountry === "raid";
+  const raid = typeof coordinate === "object" && coordinate.timezone && activeCountry === "raid" && sourceCountry === "raid";
   const moonlight = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "moonlight";
   const sparkle = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "sparkle";
   const localClockOnly = typeof coordinate === "object" && coordinate.timezone && coordinate.clockType === "local";
@@ -2090,6 +2181,8 @@ function renderFriends(query) {
 }
 
 function render() {
+  document.querySelector("#monthly-highlights-open").hidden = activeCountry !== "events";
+  elements.copyAll.firstChild.textContent = activeCountry === "raid" ? "複製團戰座標 " : "COPY ALL ";
   const query = elements.search.value.trim().toLowerCase();
   if (activeCountry === "friends") {
     renderFriends(query);
@@ -2105,6 +2198,15 @@ function render() {
     : activeCountry === "copied"
       ? copiedGroups()
       : [...libraries[activeCountry]];
+  const raidHotspots = Object.entries(raidHotspotYears).map(([country, label]) => {
+    const details = document.createElement("details");
+    details.className = "completed-events other-events raid-hotspot-section";
+    details.dataset.shareId = country;
+    return {country, label, details, coordinates: []};
+  });
+  if (activeCountry === "raid") {
+    raidHotspots.forEach(({country}) => activeGroups.push(...libraries[country].map((group) => ({...group, _sourceCountry:country}))));
+  }
   if (activeCountry === "us") {
     activeGroups.sort((a, b) => {
       const aExpired = a.event && eventNewsStatus(a.event) === "expired";
@@ -2141,9 +2243,12 @@ function render() {
   const completedEventContent = document.createElement("div");
   completedEventContent.className = "completed-event-content";
   let completedEventCount = 0;
+  const otherEventContent = document.createElement("div");
+  otherEventContent.className = "completed-event-content";
   activeGroups.forEach((group) => {
     const sourceCountry = group._sourceCountry || activeCountry;
-    const groupMatches = `${group.region} ${group.name}`.toLowerCase().includes(query);
+    const hotspot = activeCountry === "raid" && raidHotspots.find(({country}) => country === sourceCountry);
+    const groupMatches = `${group.region} ${group.name} ${hotspot ? hotspot.label : ""}`.toLowerCase().includes(query);
     const matches = (group.coordinates || []).filter((coordinate) => {
       const searchable = typeof coordinate === "string"
         ? coordinate
@@ -2153,13 +2258,13 @@ function render() {
     if (!matches.length && (!group.event || (query && !groupMatches))) return;
 
     visibleGroups += 1;
-    visibleCoordinates.push(...matches);
+    (hotspot ? hotspot.coordinates : visibleCoordinates).push(...matches);
     const matchKeys = matches.map((coordinate) =>
       typeof coordinate === "object" && coordinate._copiedKey
         ? coordinate._copiedKey
         : coordinateKey(sourceCountry, group.name, coordinate)
     );
-    visibleCoordinateKeys.push(...matchKeys);
+    if (!hotspot) visibleCoordinateKeys.push(...matchKeys);
     const section = document.createElement("section");
     section.className = "region-block";
     const groupShareId = group.shareId || group.name;
@@ -2194,7 +2299,21 @@ function render() {
     const shareControl = activeCountry === "copied"
       ? ""
       : `<button class="group-share" type="button" aria-label="分享${escapeHtml(group.name)}區塊" title="分享此區塊"><span aria-hidden="true">↗</span></button>`;
-    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${favoriteControl}${shareControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    const completedEvent = activeCountry === "events" && eventNewsStatus(group.event) === "expired";
+    const otherEvent = activeCountry === "events" && !completedEvent && isOtherEvent(group);
+    const otherControl = activeCountry === "events" && group.event && !completedEvent
+      ? `<button class="other-event-toggle" type="button">${otherEvent ? "移回活動行程" : "移至其他活動"}</button>` : "";
+    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${favoriteControl}${shareControl}${otherControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    section.querySelector(".other-event-toggle")?.addEventListener("click", () => {
+      if (otherEvent) otherEventIds.delete(groupShareId);
+      else otherEventIds.add(groupShareId);
+      try { localStorage.setItem(otherEventStorageKey, JSON.stringify([...otherEventIds])); } catch {}
+      render();
+      renderNowMode();
+      const updated = [...elements.library.querySelectorAll(".region-block")].find((item) => item.dataset.shareId === groupShareId);
+      if (otherEvent) updated?.querySelector(".other-event-toggle")?.focus();
+      else elements.library.querySelector(".other-events > summary")?.focus();
+    });
     section.querySelector(".group-favorite")?.addEventListener("click", (event) => {
       toggleFavoriteEvent(groupFavoriteKey, event.currentTarget, group.name);
     });
@@ -2223,7 +2342,10 @@ function render() {
       eventInfo.className = "event-info";
       const detailLabel = group.event.detailLabel || "一星團體戰";
       const detail = group.event.detail || group.event.raid || "";
-      const bulletList = group.event.bullets?.length
+      const raidLightRanges = activeCountry === "raid" && sourceCountry === "raid" ? describeRaidLightTimes(raidLightTimes) : null;
+      const bulletList = raidLightRanges
+        ? `<ul><li>黃色 RAID TIME：${raidLightRanges.peak}（優先於綠色）</li><li>綠色 ACTIVE HOURS：${raidLightRanges.open}</li><li>一般暗色：${raidLightRanges.closed}</li><li>倒數數值：09:00～21:29 依距離 21:30 的剩餘時間顯示，其餘時段顯示（0）。</li></ul><button class="monthly-highlights-open raid-light-open" type="button" aria-haspopup="dialog">燈號時段設定</button>`
+        : group.event.bullets?.length
         ? `<ul>${group.event.bullets.map((item) => `<li>${item}</li>`).join("")}</ul>`
         : detail;
       const notice = group.event.notice
@@ -2270,6 +2392,7 @@ function render() {
         ${redeemBlock}
         ${sourceLink}
         ${eventImage}`;
+      eventInfo.querySelector(".raid-light-open")?.addEventListener("click", openRaidLightSettings);
       eventInfo.querySelector(".event-redeem-copy")?.addEventListener("click", () => {
         copyText(group.event.redeemCode, group.event.redeemLabel || "活動兌換序號");
       });
@@ -2285,22 +2408,33 @@ function render() {
       grid.className = "coordinate-grid";
       const groupEndDate = group.event?.endDate || group.endDate || eventSource[sourceCountry]?.endDate;
       grid.replaceChildren(...matches.map((coordinate, index) =>
-        makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index])
+        makeCoordinateButton(coordinate, index, groupEndDate, matchKeys[index], sourceCountry)
       ));
       grid.hidden = collapsible && !expanded;
       section.appendChild(grid);
     }
-    const completedEvent = activeCountry === "events" && eventNewsStatus(group.event) === "expired";
     if (completedEvent) {
       section.classList.add("completed-event");
       completedEventContent.appendChild(section);
       completedEventCount += 1;
+    } else if (hotspot) {
+      hotspot.details.appendChild(section);
+    } else if (otherEvent) {
+      otherEventContent.appendChild(section);
     } else {
       fragment.appendChild(section);
     }
   });
 
   if (activeCountry === "events") {
+    const otherEvents = document.createElement("details");
+    otherEvents.className = "completed-events other-events";
+    otherEvents.open = elements.library.querySelector(".other-events")?.open ?? false;
+    const otherCount = otherEventContent.childElementCount;
+    otherEvents.innerHTML = `<summary><span>OTHER EVENTS</span><strong>其他活動</strong><b>${String(otherCount).padStart(2, "0")}</b></summary>`;
+    if (!otherCount) otherEventContent.innerHTML = '<p class="completed-events-empty">目前沒有其他活動</p>';
+    otherEvents.appendChild(otherEventContent);
+    fragment.appendChild(otherEvents);
     const completedEvents = document.createElement("details");
     completedEvents.className = "completed-events";
     completedEvents.innerHTML = `<summary><span>EVENT ARCHIVE</span><strong>活動結束</strong><b>${String(completedEventCount).padStart(2, "0")}</b></summary>`;
@@ -2313,9 +2447,28 @@ function render() {
     fragment.appendChild(completedEvents);
   }
 
+  if (activeCountry === "raid") {
+    for (const {country, label, details, coordinates} of raidHotspots) {
+      if (query && !coordinates.length && !details.childElementCount) continue;
+      const summary = document.createElement("summary");
+      summary.innerHTML = `<strong>${label}</strong><b>${coordinates.length}</b>`;
+      details.open = Boolean(query || raidHotspotOpen.has(country));
+      summary.addEventListener("click", (event) => {
+        event.preventDefault();
+        details.open = !details.open;
+        if (query) return;
+        if (details.open) raidHotspotOpen.add(country);
+        else raidHotspotOpen.delete(country);
+        try { localStorage.setItem(raidHotspotOpenKey, JSON.stringify([...raidHotspotOpen])); } catch {}
+      });
+      details.prepend(summary);
+      fragment.appendChild(details);
+    }
+  }
   elements.library.replaceChildren(fragment);
-  elements.resultCount.textContent = visibleCoordinates.length;
-  elements.visibleCount.textContent = String(visibleCoordinates.length).padStart(3, "0");
+  const totalVisible = visibleCoordinates.length + raidHotspots.reduce((sum, section) => sum + section.coordinates.length, 0);
+  elements.resultCount.textContent = totalVisible;
+  elements.visibleCount.textContent = String(totalVisible).padStart(3, "0");
   elements.groupCount.textContent = visibleGroups;
   elements.countryLabel.textContent = countryNames[activeCountry];
   elements.empty.hidden = visibleGroups > 0;
@@ -2431,6 +2584,10 @@ function updateRaidClocks() {
 }
 
 function switchCountry(country, options = {}) {
+  if (raidHotspotYears[country]) {
+    if (!pendingSharedGroup) pendingSharedGroup = country;
+    country = "raid";
+  }
   activeCountry = country;
   const koreaActive = libraries.korea.some((group) => group.event && eventNewsStatus(group.event) === "active");
   try {
@@ -2693,6 +2850,27 @@ elements.gymCounterTargetCancel.addEventListener("click", () => {
 });
 elements.gymCounterTargetName.addEventListener("input", (event) => event.target.setCustomValidity(""));
 elements.gymCounterTargetForm.addEventListener("submit", saveGymCounterTargetName);
+const monthlyHighlightsModal = document.querySelector("#monthly-highlights-modal");
+document.querySelector("#monthly-highlights-open").addEventListener("click", () => monthlyHighlightsModal.showModal());
+monthlyHighlightsModal.querySelectorAll(".event-image-trigger").forEach((button) => {
+  button.addEventListener("click", () => {
+    const image = button.querySelector("img");
+    openImageModal(image.getAttribute("src"), image.alt, button.querySelector("span").textContent);
+  });
+});
+document.querySelector("#raid-light-form").addEventListener("input", previewRaidLightDraft);
+document.querySelector("#raid-light-cancel").addEventListener("click", () => document.querySelector("#raid-light-modal").close());
+document.querySelector("#raid-light-defaults").addEventListener("click", () => writeRaidLightDraft(raidLightDefaults));
+document.querySelector("#raid-light-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const draft = readRaidLightDraft();
+  if (!validRaidLightTimes(draft)) return;
+  raidLightTimes = draft;
+  try { localStorage.setItem(raidLightKey, JSON.stringify(draft)); } catch {}
+  document.querySelector("#raid-light-modal").close();
+  render();
+  elements.library.querySelector(".raid-light-open")?.focus();
+});
 elements.gymCounterCopyCurrent.addEventListener("click", () => openGymCounterCopyDialog(false));
 elements.gymCounterCopyAll.addEventListener("click", () => openGymCounterCopyDialog(true));
 elements.gymCounterReset.addEventListener("click", resetGymCounter);
