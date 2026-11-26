@@ -7,7 +7,7 @@
   <meta name="description" content="日本、韓國、歐洲、印尼、英國與美國活動 GPS 座標快速搜尋及一鍵複製工具。">
   <title>GEO//PULSE 座標終端</title>
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="stylesheet" href="style.css?v=20261126-7">
+  <link rel="stylesheet" href="style.css?v=20261126-9">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -514,7 +514,7 @@
       </form>
     </div>
   </dialog>
-  <script src="coordinates-data.js?v=20261126-2"></script>
+  <script src="coordinates-data.js?v=20261126-15"></script>
   <script src="friends-data.js?v=20261007-1"></script>
   <script src="assets/vendor/qrious-4.0.2.min.js"></script>
   <dialog class="filter-modal monthly-highlights-modal" id="raid-light-modal" aria-labelledby="raid-light-title">
@@ -551,6 +551,14 @@
       </form>
     </div>
   </dialog>
-  <script src="script.js?v=20261126-8"></script>
+  <dialog class="filter-modal gym-counter-modal" id="event-results-modal" aria-labelledby="event-results-title">
+    <div class="filter-modal-panel">
+      <form method="dialog"><button class="filter-modal-close" aria-label="關閉戰果選擇">×</button></form>
+      <h2 id="event-results-title">選擇戰果對象</h2>
+      <p class="filter-modal-note" id="event-results-name"></p>
+      <div id="event-results-groups"></div>
+    </div>
+  </dialog>
+  <script src="script.js?v=20261126-13"></script>
 </body>
 </html>

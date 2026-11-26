@@ -717,6 +717,58 @@ function confirmGymCounterAdjust() {
   closeGymCounterAdjust();
 }
 
+function openEventResultTarget(mode, name) {
+  switchGymCounterMode(mode);
+  if (gymCounter.modes[mode].targets.some((target) => target.name === name)) {
+    selectGymCounterTarget(name);
+    openGymCounterModal();
+    return;
+  }
+  openGymCounterModal();
+  openGymCounterTargetForm(false);
+  elements.gymCounterTargetName.value = name;
+  elements.gymCounterTargetName.select();
+}
+
+function openEventResultPicker(group) {
+  const groups = group.event.resultGroups;
+  if (groups.length === 1 && groups[0].targets.length === 1) {
+    openEventResultTarget(groups[0].mode, groups[0].targets[0]);
+    return;
+  }
+  const dialog = document.querySelector("#event-results-modal");
+  const container = document.querySelector("#event-results-groups");
+  document.querySelector("#event-results-name").textContent = group.name;
+  container.replaceChildren(...groups.map(({mode, label, targets, collapsed, note}) => {
+    const details = document.createElement("details");
+    details.className = "event-results-group";
+    details.open = !collapsed;
+    const summary = document.createElement("summary");
+    summary.textContent = `${label}（${targets.length}）`;
+    details.append(summary);
+    if (note) {
+      const description = document.createElement("p");
+      description.textContent = note;
+      details.append(description);
+    }
+    const grid = document.createElement("div");
+    grid.className = "event-results-grid";
+    targets.forEach((name) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = name;
+      button.addEventListener("click", () => {
+        dialog.close();
+        openEventResultTarget(mode, name);
+      });
+      grid.append(button);
+    });
+    details.append(grid);
+    return details;
+  }));
+  dialog.showModal();
+}
+
 function openGymCounterModal() {
   renderGymCounter();
   if (typeof elements.gymCounterModal.showModal === "function") {
@@ -2302,16 +2354,27 @@ function render() {
     const completedEvent = activeCountry === "events" && eventNewsStatus(group.event) === "expired";
     const otherEvent = activeCountry === "events" && !completedEvent && isOtherEvent(group);
     const otherControl = activeCountry === "events" && group.event && !completedEvent
-      ? `<button class="other-event-toggle" type="button">${otherEvent ? "移回活動行程" : "移至其他活動"}</button>` : "";
-    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${favoriteControl}${shareControl}${otherControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
-    section.querySelector(".other-event-toggle")?.addEventListener("click", () => {
+      ? `<button class="other-event-toggle group-move-event" type="button">${otherEvent ? "移回活動行程" : "移至其他活動"}</button>` : "";
+    const ukResultIndex = activeCountry === "uk" ? libraries.uk.indexOf(group) : -1;
+    const ukResultOffset = ukResultIndex < 0 ? 0 : libraries.uk.slice(0, ukResultIndex)
+      .reduce((count, entry) => count + entry.coordinates.length, 0);
+    const resultGroups = ukResultIndex < 0 ? group.event?.resultGroups : [{
+      mode: "raid",
+      label: "團體戰 · 依英國座標順序",
+      targets: group.coordinates.map((_, index) => `英國No.${String(ukResultOffset + index + 1).padStart(2, "0")}`)
+    }];
+    const resultControl = resultGroups?.length
+      ? `<button class="other-event-toggle group-record-result" type="button" aria-haspopup="dialog">${group.event && eventNewsStatus(group.event) === "expired" ? "補記戰果" : "記錄戰果"}</button>` : "";
+    section.innerHTML = `<header>${region}${groupStamp}<h3>${group.name}</h3>${collapseControl}${favoriteControl}${shareControl}${resultControl}${otherControl}${groupSource}<b>${matches.length.toString().padStart(2, "0")}</b></header>`;
+    section.querySelector(".group-record-result")?.addEventListener("click", () => openEventResultPicker({name: group.name, event: {resultGroups}}));
+    section.querySelector(".group-move-event")?.addEventListener("click", () => {
       if (otherEvent) otherEventIds.delete(groupShareId);
       else otherEventIds.add(groupShareId);
       try { localStorage.setItem(otherEventStorageKey, JSON.stringify([...otherEventIds])); } catch {}
       render();
       renderNowMode();
       const updated = [...elements.library.querySelectorAll(".region-block")].find((item) => item.dataset.shareId === groupShareId);
-      if (otherEvent) updated?.querySelector(".other-event-toggle")?.focus();
+      if (otherEvent) updated?.querySelector(".group-move-event")?.focus();
       else elements.library.querySelector(".other-events > summary")?.focus();
     });
     section.querySelector(".group-favorite")?.addEventListener("click", (event) => {

@@ -48,6 +48,11 @@ window.coordinateLibraries = {
       "name": "《Pokémon Champions》聯名活動",
       "shareId": "pokemon-champions-celebration-event-2026",
       "event": {
+        "resultGroups": [
+          { "mode": "raid", "label": "一星團體戰", "targets": ["寶貝龍", "火斑喵", "涼脊龍"] },
+          { "mode": "raid", "label": "三星團體戰", "targets": ["雷丘", "烈咬陸鯊", "轟擂金剛猩"] },
+          { "mode": "raid", "label": "傳說團體戰 · 12/9～12/15", "collapsed": true, "note": "聯名特別背卡只到台灣時間 12/14 20:00。", "targets": ["拉帝亞斯", "拉帝歐斯", "席多藍恩", "勾帕路翁", "代拉基翁", "畢力吉翁", "雷吉艾勒奇", "雷吉鐸拉戈"] }
+        ],
         "scope": "global",
         "access": "free-with-optional-upgrade",
         "periodLabel": "EVENT PERIOD / 台灣時間",
@@ -83,6 +88,9 @@ window.coordinateLibraries = {
       "name": "超極巨化千面避役極巨對戰日",
       "shareId": "gigantamax-inteleon-max-battle-day-2026",
       "event": {
+        "resultGroups": [
+          { "mode": "maxBattle", "label": "六星極巨對戰", "targets": ["千面避役"] }
+        ],
         "category": "max-battle-event",
         "scope": "global",
         "access": "free-with-optional-upgrade",
@@ -1249,27 +1257,36 @@ window.coordinateLibraries = {
       "coordinates": []
     },
     {
-      "region": "全球活動情報 · SAVE THE DATE",
-      "name": "2026 年 11 月極致超級團體戰日",
+      "region": "全球活動情報 · 團體戰日",
+      "name": "皮可西極致超級團體戰日",
       "shareId": "super-mega-raid-day-november-2026-save-the-date",
       "event": {
-        "category": "save-the-date",
+        "category": "raid-day",
         "scope": "global",
         "access": "free-with-optional-ticket",
-        "periodLabel": "SAVE THE DATE / 當地日期",
-        "period": "2026 年 11 月 28 日",
+        "periodLabel": "EVENT PERIOD / 台灣時間",
+        "period": "2026 年 11 月 28 日 14:00～17:00",
         "startDate": "2026-11-28",
         "endDate": "2026-11-28",
-        "description": "官方已公布 2026 年 11 月極致超級團體戰日日期，主角寶可夢、活動時間與獎勵內容仍待後續公告。",
-        "detailLabel": "目前已公布資訊",
-        "bullets": [
-          "活動日期：2026 年 11 月 28 日。",
-          "登場的超級進化寶可夢尚未公布。",
-          "活動時段、免費團體戰入場券、全球大挑戰與付費票券內容仍待官方公布。"
+        "startDateTime": "2026-11-28T14:00:00+08:00",
+        "endDateTime": "2026-11-28T17:00:00+08:00",
+        "resultGroups": [
+          { "mode": "raid", "label": "極致超級團體戰", "targets": ["皮可西"] }
         ],
-        "notice": "SAVE THE DATE：目前只有活動日期；正式名稱、主角與詳細內容公布後再更新。",
-        "sourceUrl": "https://pokemongo.com/zh-Hant/news/save-the-date-s24",
-        "sourceLabel": "Pokémon GO 官方日期公告"
+        "description": "超級皮可西首次在 Pokémon GO 的極致超級團體戰登場。活動期間異色皮可西的遭遇機率提高。",
+        "detailLabel": "團體戰與活動加碼",
+        "bullets": [
+          "旋轉道館轉盤，最多可領取 6 張免費團體戰入場券。",
+          "在極致超級團體戰捕捉的皮可西會解鎖超級等級 1。",
+          "超級皮可西可提升至超級頂尖級，超級進化時可使用月亮之力＋。",
+          "活動限時調查可獲得特級對戰入場券與巨金怪遭遇機會。"
+        ],
+        "notice": "全球大挑戰與遠距團體戰上限提高至 20 次的時段為台灣時間 11 月 28 日 09:00～11 月 29 日 12:00，與活動主時段不同。",
+        "sourceUrl": "https://pokemongo.com/zh-Hant/news/clefable-super-mega-raid-day-2026",
+        "sourceLabel": "Pokémon GO 官方公告",
+        "images": [
+          { "src": "assets/Events/clefable-super-mega-raid-day-2026.png", "alt": "超級皮可西極致超級團體戰日主視覺", "caption": "皮可西極致超級團體戰日", "wide": true }
+        ]
       },
       "coordinates": []
     },
@@ -1463,6 +1480,9 @@ window.coordinateLibraries = {
       "region": "歐洲博物館限定活動",
       "name": "太空人皮卡丘 · 地區背景",
       "event": {
+        "resultGroups": [
+          { "mode": "raid", "label": "一星團體戰 · 依座標序號", "targets": ["太空皮No.01", "太空皮No.02", "太空皮No.03", "太空皮No.04", "太空皮No.05", "太空皮No.06"] }
+        ],
         "periodLabel": "EVENT PERIOD / 活動日期",
         "period": "2026 年 10 月 4 日～2027 年 4 月 30 日",
         "startDate": "2026-10-04",
@@ -2663,12 +2683,15 @@ window.coordinateLibraries = {
       "region": "日本限定團體戰 · 特殊背景",
       "name": "維羅博士的助手皮卡丘",
       "event": {
+        "resultGroups": [
+          { "mode": "raid", "label": "團體戰", "targets": ["維羅博士的助手皮卡丘"] }
+        ],
         "periodLabel": "EVENT PERIOD / 活動期間",
-        "period": "待公布",
-        "description": "維羅博士的助手皮卡丘將於指定地點的團體戰登場，捕捉時有機會取得特殊背景卡。",
+        "period": "已開始 · 結束時間待確認",
+        "description": "維羅博士的助手皮卡丘已在日本指定地點的團體戰登場，捕捉時有機會取得特殊背景卡。",
         "detailLabel": "團體戰備註",
         "detail": "特殊背景並非必定出現。",
-        "notice": "此為非必背的團體戰；活動期間目前尚未提供，待取得資訊後補充。",
+        "notice": "團體戰捕捉不保證取得特殊背景卡；確切起訖時間待確認。",
         "images": [
           {
             "src": "assets/Japan/professor-willow-assistant-pikachu.png",
@@ -2874,6 +2897,9 @@ window.coordinateLibraries = {
       "region": "芝加哥限定活動",
       "name": "化石博物館皮卡丘",
       "event": {
+        "resultGroups": [
+          { "mode": "raid", "label": "團體戰", "targets": ["化石博物館皮卡丘"] }
+        ],
         "period": "2026 年 5 月 22 日 ～ 2027 年 4 月 11 日",
         "endDate": "2027-04-11",
         "description": "美國芝加哥化石博物館皮卡丘活動座標。",
